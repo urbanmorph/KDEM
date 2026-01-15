@@ -12,108 +12,193 @@ This dashboard provides a comprehensive, public-facing view of Karnataka Digital
 
 - **Vision 2030 Progress**: Real-time tracking of Karnataka's digital economy goals
 - **Beyond Bengaluru Initiative**: Distributed growth across 6 strategic clusters
-- **Competitive Positioning**: Karnataka's leadership in India's tech ecosystem
+- **Strategic Roadmap**: 5-year implementation plan with milestones
+- **Competitive Positioning**: Karnataka's leadership vs. competitor states
+- **Measurement Framework**: Transparent data sources with confidence ratings
 - **Program Impact**: ELEVATE, LEAP, and other strategic initiatives
-- **Transparent Attribution**: Clear methodology distinguishing direct vs. influenced impact
 
-## 📊 Dashboard Sections
+---
 
-### 1. Vision & Impact
+## 🗺️ NEW: Strategic Roadmap 2025-2030
+
+### Phase Overview
+
+| Phase | Period | Theme | Key Focus |
+|-------|--------|-------|-----------|
+| **Phase 1** | Jan-Dec 2026 | Foundation & Acceleration | Dashboard launch, systems build, GCC attraction |
+| **Phase 2** | Jan 2027-Dec 2028 | Scale & Differentiate | Cluster scaling, mid-market GCC capture |
+| **Phase 3** | Jan 2029-Dec 2030 | Consolidate & Lead | Vision achievement, global positioning |
+
+### 2026 Implementation Milestones
+
+| Quarter | Key Deliverables |
+|---------|------------------|
+| Q1 2026 | Dashboard v1.0 live, Company Registry operational, 3 data MoUs signed |
+| Q2 2026 | Mysuru Global Tech Centre Phase 1, Cost Calculator tool, ELEVATE AI first cohort |
+| Q3 2026 | Dashboard v2.0 with APIs, Mangaluru Tech Park groundbreaking, 25 GCC pipeline |
+| Q4 2026 | **BTS 2026 Public Launch**, Annual Impact Report, 60 new GCCs target |
+
+### Benchmarking Against Global Best Practices
+
+| Benchmark | Singapore 2024 | Karnataka 2025 | Karnataka 2030 Target |
+|-----------|----------------|----------------|----------------------|
+| Digital Economy Value | $128.1B (18.6% GDP) | ~$110B (~15% GSDP) | $400B (~25% GSDP) |
+| Tech Employment | 220K (ICM) | 2.2M | 3M |
+| GCC Count | 100+ MNCs | 550+ | 1,000 |
+| Digital Adoption (SME) | 94.6% | ~60% | 90% |
+
+---
+
+## 📊 Dashboard Sections (Updated Structure)
+
+### 1. Vision & Impact (Homepage)
 - Karnataka's $400B digital economy vision with progress tracking
 - Current achievements: 45% of India's IT exports, 550+ GCCs, 17,000+ startups
-- 2030 targets across key metrics
+- 2030 targets with status indicators (On Track / Needs Acceleration / Key Priority)
+- **NEW:** Roadmap milestone tracker
 
 ### 2. Beyond Bengaluru: Six Strategic Clusters
 
 #### Tier 1 Priorities (Invest Aggressively)
-- **Mysuru** - "India's Cybersecurity Valley" → $10B by 2030
-- **Mangaluru** - "Silicon Beach of India" → ₹40,000 Cr by 2034
-- **Hubballi-Dharwad-Belagavi** - "North Karnataka Corridor" → Industrial AI Hub
+| Cluster | Brand | 2030 Vision | Key Milestone 2026 |
+|---------|-------|-------------|-------------------|
+| **Mysuru** | India's Cybersecurity Valley | $10B, 150K jobs | Global Tech Centre operational |
+| **Mangaluru** | Silicon Beach of India | ₹40,000 Cr, 200K jobs | Tech Park groundbreaking |
+| **Hubballi-Dharwad-Belagavi** | North Karnataka Corridor | Industrial AI Hub | EMC 2.0 full operation |
 
 #### Tier 2 (Nurture & Build)
-- **Kalaburagi** - "Kalyana Karnataka AI Hub" → 50+ startups, 10,000 jobs
-- **Tumakuru** - "Aerospace Valley" → Precision manufacturing hub
+| Cluster | Brand | Vision | Key Milestone 2026 |
+|---------|-------|--------|-------------------|
+| **Kalaburagi** | Kalyana Karnataka AI Hub | 50+ startups, 10K jobs | XCEL Corp R&D operational |
+| **Tumakuru** | Aerospace Valley | Precision manufacturing hub | Japanese Township Phase 1 |
 
 #### Tier 3 (Study & Strategize)
-- **Shivamogga** - Development phase, feasibility study Q2 2026
+| Cluster | Status | Key Milestone 2026 |
+|---------|--------|-------------------|
+| **Shivamogga** | Development phase | Feasibility study complete Q2 2026 |
 
 ### 3. Competitive Intelligence
-- Karnataka vs. Telangana GCC competition analysis
-- Strategic response to competitive pressures
-- Cost competitiveness of Beyond Bengaluru clusters
+- **NEW:** Karnataka vs. Telangana GCC battle tracker
+- Cost competitiveness calculator (Bengaluru vs. Tier-2 vs. Hyderabad)
+- Strategic response dashboard
+- Competitor state policy monitor
 
-### 4. Strategic Programs
-- Karnataka IT-BT Policy 2025-2030 (₹445.5 Cr)
-- Karnataka GCC Policy 2024 (500 GCCs by 2029)
-- ELEVATE (1,000+ startups funded)
-- LEAP (₹1,000 Cr allocation)
-- Nipuna Karnataka (100,000 skilling target)
+### 4. Roadmap & Implementation (NEW)
+- Phase-wise milestone tracking
+- Cluster-specific implementation plans
+- Budget allocation tracker
+- Risk register with mitigation status
 
-## 🔍 Data Sources & Methodology
+### 5. Data Quality & Sources (NEW)
+- Confidence rating system (⭐ to ⭐⭐⭐⭐⭐)
+- Source attribution for all metrics
+- Gap analysis and remediation status
+- External partnership tracker
+
+---
+
+## 🔍 Data Sources & Methodology (Enhanced)
 
 ### Attribution Transparency Framework
 
 KDEM operates as a **facilitator and enabler**. We employ a three-tier attribution model:
 
-| Level | Type | Confidence | Examples |
-|-------|------|-----------|----------|
-| **Level A** | Direct Impact | High | ELEVATE-funded startups, documented facilitation |
-| **Level B** | Influenced Outcomes | Medium | Event conversions, policy advocacy outcomes |
-| **Level C** | Ecosystem Health | Narrative | Overall state trends, Karnataka rankings |
+| Level | Type | Confidence | Examples | Dashboard Treatment |
+|-------|------|-----------|----------|---------------------|
+| **Level A** | Direct Impact | ⭐⭐⭐⭐⭐ | ELEVATE-funded startups, documented facilitation | "KDEM-Enabled" |
+| **Level B** | Influenced Outcomes | ⭐⭐⭐⭐ | Event conversions, policy advocacy outcomes | "KDEM-Influenced" |
+| **Level C** | Ecosystem Health | ⭐⭐⭐ | Overall state trends, Karnataka rankings | "Ecosystem Health" |
 
-### Primary Data Sources
+### Source Confidence Ratings
 
-**Official Government:**
-- KDEM Official Reports & Program Tracking
+| Rating | Definition | Verification Level |
+|--------|-----------|-------------------|
+| ⭐⭐⭐⭐⭐ | **Verified Official** | Third-party government/institution data |
+| ⭐⭐⭐⭐ | **High Confidence** | Cross-validated from multiple sources |
+| ⭐⭐⭐ | **Moderate Confidence** | Reputable research/industry reports |
+| ⭐⭐ | **Self-Reported** | Company/cluster self-reporting |
+| ⭐ | **Estimated/Projected** | Calculated from methodology |
+
+### Primary Data Sources by Category
+
+**Official Government (⭐⭐⭐⭐⭐):**
+- KDEM Official Reports
 - Karnataka IT-BT Policy 2025-2030
-- Karnataka Startup Policy 2025-2030
 - Karnataka GCC Policy 2024
 - STPI Karnataka Export Data
+- DPIIT Startup Rankings
 
-**Industry Research:**
+**Industry Research (⭐⭐⭐⭐):**
 - NASSCOM GCC Reports
 - Zinnov GCC Reports 2025
-- Tracxn & Inc42 Startup Data
+- Tracxn Startup Data
 - Startup Genome - Bengaluru Karnataka
 
-**Cluster Vision Documents:**
+**International Benchmarks (⭐⭐⭐⭐):**
+- Singapore Digital Economy Report 2025 (IMDA)
+- e-Conomy SEA 2025 (Google/Temasek/Bain)
+- ASEAN Digital Economy Framework Agreement
+- World Bank Digital Economy Framework
+
+**Cluster Vision Documents (⭐⭐⭐⭐):**
 - Mysuru Vision 2030 (Released July 2025)
 - Mangaluru Vision 2034 (Released September 2025)
 - HDB Cluster Vision 2025-2030
-- Silicon Beach Skills Report (Xpheno-KDEM)
 
-**Events & Programs:**
-- Bengaluru Tech Summit 2025 (50,000+ visitors, 60+ countries)
-- Mysuru Big Tech Show 2025
-- Mangaluru Technovanza 2025
+See [SOURCES.md](SOURCES.md) for complete attribution with confidence ratings.
 
-### Key Assumptions & Projections
+---
 
-1. **Digital Economy Growth**: CAGR of 25-30% assumed to reach $400B by 2030 from ~$110B (2025)
-2. **Beyond Bengaluru Attribution**: Companies counted as "onboarded" when KDEM has documented facilitation role
-3. **GCC Growth**: 500 new GCCs target requires acceleration from current ~40/year to ~100/year average
-4. **Cluster Targets**: Based on official Vision Documents released by KDEM
-5. **Competitive Data**: Validated through multiple sources (Zinnov, NASSCOM, state announcements)
-6. **Update Frequency**: Quarterly updates planned; current data as of January 2026
+## 📈 Key Metrics Tracked (With Confidence Ratings)
 
-## 🚀 Quick Start
+### North Star Metrics (Ecosystem Health)
 
-### Viewing the Dashboard
+| Metric | Current | 2030 Target | Confidence | Source |
+|--------|---------|-------------|------------|--------|
+| Digital Economy Size | ~$110B | $400B | ⭐⭐⭐ | State economic estimate |
+| IT Export Share | 45% of India | 45%+ | ⭐⭐⭐⭐⭐ | STPI |
+| Total GCCs | 550+ | 1,000 | ⭐⭐⭐⭐ | NASSCOM |
+| Active Startups | 17,000+ | 25,000 | ⭐⭐⭐⭐⭐ | DPIIT |
+| Unicorns + Soonicorns | 45 | 90 | ⭐⭐⭐⭐ | Tracxn |
+| Tech Employment | 2.2M | 3M | ⭐⭐⭐⭐ | Industry surveys |
 
-Simply open `index.html` in a modern web browser. The dashboard is built with vanilla HTML, CSS, and JavaScript - no build process required.
+### KDEM Mission Impact
 
-### For GitHub Pages Deployment
+| Metric | Current | Target | Confidence | Source |
+|--------|---------|--------|------------|--------|
+| Beyond Bengaluru Companies | 126 | 500+ | ⭐⭐ | Self-reported (Registry needed) |
+| Beyond Bengaluru Jobs | 5,500+ | 50,000+ | ⭐⭐ | Self-reported (EPFO verification needed) |
+| ELEVATE Startups Funded | 1,000+ | - | ⭐⭐⭐⭐ | Program records |
+| Mid-Market GCCs (BB) | TBD | 100 | - | Tracking needed |
 
-1. Navigate to repository Settings
-2. Go to Pages section
-3. Select source: Deploy from branch
-4. Choose branch: `main`
-5. Select folder: `/ (root)`
-6. Save
+---
 
-The dashboard will be available at: `https://[username].github.io/kdem/`
+## 🏆 Competitive Positioning
 
-## 📁 Repository Structure
+### Karnataka's National Leadership
+
+| Metric | Status | Confidence |
+|--------|--------|------------|
+| **#1** in IT Exports | 45% of India | ⭐⭐⭐⭐⭐ |
+| **#1** in GCCs | 550+ (35-40% of India) | ⭐⭐⭐⭐ |
+| **#1** in Unicorns | 45+ (50% of India) | ⭐⭐⭐⭐ |
+| **#1** in DPIIT Rankings | Consistently | ⭐⭐⭐⭐⭐ |
+| **World #2** AI Talent | 600,000 professionals | ⭐⭐⭐⭐ |
+
+### Strategic Response to Telangana Competition
+
+**Challenge:** Telangana attracted 70 greenfield GCCs in 2024-25 vs. Karnataka's 40+
+
+**KDEM Response:**
+- ✅ Beyond Bengaluru positioning (30-40% cost advantage)
+- ✅ Mid-market GCC targeting (100 by 2030)
+- ✅ Cluster specialization (Cybersecurity, Fintech, AI)
+- 🔄 Speed-to-operational guarantee (90 days)
+- 🔄 International roadshows (US, Europe, Japan, Korea)
+
+---
+
+## 🗂️ Repository Structure
 
 ```
 kdem/
@@ -121,10 +206,27 @@ kdem/
 ├── styles.css          # Comprehensive styling
 ├── script.js           # Interactive animations & effects
 ├── README.md           # This file
-└── SOURCES.md          # Detailed data sources and references
+├── SOURCES.md          # Data sources with confidence ratings
+└── .claude/            # Claude project configuration
 ```
 
-## 🎨 Features
+### Related Analysis Documents
+
+Located at `~/Library/Mobile Documents/com~apple~CloudDocs/KDEM/analysis/`:
+
+| Document | Purpose |
+|----------|---------|
+| `00-README-START-HERE.md` | Master index and project overview |
+| `01-kdem-priorities-extracted.md` | KDEM mission, verticals, strategic targets |
+| `02-beyond-bengaluru-cluster-analysis.md` | Deep dive on 6 clusters |
+| `03-updated-strategic-framework.md` | Dashboard design framework |
+| `04-competitive-landscape-intelligence.md` | Competitor state analysis |
+| `05-roadmap-implementation-plan.md` | **NEW:** 5-year implementation plan |
+| `06-measurement-gaps-solutions.md` | **NEW:** Gap analysis with solutions |
+
+---
+
+## 🎨 Dashboard Features
 
 ### Responsive Design
 - Mobile-first approach
@@ -136,65 +238,29 @@ kdem/
 - Animated counters on scroll
 - Hover effects on cards
 - Dynamic section highlighting
+- **NEW:** Roadmap milestone tracker
+- **NEW:** Confidence rating tooltips
 
-### Accessibility
-- Semantic HTML5 structure
-- ARIA labels where appropriate
-- High contrast color schemes
-- Readable font sizes
+### Data Visualization (Planned Enhancements)
+- Phase progress bars
+- Cluster comparison charts
+- Competitive positioning matrix
+- Cost calculator interactive tool
 
-### Performance
-- Minimal dependencies (vanilla JS)
-- Optimized CSS
-- Fast loading times
-- No external API calls (static dashboard)
-
-## 📈 Metrics Tracked
-
-### North Star Metrics (Ecosystem Health)
-- Digital Economy Size: ~$110B → $400B by 2030
-- IT Export Share: 45% of India (maintain/grow)
-- Total GCCs: 550+ → 1,000 by 2030
-- Active Startups: 17,000+ → 25,000 by 2030
-- Unicorns/Soonicorns: 45 → 90 by 2030
-- Tech Employment: 2.2M → 3M by 2030
-
-### KDEM Mission Impact
-- Beyond Bengaluru: 126 companies, 5,500+ jobs (January 2026)
-- ELEVATE: 1,000+ startups funded
-- LEAP: ₹1,000 Cr allocation, 3,000 ideas/year target
-- GCC Attraction: Targeting 100 mid-sized GCCs in Tier-2 cities
-
-### Cluster-Specific Targets
-- Mysuru: $10B digital economy, 150,000 jobs by 2030
-- Mangaluru: ₹40,000 Cr exports, 200,000 jobs by 2034
-- HDB: ₹300 Cr EMC 2.0 investment, industrial corridor
-
-## 🏆 Karnataka's Competitive Position
-
-### National Leadership
-- **#1** in IT Exports (45% of India)
-- **#1** in GCCs (550+, 35-40% of India)
-- **#1** in Unicorns (45+, 50% of India)
-- **#1** in DPIIT Startup Rankings
-- **World #2** AI/ML Talent Hub (600,000 professionals)
-
-### Strategic Response to Competition
-Telangana attracted 70 greenfield GCCs in 2024-25 vs. Karnataka's 40+. KDEM's response:
-- Accelerate Beyond Bengaluru execution
-- Position Tier-2 cities as cost-competitive alternatives
-- Target 100 mid-sized GCCs in Mysuru, Mangaluru, Hubballi
-- Specialized cluster branding (Cybersecurity Valley, Silicon Beach, AI Corridor)
+---
 
 ## 🔄 Update Schedule
 
-| Component | Frequency | Next Update |
-|-----------|-----------|-------------|
-| Vision Progress | Quarterly | April 2026 |
-| Beyond Bengaluru Metrics | Monthly | February 2026 |
-| Program Data (ELEVATE, LEAP) | Quarterly | April 2026 |
-| Competitive Intelligence | Quarterly | April 2026 |
-| Cluster Vision Tracking | Monthly | February 2026 |
+| Component | Frequency | Next Update | Owner |
+|-----------|-----------|-------------|-------|
+| Vision Progress | Quarterly | April 2026 | Strategy |
+| Beyond Bengaluru Metrics | Monthly | February 2026 | Clusters |
+| Program Data (ELEVATE/LEAP) | Quarterly | April 2026 | Innovation |
+| Competitive Intelligence | Quarterly | April 2026 | Strategy |
+| Roadmap Milestones | Monthly | February 2026 | Strategy |
+| Source Confidence Review | Quarterly | April 2026 | Data Team |
+
+---
 
 ## 📞 Contact & Links
 
@@ -212,13 +278,27 @@ Telangana attracted 70 greenfield GCCs in 2024-25 vs. Karnataka's 40+. KDEM's re
 - IESA
 - NASSCOM
 
+---
+
 ## 📄 License & Attribution
 
 This dashboard is built based on comprehensive analysis of publicly available KDEM strategic planning documents, policy papers, vision documents, and industry research reports.
 
 **Data Period:** FY 2024-25 & 2025-26
-**Last Updated:** January 2026
-**Analysis Sources:** See [SOURCES.md](SOURCES.md) for complete attribution
+**Last Updated:** January 15, 2026
+**Analysis Sources:** See [SOURCES.md](SOURCES.md) for complete attribution with confidence ratings
+
+---
+
+## 🚀 Roadmap for Dashboard Development
+
+| Phase | Timeline | Deliverables |
+|-------|----------|--------------|
+| **v1.0** | Q1 2026 | Basic dashboard, static data |
+| **v2.0** | Q3 2026 | Automated refresh, APIs, roadmap tracker |
+| **v3.0** | Q2 2027 | Real-time updates, predictive analytics |
+
+**Target Launch:** BTS 2026 (November 17-19, 2026)
 
 ---
 
@@ -229,10 +309,11 @@ This dashboard synthesizes data and insights from:
 - Karnataka Government IT-BT, Startup, and GCC policies
 - Cluster Vision Documents (Mysuru, Mangaluru, HDB)
 - Industry research partners (NASSCOM, Zinnov, Tracxn, Inc42)
+- International benchmarks (Singapore IMDA, ASEAN DEFA, World Bank)
 - Bengaluru Tech Summit, Mysuru Big Tech Show, Mangaluru Technovanza
-- STPI Karnataka, Startup Genome, and ecosystem stakeholders
 
 ---
 
 **Built for KDEM Strategic Communication**
 *Transparent. Data-Driven. Impact-Focused.*
+
