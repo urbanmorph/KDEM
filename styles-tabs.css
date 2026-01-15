@@ -310,17 +310,15 @@ section h5 {
 
 .quick-nav {
     margin: var(--spacing-xl) 0;
-    padding: var(--spacing-xl);
-    background: linear-gradient(135deg, rgba(91, 185, 236, 0.1) 0%, rgba(233, 99, 55, 0.05) 100%);
-    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl) 0;
 }
 
 .quick-nav h3 {
     font-size: var(--font-size-3xl);
-    color: var(--primary-color);
+    color: var(--text-primary);
     text-align: center;
     margin-bottom: var(--spacing-xl);
-    font-weight: 700;
+    font-weight: 600;
     border: none;
     padding: 0;
 }
@@ -334,8 +332,8 @@ section h5 {
 .quick-nav-card {
     background: var(--white);
     padding: var(--spacing-lg);
-    border-radius: var(--radius-lg);
-    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
     cursor: pointer;
     transition: all var(--transition-base);
     display: flex;
@@ -345,19 +343,18 @@ section h5 {
 }
 
 .quick-nav-card:hover {
-    border-color: var(--tertiary-color);
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
+    border-color: var(--text-primary);
+    box-shadow: var(--shadow-sm);
 }
 
 .quick-nav-card .nav-icon {
-    font-size: 3rem;
+    font-size: 2.5rem;
 }
 
 .quick-nav-card .nav-title {
     font-size: var(--font-size-xl);
-    font-weight: 700;
-    color: var(--primary-color);
+    font-weight: 600;
+    color: var(--text-primary);
 }
 
 .quick-nav-card .nav-desc {
@@ -383,22 +380,21 @@ section h5 {
 .hero-stat-card {
     background: var(--white);
     padding: var(--spacing-lg);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
     text-align: center;
     transition: all var(--transition-base);
-    border-top: 4px solid var(--primary-color);
 }
 
 .hero-stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
+    border-color: var(--text-primary);
+    box-shadow: var(--shadow-sm);
 }
 
 .stat-number {
     font-size: 3rem;
     font-weight: 700;
-    color: var(--primary-color);
+    color: var(--text-primary);
     margin-bottom: var(--spacing-xs);
 }
 
@@ -430,9 +426,8 @@ section h5 {
 .progress-card {
     background: var(--white);
     padding: var(--spacing-lg);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-    border-left: 5px solid var(--tertiary-color);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
 }
 
 .progress-header {
@@ -531,14 +526,14 @@ section h5 {
 .program-card {
     background: var(--white);
     padding: var(--spacing-lg);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
     transition: all var(--transition-base);
 }
 
 .program-card:hover {
-    box-shadow: var(--shadow-lg);
-    transform: translateY(-3px);
+    border-color: var(--text-primary);
+    box-shadow: var(--shadow-sm);
 }
 
 .program-icon {
@@ -569,10 +564,8 @@ section h5 {
     align-items: center;
     gap: var(--spacing-md);
     margin-bottom: var(--spacing-lg);
-    padding: var(--spacing-lg);
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
+    padding: var(--spacing-md) 0;
+    border-bottom: 2px solid var(--border-color);
 }
 
 .tier-header h3 {
@@ -580,59 +573,30 @@ section h5 {
     font-size: var(--font-size-2xl);
     border: none;
     padding: 0;
+    color: var(--text-primary);
+    font-weight: 600;
 }
 
 .tier-header.tier-1-header {
-    background: linear-gradient(135deg, var(--tier-1-bg) 0%, var(--white) 100%);
-    border-left: 6px solid var(--primary-color);
-}
-
-.tier-header.tier-1-header h3 {
-    color: var(--primary-color);
+    border-bottom-color: var(--text-primary);
 }
 
 .tier-header.tier-2-header {
-    background: linear-gradient(135deg, var(--tier-2-bg) 0%, var(--white) 100%);
-    border-left: 6px solid var(--secondary-color);
-}
-
-.tier-header.tier-2-header h3 {
-    color: var(--secondary-color);
+    border-bottom-color: var(--text-primary);
 }
 
 .tier-header.tier-3-header {
-    background: linear-gradient(135deg, var(--tier-3-bg) 0%, var(--white) 100%);
-    border-left: 6px solid var(--tertiary-color);
-}
-
-.tier-header.tier-3-header h3 {
-    color: var(--tertiary-color);
+    border-bottom-color: var(--text-primary);
 }
 
 .tier-badge {
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--radius-lg);
-    font-weight: 700;
-    font-size: var(--font-size-base);
-    box-shadow: var(--shadow-sm);
-}
-
-.tier-badge.tier-1-badge {
-    background: var(--primary-color);
-    color: var(--white);
-    border: none;
-}
-
-.tier-badge.tier-2-badge {
-    background: var(--secondary-color);
-    color: var(--white);
-    border: none;
-}
-
-.tier-badge.tier-3-badge {
-    background: var(--tertiary-color);
-    color: var(--white);
-    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    background: var(--bg-color);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
 }
 
 .cluster-grid {
@@ -643,24 +607,16 @@ section h5 {
 .cluster-card-detailed {
     background: var(--white);
     padding: var(--spacing-lg);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-    border-left: 5px solid var(--border-color);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    margin-bottom: var(--spacing-md);
 }
 
-.cluster-card-detailed.tier-1 {
-    border-left-color: var(--primary-color);
-    background: linear-gradient(to right, var(--tier-1-bg) 0%, var(--white) 100%);
-}
-
-.cluster-card-detailed.tier-2 {
-    border-left-color: var(--secondary-color);
-    background: linear-gradient(to right, var(--tier-2-bg) 0%, var(--white) 100%);
-}
-
+.cluster-card-detailed.tier-1,
+.cluster-card-detailed.tier-2,
 .cluster-card-detailed.tier-3 {
-    border-left-color: var(--tertiary-color);
-    background: linear-gradient(to right, var(--tier-3-bg) 0%, var(--white) 100%);
+    border-left-width: 3px;
+    border-left-color: var(--text-primary);
 }
 
 .cluster-header {
@@ -684,12 +640,13 @@ section h5 {
 }
 
 .cluster-vision-badge {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    color: var(--white);
+    background: var(--bg-color);
+    color: var(--text-primary);
     padding: 0.5rem 1rem;
-    border-radius: var(--radius-lg);
-    font-weight: 700;
-    font-size: var(--font-size-base);
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    border: 1px solid var(--border-color);
 }
 
 .cluster-progress-section {
@@ -772,53 +729,52 @@ section h5 {
    ============================================ */
 
 .leadership-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
     margin-bottom: var(--spacing-xl);
 }
 
 .leadership-card {
-    background: linear-gradient(135deg, var(--white) 0%, rgba(91, 185, 236, 0.1) 100%);
-    padding: var(--spacing-xl) var(--spacing-lg);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-md);
-    text-align: center;
-    border: 3px solid var(--tertiary-color);
+    background: var(--white);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    display: grid;
+    grid-template-columns: 80px 1fr 1fr 120px;
+    align-items: center;
+    gap: var(--spacing-lg);
     transition: all var(--transition-base);
 }
 
 .leadership-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: var(--shadow-xl);
-    border-color: var(--primary-color);
+    border-color: var(--text-primary);
+    box-shadow: var(--shadow-sm);
 }
 
 .leadership-rank {
-    font-size: 3rem;
-    font-weight: 800;
-    color: var(--primary-color);
-    margin-bottom: var(--spacing-sm);
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: center;
 }
 
 .leadership-metric {
     font-size: var(--font-size-xl);
-    font-weight: 700;
+    font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: var(--spacing-sm);
 }
 
 .leadership-value {
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-base);
     color: var(--text-secondary);
-    margin-bottom: var(--spacing-md);
-    font-weight: 600;
+    font-weight: 400;
 }
 
 .leadership-confidence {
-    font-size: var(--font-size-base);
-    color: var(--secondary-color);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    text-align: right;
 }
 
 /* ============================================
@@ -1010,49 +966,49 @@ section h5 {
 
 .phase-implementation {
     display: grid;
-    gap: var(--spacing-xl);
+    gap: var(--spacing-lg);
 }
 
 .phase-card {
-    background: linear-gradient(135deg, var(--white) 0%, rgba(91, 185, 236, 0.05) 100%);
+    background: var(--white);
     padding: var(--spacing-xl);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-lg);
-    border: 3px solid var(--border-color);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
     transition: all var(--transition-base);
 }
 
 .phase-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-xl);
-    border-color: var(--tertiary-color);
+    border-color: var(--text-primary);
+    box-shadow: var(--shadow-sm);
 }
 
 .phase-card h3 {
-    color: var(--primary-color);
+    color: var(--text-primary);
     margin-bottom: var(--spacing-md);
-    font-size: var(--font-size-3xl);
-    border-bottom: 3px solid var(--primary-color);
+    font-size: var(--font-size-2xl);
+    border-bottom: 2px solid var(--border-color);
     padding-bottom: var(--spacing-sm);
-    display: inline-block;
+    font-weight: 600;
 }
 
 .phase-card h4 {
-    color: var(--secondary-color);
+    color: var(--text-primary);
     margin-bottom: var(--spacing-md);
     margin-top: var(--spacing-lg);
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
 }
 
 .phase-card .phase-period {
     display: inline-block;
-    background: var(--tertiary-color);
-    color: var(--white);
+    background: var(--bg-color);
+    color: var(--text-primary);
     padding: 0.5rem 1rem;
-    border-radius: var(--radius-md);
-    font-weight: 700;
-    font-size: var(--font-size-base);
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: var(--font-size-sm);
     margin-bottom: var(--spacing-md);
+    border: 1px solid var(--border-color);
 }
 
 .target-mini-progress {
