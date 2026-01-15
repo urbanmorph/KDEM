@@ -98,7 +98,7 @@ body {
    ============================================ */
 
 .header {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    background: var(--primary-color);
     color: var(--white);
     padding: var(--spacing-lg) 0;
     box-shadow: var(--shadow-md);
@@ -150,51 +150,78 @@ body {
 /* Tab Navigation */
 .tab-navigation {
     display: flex;
-    gap: var(--spacing-xs);
+    gap: var(--spacing-sm);
     overflow-x: auto;
-    padding-bottom: var(--spacing-xs);
+    padding: var(--spacing-md) 0;
     -webkit-overflow-scrolling: touch;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-sm);
 }
 
 .tab-navigation::-webkit-scrollbar {
-    height: 4px;
+    height: 6px;
 }
 
 .tab-navigation::-webkit-scrollbar-track {
     background: rgba(255,255,255,0.1);
-    border-radius: 2px;
+    border-radius: 3px;
 }
 
 .tab-navigation::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.3);
-    border-radius: 2px;
+    background: rgba(255,255,255,0.4);
+    border-radius: 3px;
 }
 
 .nav-btn {
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.3);
+    background: transparent;
+    border: 2px solid transparent;
     color: var(--white);
-    padding: var(--spacing-sm) var(--spacing-md);
-    border-radius: var(--radius-md);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius-lg);
     cursor: pointer;
-    font-size: var(--font-size-base);
-    font-weight: 500;
+    font-size: var(--font-size-lg);
+    font-weight: 600;
     white-space: nowrap;
     transition: all var(--transition-base);
-    backdrop-filter: blur(10px);
+    position: relative;
+    min-width: 150px;
+    text-align: center;
+}
+
+.nav-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background: var(--white);
+    transition: width var(--transition-base);
+    border-radius: 3px 3px 0 0;
 }
 
 .nav-btn:hover {
-    background: rgba(255,255,255,0.25);
-    border-color: rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(255,255,255,0.3);
     transform: translateY(-2px);
+}
+
+.nav-btn:hover::after {
+    width: 80%;
 }
 
 .nav-btn.active {
     background: var(--white);
     color: var(--primary-color);
     border-color: var(--white);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateY(-3px);
+}
+
+.nav-btn.active::after {
+    width: 0;
 }
 
 /* ============================================
@@ -275,6 +302,67 @@ section h5 {
     color: var(--text-secondary);
     margin-bottom: var(--spacing-sm);
     font-weight: 600;
+}
+
+/* ============================================
+   QUICK NAVIGATION (Tab 1)
+   ============================================ */
+
+.quick-nav {
+    margin: var(--spacing-xl) 0;
+    padding: var(--spacing-xl);
+    background: linear-gradient(135deg, rgba(91, 185, 236, 0.1) 0%, rgba(233, 99, 55, 0.05) 100%);
+    border-radius: var(--radius-xl);
+}
+
+.quick-nav h3 {
+    font-size: var(--font-size-3xl);
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+    font-weight: 700;
+    border: none;
+    padding: 0;
+}
+
+.quick-nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.quick-nav-card {
+    background: var(--white);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    text-align: center;
+}
+
+.quick-nav-card:hover {
+    border-color: var(--tertiary-color);
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.quick-nav-card .nav-icon {
+    font-size: 3rem;
+}
+
+.quick-nav-card .nav-title {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.quick-nav-card .nav-desc {
+    font-size: var(--font-size-base);
+    color: var(--text-secondary);
 }
 
 /* ============================================
@@ -480,32 +568,71 @@ section h5 {
     display: flex;
     align-items: center;
     gap: var(--spacing-md);
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.tier-header h3 {
+    margin: 0;
+    font-size: var(--font-size-2xl);
+    border: none;
+    padding: 0;
+}
+
+.tier-header.tier-1-header {
+    background: linear-gradient(135deg, var(--tier-1-bg) 0%, var(--white) 100%);
+    border-left: 6px solid var(--primary-color);
+}
+
+.tier-header.tier-1-header h3 {
+    color: var(--primary-color);
+}
+
+.tier-header.tier-2-header {
+    background: linear-gradient(135deg, var(--tier-2-bg) 0%, var(--white) 100%);
+    border-left: 6px solid var(--secondary-color);
+}
+
+.tier-header.tier-2-header h3 {
+    color: var(--secondary-color);
+}
+
+.tier-header.tier-3-header {
+    background: linear-gradient(135deg, var(--tier-3-bg) 0%, var(--white) 100%);
+    border-left: 6px solid var(--tertiary-color);
+}
+
+.tier-header.tier-3-header h3 {
+    color: var(--tertiary-color);
 }
 
 .tier-badge {
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius-md);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-lg);
     font-weight: 700;
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-base);
+    box-shadow: var(--shadow-sm);
 }
 
 .tier-badge.tier-1-badge {
-    background: var(--tier-1-bg);
-    color: var(--primary-color);
-    border: 2px solid var(--tier-1-border);
+    background: var(--primary-color);
+    color: var(--white);
+    border: none;
 }
 
 .tier-badge.tier-2-badge {
-    background: var(--tier-2-bg);
-    color: var(--secondary-color);
-    border: 2px solid var(--tier-2-border);
+    background: var(--secondary-color);
+    color: var(--white);
+    border: none;
 }
 
 .tier-badge.tier-3-badge {
-    background: var(--tier-3-bg);
-    color: var(--tertiary-color);
-    border: 2px solid var(--tier-3-border);
+    background: var(--tertiary-color);
+    color: var(--white);
+    border: none;
 }
 
 .cluster-grid {
@@ -638,6 +765,60 @@ section h5 {
     position: absolute;
     left: 0;
     color: var(--warning);
+}
+
+/* ============================================
+   KARNATAKA LEADERSHIP (Tab 3)
+   ============================================ */
+
+.leadership-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.leadership-card {
+    background: linear-gradient(135deg, var(--white) 0%, rgba(91, 185, 236, 0.1) 100%);
+    padding: var(--spacing-xl) var(--spacing-lg);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    border: 3px solid var(--tertiary-color);
+    transition: all var(--transition-base);
+}
+
+.leadership-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--primary-color);
+}
+
+.leadership-rank {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-sm);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.leadership-metric {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.leadership-value {
+    font-size: var(--font-size-lg);
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-md);
+    font-weight: 600;
+}
+
+.leadership-confidence {
+    font-size: var(--font-size-base);
+    color: var(--secondary-color);
 }
 
 /* ============================================
@@ -829,18 +1010,48 @@ section h5 {
 
 .phase-implementation {
     display: grid;
-    gap: var(--spacing-lg);
+    gap: var(--spacing-xl);
 }
 
 .phase-card {
-    background: var(--white);
-    padding: var(--spacing-lg);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
+    background: linear-gradient(135deg, var(--white) 0%, rgba(91, 185, 236, 0.05) 100%);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    border: 3px solid var(--border-color);
+    transition: all var(--transition-base);
+}
+
+.phase-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--tertiary-color);
+}
+
+.phase-card h3 {
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-md);
+    font-size: var(--font-size-3xl);
+    border-bottom: 3px solid var(--primary-color);
+    padding-bottom: var(--spacing-sm);
+    display: inline-block;
 }
 
 .phase-card h4 {
-    color: var(--primary-color);
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+    font-size: var(--font-size-xl);
+}
+
+.phase-card .phase-period {
+    display: inline-block;
+    background: var(--tertiary-color);
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    font-size: var(--font-size-base);
     margin-bottom: var(--spacing-md);
 }
 
@@ -1493,7 +1704,7 @@ section h5 {
    ============================================ */
 
 .footer {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    background: var(--tertiary-color);
     color: var(--white);
     padding: var(--spacing-xl) 0;
     margin-top: var(--spacing-xl);
