@@ -38,8 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Counter animation for numbers
-function animateCounter(element, target, duration = 2000) {
+// Counter animation for numbers with suffix preservation
+function animateCounter(element, target, suffix, duration = 2000) {
     const start = 0;
     const increment = target / (duration / 16);
     let current = start;
@@ -47,10 +47,10 @@ function animateCounter(element, target, duration = 2000) {
     const timer = setInterval(() => {
         current += increment;
         if (current >= target) {
-            element.textContent = formatNumber(target);
+            element.textContent = formatNumber(target) + suffix;
             clearInterval(timer);
         } else {
-            element.textContent = formatNumber(Math.floor(current));
+            element.textContent = formatNumber(Math.floor(current)) + suffix;
         }
     }, 16);
 }
@@ -59,7 +59,7 @@ function formatNumber(num) {
     if (num >= 1000000) {
         return (num / 1000000).toFixed(1) + 'M';
     } else if (num >= 1000) {
-        return (num / 1000).toFixed(0) + 'K';
+        return num.toLocaleString();
     }
     return num.toString();
 }
@@ -70,12 +70,14 @@ const heroObserver = new IntersectionObserver((entries) => {
         if (entry.isIntersecting) {
             const statNumbers = entry.target.querySelectorAll('.stat-number');
             statNumbers.forEach(stat => {
-                const text = stat.textContent;
-                const match = text.match(/(\d+)/);
+                const text = stat.textContent.trim();
+                // Extract number and suffix (%, +, K, etc.)
+                const match = text.match(/(\d[\d,]*)(.*)/);
                 if (match) {
-                    const num = parseInt(match[1]);
-                    stat.textContent = '0';
-                    setTimeout(() => animateCounter(stat, num), 200);
+                    const num = parseInt(match[1].replace(/,/g, ''));
+                    const suffix = match[2] || '';
+                    stat.textContent = '0' + suffix;
+                    setTimeout(() => animateCounter(stat, num, suffix), 200);
                 }
             });
             heroObserver.unobserve(entry.target);
