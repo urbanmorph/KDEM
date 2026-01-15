@@ -56,7 +56,7 @@ This document provides complete attribution for all data, metrics, and insights 
 
 10. **Software Technology Parks of India (STPI) - Karnataka**
     - URL: https://bengaluru.stpi.in/
-    - Data Used: IT/ITES export statistics, Karnataka's 44% share of India's IT exports
+    - Data Used: IT/ITES export statistics, Karnataka's 45% share of India's IT exports
     - Frequency: Quarterly updates
     - Last Accessed: January 2026
 

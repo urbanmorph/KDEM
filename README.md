@@ -20,7 +20,7 @@ This dashboard provides a comprehensive, public-facing view of Karnataka Digital
 
 ### 1. Vision & Impact
 - Karnataka's $400B digital economy vision with progress tracking
-- Current achievements: 44% of India's IT exports, 550+ GCCs, 17,000+ startups
+- Current achievements: 45% of India's IT exports, 550+ GCCs, 17,000+ startups
 - 2030 targets across key metrics
 
 ### 2. Beyond Bengaluru: Six Strategic Clusters
@@ -153,7 +153,7 @@ kdem/
 
 ### North Star Metrics (Ecosystem Health)
 - Digital Economy Size: ~$110B → $400B by 2030
-- IT Export Share: 44% of India (maintain/grow)
+- IT Export Share: 45% of India (maintain/grow)
 - Total GCCs: 550+ → 1,000 by 2030
 - Active Startups: 17,000+ → 25,000 by 2030
 - Unicorns/Soonicorns: 45 → 90 by 2030
@@ -173,7 +173,7 @@ kdem/
 ## 🏆 Karnataka's Competitive Position
 
 ### National Leadership
-- **#1** in IT Exports (44% of India)
+- **#1** in IT Exports (45% of India)
 - **#1** in GCCs (550+, 35-40% of India)
 - **#1** in Unicorns (45+, 50% of India)
 - **#1** in DPIIT Startup Rankings
