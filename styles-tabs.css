@@ -919,30 +919,54 @@ section h5 {
 
 .overall-progress {
     background: var(--white);
-    padding: var(--spacing-lg);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
     margin-bottom: var(--spacing-xl);
 }
 
+.progress-summary h3 {
+    font-size: var(--font-size-2xl);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+    font-weight: 600;
+    border: none;
+    padding: 0;
+}
+
 .mega-progress-bar {
-    height: 24px;
+    height: 32px;
     background: var(--bg-color);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     overflow: hidden;
     margin: var(--spacing-md) 0;
+    border: 1px solid var(--border-color);
 }
 
 .mega-progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+    background: var(--text-primary);
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--white);
     font-weight: 700;
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-base);
     transition: width var(--transition-slow);
+}
+
+.progress-stats-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: var(--spacing-md);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.progress-stats-row span:first-child {
+    font-weight: 600;
+    color: var(--text-primary);
 }
 
 .quarterly-timeline {
