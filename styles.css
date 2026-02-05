@@ -599,22 +599,9 @@ body {
 /* Growth Trends Charts */
 .growth-charts-grid {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2rem;
     margin-bottom: 3rem;
-}
-
-/* Responsive grid for growth charts */
-@media (min-width: 768px) {
-    .growth-charts-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (min-width: 1200px) {
-    .growth-charts-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
 }
 
 .growth-chart-card {
@@ -652,20 +639,6 @@ body {
     margin-bottom: 1rem;
     padding: 2rem 0 0 0;
     position: relative;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-/* Ensure bars don't get too cramped on mobile */
-@media (max-width: 768px) {
-    .bar-chart {
-        justify-content: flex-start;
-    }
-
-    .bar-container {
-        min-width: 45px;
-        flex-shrink: 0;
-    }
 }
 
 .bar-container {
