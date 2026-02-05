@@ -2608,3 +2608,81 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* ============================================
+   FIX METRIC CARDS FOR NEW TABS
+   Override for Labor, Capital, Land, Entrepreneurship tabs
+   ============================================ */
+
+/* Fix metric cards in new tabs to use vertical layout */
+.labor-tab .metric-card,
+.capital-tab .metric-card,
+.land-tab .metric-card,
+.entrepreneurship-tab .metric-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+    padding: var(--spacing-lg);
+}
+
+/* Ensure proper stacking order */
+.labor-tab .metric-card > *,
+.capital-tab .metric-card > *,
+.land-tab .metric-card > *,
+.entrepreneurship-tab .metric-card > * {
+    width: 100%;
+}
+
+/* Icon styling */
+.labor-tab .metric-icon,
+.capital-tab .metric-icon,
+.land-tab .metric-icon,
+.entrepreneurship-tab .metric-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Value styling */
+.labor-tab .metric-value,
+.capital-tab .metric-value,
+.land-tab .metric-value,
+.entrepreneurship-tab .metric-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    line-height: 1.2;
+}
+
+/* Label styling */
+.labor-tab .metric-label,
+.capital-tab .metric-label,
+.land-tab .metric-label,
+.entrepreneurship-tab .metric-label {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+/* Source styling */
+.labor-tab .metric-source,
+.capital-tab .metric-source,
+.land-tab .metric-source,
+.entrepreneurship-tab .metric-source {
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+    font-style: italic;
+    margin-top: 0.25rem;
+}
+
+/* Highlight variant */
+.labor-tab .metric-card.metric-highlight,
+.capital-tab .metric-card.metric-highlight,
+.land-tab .metric-card.metric-highlight,
+.entrepreneurship-tab .metric-card.metric-highlight {
+    border: 2px solid var(--primary-color);
+    background: linear-gradient(135deg, #fff 0%, #fff5f2 100%);
+}
+
