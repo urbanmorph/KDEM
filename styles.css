@@ -1149,8 +1149,12 @@ body {
     flex-wrap: nowrap;
 }
 
-/* Line 1: Strategy (Overview + Roadmap) */
+/* Line 1: Strategy (Overview + Roadmap) + Sources */
 .tab-nav-container.collapsed .tab-group-strategy {
+    order: 1;
+}
+
+.tab-nav-container.collapsed .tab-group-single {
     order: 1;
 }
 
@@ -1160,13 +1164,15 @@ body {
     flex-basis: 100%;
 }
 
-/* Line 3: Geography + Factors (together on same line) */
+/* Line 3: Geography */
 .tab-nav-container.collapsed .tab-group-geography {
     order: 3;
 }
 
-.tab-nav-container.collapsed .tab-group-single {
-    order: 3;
+/* Last Line: All 4 Factors (full width) */
+.tab-nav-container.collapsed .tab-group-factors {
+    order: 4;
+    flex-basis: 100%;
 }
 
 .tab-nav-container.collapsed .nav-btn {
