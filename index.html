@@ -30,92 +30,91 @@
             <span class="hamburger-icon"></span>
             <span class="hamburger-icon"></span>
         </button>
-        <div class="tab-navigation-grid">
-            <!-- Strategy Group (combines Overview + Roadmap) -->
-            <div class="tab-group tab-group-strategy">
-                <div class="tab-group-label">Strategy</div>
-                <div class="tab-group-items">
-                    <button class="nav-btn nav-btn-strategic active" data-tab="overview">
-                        <span class="tab-icon">📊</span>
-                        <span class="tab-label">Overview</span>
-                    </button>
-                    <button class="nav-btn nav-btn-strategic" data-tab="roadmap">
-                        <span class="tab-icon">🗺️</span>
-                        <span class="tab-label">Roadmap</span>
-                    </button>
-                </div>
+
+        <!-- Primary Navigation (Categories) -->
+        <div class="primary-nav">
+            <button class="category-btn active" data-category="strategy">
+                <span class="category-label">Strategy</span>
+            </button>
+            <button class="category-btn" data-category="verticals">
+                <span class="category-label">Verticals</span>
+            </button>
+            <button class="category-btn" data-category="geography">
+                <span class="category-label">Geography</span>
+            </button>
+            <button class="category-btn" data-category="factors">
+                <span class="category-label">Factors</span>
+            </button>
+        </div>
+
+        <!-- Secondary Navigation (Tabs) -->
+        <div class="secondary-nav">
+            <!-- Strategy Tabs -->
+            <div class="tab-group" data-category="strategy">
+                <button class="nav-btn active" data-tab="overview">
+                    <span class="tab-icon">📊</span>
+                    <span class="tab-label">Overview</span>
+                </button>
+                <button class="nav-btn" data-tab="roadmap">
+                    <span class="tab-icon">🗺️</span>
+                    <span class="tab-label">Roadmap</span>
+                </button>
+                <button class="nav-btn" data-tab="sources">
+                    <span class="tab-icon">📚</span>
+                    <span class="tab-label">Sources</span>
+                </button>
             </div>
 
-            <!-- Verticals Group -->
-            <div class="tab-group tab-group-verticals">
-                <div class="tab-group-label">Verticals</div>
-                <div class="tab-group-items">
-                    <button class="nav-btn nav-btn-vertical" data-tab="it-exports">
-                        <span class="tab-icon">💼</span>
-                        <span class="tab-label">IT Exports</span>
-                    </button>
-                    <button class="nav-btn nav-btn-vertical" data-tab="it-domestic">
-                        <span class="tab-icon">🏢</span>
-                        <span class="tab-label">IT Domestic</span>
-                    </button>
-                    <button class="nav-btn nav-btn-vertical" data-tab="esdm">
-                        <span class="tab-icon">⚡</span>
-                        <span class="tab-label">ESDM</span>
-                    </button>
-                    <button class="nav-btn nav-btn-vertical" data-tab="startups">
-                        <span class="tab-icon">🚀</span>
-                        <span class="tab-label">Startups & Digitizing</span>
-                    </button>
-                </div>
+            <!-- Verticals Tabs -->
+            <div class="tab-group" data-category="verticals" style="display: none;">
+                <button class="nav-btn" data-tab="it-exports">
+                    <span class="tab-icon">💼</span>
+                    <span class="tab-label">IT Exports</span>
+                </button>
+                <button class="nav-btn" data-tab="it-domestic">
+                    <span class="tab-icon">🏢</span>
+                    <span class="tab-label">IT Domestic</span>
+                </button>
+                <button class="nav-btn" data-tab="esdm">
+                    <span class="tab-icon">⚡</span>
+                    <span class="tab-label">ESDM</span>
+                </button>
+                <button class="nav-btn" data-tab="startups">
+                    <span class="tab-icon">🚀</span>
+                    <span class="tab-label">Startups</span>
+                </button>
             </div>
 
-            <!-- Geography Group -->
-            <div class="tab-group tab-group-geography">
-                <div class="tab-group-label">Geography</div>
-                <div class="tab-group-items">
-                    <button class="nav-btn nav-btn-geography" data-tab="bengaluru">
-                        <span class="tab-icon">🏙️</span>
-                        <span class="tab-label">Bengaluru</span>
-                    </button>
-                    <button class="nav-btn nav-btn-geography" data-tab="clusters">
-                        <span class="tab-icon">🌐</span>
-                        <span class="tab-label">Beyond Bengaluru</span>
-                    </button>
-                </div>
+            <!-- Geography Tabs -->
+            <div class="tab-group" data-category="geography" style="display: none;">
+                <button class="nav-btn" data-tab="bengaluru">
+                    <span class="tab-icon">🏙️</span>
+                    <span class="tab-label">Bengaluru</span>
+                </button>
+                <button class="nav-btn" data-tab="clusters">
+                    <span class="tab-icon">🌐</span>
+                    <span class="tab-label">Beyond Bengaluru</span>
+                </button>
             </div>
 
-            <!-- Factors Group (will be grouped with Geography on collapse) -->
-            <div class="tab-group tab-group-factors">
-                <div class="tab-group-label">Factors</div>
-                <div class="tab-group-items">
-                    <button class="nav-btn nav-btn-factors" data-tab="land">
-                        <span class="tab-icon">🏗️</span>
-                        <span class="tab-label">Land</span>
-                    </button>
-                    <button class="nav-btn nav-btn-factors" data-tab="labor">
-                        <span class="tab-icon">👥</span>
-                        <span class="tab-label">Labor</span>
-                    </button>
-                    <button class="nav-btn nav-btn-factors" data-tab="capital">
-                        <span class="tab-icon">💼</span>
-                        <span class="tab-label">Capital</span>
-                    </button>
-                    <button class="nav-btn nav-btn-factors" data-tab="organisation">
-                        <span class="tab-icon">⚙️</span>
-                        <span class="tab-label">Organisation</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Sources Tab -->
-            <div class="tab-group tab-group-single">
-                <div class="tab-group-label">Reference</div>
-                <div class="tab-group-items">
-                    <button class="nav-btn nav-btn-reference" data-tab="sources">
-                        <span class="tab-icon">📚</span>
-                        <span class="tab-label">Sources</span>
-                    </button>
-                </div>
+            <!-- Factors Tabs -->
+            <div class="tab-group" data-category="factors" style="display: none;">
+                <button class="nav-btn" data-tab="land">
+                    <span class="tab-icon">🏗️</span>
+                    <span class="tab-label">Land</span>
+                </button>
+                <button class="nav-btn" data-tab="labor">
+                    <span class="tab-icon">👥</span>
+                    <span class="tab-label">Labor</span>
+                </button>
+                <button class="nav-btn" data-tab="capital">
+                    <span class="tab-icon">💼</span>
+                    <span class="tab-label">Capital</span>
+                </button>
+                <button class="nav-btn" data-tab="organisation">
+                    <span class="tab-icon">⚙️</span>
+                    <span class="tab-label">Organisation</span>
+                </button>
             </div>
         </div>
     </nav>

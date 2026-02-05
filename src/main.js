@@ -18,6 +18,7 @@ import { renderStartupsTab } from './tabs/startups.js'
 
 // State
 let currentTab = 'overview'
+let currentCategory = 'strategy'
 let appData = {
     verticals: [],
     geographies: [],
@@ -90,6 +91,15 @@ async function loadInitialData() {
  * Setup event listeners
  */
 function setupEventListeners() {
+    // Category navigation
+    const categoryButtons = document.querySelectorAll('.category-btn')
+    categoryButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const category = btn.dataset.category
+            switchCategory(category)
+        })
+    })
+
     // Tab navigation
     const navButtons = document.querySelectorAll('.nav-btn')
     navButtons.forEach(btn => {
@@ -112,6 +122,41 @@ function setupEventListeners() {
 
     // Mobile hamburger menu
     setupMobileMenu()
+}
+
+/**
+ * Switch between categories and show appropriate tabs
+ */
+function switchCategory(category) {
+    console.log(`Switching to category: ${category}`)
+
+    // Update active category button
+    const categoryButtons = document.querySelectorAll('.category-btn')
+    categoryButtons.forEach(btn => {
+        if (btn.dataset.category === category) {
+            btn.classList.add('active')
+        } else {
+            btn.classList.remove('active')
+        }
+    })
+
+    // Show appropriate tab group
+    const tabGroups = document.querySelectorAll('.secondary-nav .tab-group')
+    tabGroups.forEach(group => {
+        if (group.dataset.category === category) {
+            group.style.display = 'flex'
+
+            // Load the first tab in this category
+            const firstTab = group.querySelector('.nav-btn')
+            if (firstTab) {
+                loadTab(firstTab.dataset.tab)
+            }
+        } else {
+            group.style.display = 'none'
+        }
+    })
+
+    currentCategory = category
 }
 
 /**
@@ -144,15 +189,18 @@ async function loadTab(tabId) {
     console.log(`Loading tab: ${tabId}`)
 
     try {
-        // Update active tab button
-        const navButtons = document.querySelectorAll('.nav-btn')
-        navButtons.forEach(btn => {
-            if (btn.dataset.tab === tabId) {
-                btn.classList.add('active')
-            } else {
-                btn.classList.remove('active')
-            }
-        })
+        // Update active tab button (only within the current category's tab group)
+        const activeTabGroup = document.querySelector(`.secondary-nav .tab-group[data-category="${currentCategory}"]`)
+        if (activeTabGroup) {
+            const navButtons = activeTabGroup.querySelectorAll('.nav-btn')
+            navButtons.forEach(btn => {
+                if (btn.dataset.tab === tabId) {
+                    btn.classList.add('active')
+                } else {
+                    btn.classList.remove('active')
+                }
+            })
+        }
 
         // Get content container
         const contentContainer = document.getElementById('tab-content')
@@ -295,7 +343,9 @@ if (document.readyState === 'loading') {
 window.KDEM = {
     appData,
     loadTab,
-    currentTab: () => currentTab
+    switchCategory,
+    currentTab: () => currentTab,
+    currentCategory: () => currentCategory
 }
 
 /**
