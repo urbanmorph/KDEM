@@ -46,16 +46,6 @@ export async function renderOverviewTab(appData) {
                     }).join('')}
                 </div>
 
-                <!-- Year-wise Growth Trends -->
-                <div class="section-header mt-4">
-                    <h3>Growth Trends & Projections</h3>
-                    <p>Historical performance and future projections for India and Karnataka's digital economy</p>
-                </div>
-
-                <div class="growth-trends">
-                    ${renderGrowthTrends()}
-                </div>
-
                 <!-- Economic Context -->
                 <div class="section-header mt-4">
                     <h3>Economic Context: GDP & GSDP</h3>
@@ -74,6 +64,16 @@ export async function renderOverviewTab(appData) {
 
                 <div class="it-market-breakdown">
                     ${renderITMarketBreakdown()}
+                </div>
+
+                <!-- Year-wise Growth Trends -->
+                <div class="section-header mt-4">
+                    <h3>Growth Trends & Projections</h3>
+                    <p>Historical performance and future projections for India and Karnataka's digital economy</p>
+                </div>
+
+                <div class="growth-trends">
+                    ${renderGrowthTrends()}
                 </div>
 
                 <!-- Vision Progress -->
