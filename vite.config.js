@@ -6,9 +6,67 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info', 'console.debug'],
+        passes: 2,
+        unsafe: true,
+        unsafe_comps: true,
+        unsafe_math: true,
+        unsafe_methods: true
+      },
+      mangle: {
+        safari10: true
+      }
+    },
+    cssCodeSplit: true,
+    chunkSizeWarningLimit: 500,
     rollupOptions: {
       input: {
         main: './index.html'
+      },
+      output: {
+        manualChunks(id) {
+          // Split Chart.js into separate vendor chunk
+          if (id.includes('node_modules/chart.js')) {
+            return 'vendor-chartjs'
+          }
+
+          // Split Supabase into separate vendor chunk
+          if (id.includes('node_modules/@supabase')) {
+            return 'vendor-supabase'
+          }
+
+          // Split tab components into logical groups
+          if (id.includes('src/tabs/overview.js')) {
+            return 'tab-overview'
+          }
+
+          if (id.includes('src/tabs/vertical.js') ||
+              id.includes('src/tabs/startups.js')) {
+            return 'tab-verticals'
+          }
+
+          if (id.includes('src/tabs/geography.js')) {
+            return 'tab-geography'
+          }
+
+          if (id.includes('src/tabs/factors.js') ||
+              id.includes('src/tabs/land.js') ||
+              id.includes('src/tabs/labor.js') ||
+              id.includes('src/tabs/capital.js') ||
+              id.includes('src/tabs/organisation.js')) {
+            return 'tab-factors'
+          }
+
+          if (id.includes('src/tabs/roadmap.js') ||
+              id.includes('src/tabs/sources.js')) {
+            return 'tab-misc'
+          }
+        }
       }
     }
   },

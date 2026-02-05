@@ -4,10 +4,33 @@
  */
 
 import { getVerticalOverview, getTotalMetrics } from '../services/dataService.js'
-import { Chart, registerables } from 'chart.js'
+import {
+    Chart,
+    BarController,
+    LineController,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    LineElement,
+    PointElement,
+    Title,
+    Tooltip,
+    Legend
+} from 'chart.js'
 
-// Register Chart.js components
-Chart.register(...registerables)
+// Register only the Chart.js components we need (bar and line charts)
+Chart.register(
+    BarController,
+    LineController,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    LineElement,
+    PointElement,
+    Title,
+    Tooltip,
+    Legend
+)
 
 export async function renderOverviewTab(appData) {
     try {

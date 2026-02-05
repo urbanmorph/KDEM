@@ -4,17 +4,9 @@
  */
 
 import { fetchVerticals, fetchGeographies, fetchFactors } from './services/dataService.js'
-import { renderOverviewTab } from './tabs/overview.js'
-import { renderVerticalTab } from './tabs/vertical.js'
-import { renderGeographyTab } from './tabs/geography.js'
-import { renderFactorsTab } from './tabs/factors.js'
-import { renderRoadmapTab } from './tabs/roadmap.js'
-import { renderLandTab } from './tabs/land.js'
-import { renderLaborTab } from './tabs/labor.js'
-import { renderCapitalTab } from './tabs/capital.js'
-import { renderOrganisationTab } from './tabs/organisation.js'
-import { renderSourcesTab } from './tabs/sources.js'
-import { renderStartupsTab } from './tabs/startups.js'
+
+// Tab renderers are now loaded dynamically on-demand to reduce initial bundle size
+// This improves initial page load performance by code splitting
 
 // State
 let currentTab = 'overview'
@@ -210,64 +202,93 @@ async function loadTab(tabId) {
         showLoading()
 
         // Render tab content based on tabId
+        // Use dynamic imports to lazy-load tab components
         let content = ''
 
         switch(tabId) {
-            case 'overview':
+            case 'overview': {
+                const { renderOverviewTab } = await import('./tabs/overview.js')
                 content = await renderOverviewTab(appData)
                 break
+            }
 
-            case 'it-exports':
+            case 'it-exports': {
+                const { renderVerticalTab } = await import('./tabs/vertical.js')
                 content = await renderVerticalTab('it-exports', appData)
                 break
+            }
 
-            case 'it-domestic':
+            case 'it-domestic': {
+                const { renderVerticalTab } = await import('./tabs/vertical.js')
                 content = await renderVerticalTab('it-domestic', appData)
                 break
+            }
 
-            case 'esdm':
+            case 'esdm': {
+                const { renderVerticalTab } = await import('./tabs/vertical.js')
                 content = await renderVerticalTab('esdm', appData)
                 break
+            }
 
-            case 'startups':
+            case 'startups': {
+                const { renderStartupsTab } = await import('./tabs/startups.js')
                 content = await renderStartupsTab(appData)
                 break
+            }
 
-            case 'bengaluru':
+            case 'bengaluru': {
+                const { renderGeographyTab } = await import('./tabs/geography.js')
                 content = await renderGeographyTab('bengaluru', appData)
                 break
+            }
 
-            case 'clusters':
+            case 'clusters': {
+                const { renderGeographyTab } = await import('./tabs/geography.js')
                 content = await renderGeographyTab('clusters', appData)
                 break
+            }
 
-            case 'factors':
+            case 'factors': {
+                const { renderFactorsTab } = await import('./tabs/factors.js')
                 content = await renderFactorsTab(appData)
                 break
+            }
 
-            case 'land':
+            case 'land': {
+                const { renderLandTab } = await import('./tabs/land.js')
                 content = await renderLandTab(appData)
                 break
+            }
 
-            case 'labor':
+            case 'labor': {
+                const { renderLaborTab } = await import('./tabs/labor.js')
                 content = await renderLaborTab(appData)
                 break
+            }
 
-            case 'capital':
+            case 'capital': {
+                const { renderCapitalTab } = await import('./tabs/capital.js')
                 content = await renderCapitalTab(appData)
                 break
+            }
 
-            case 'organisation':
+            case 'organisation': {
+                const { renderOrganisationTab } = await import('./tabs/organisation.js')
                 content = await renderOrganisationTab(appData)
                 break
+            }
 
-            case 'roadmap':
+            case 'roadmap': {
+                const { renderRoadmapTab } = await import('./tabs/roadmap.js')
                 content = await renderRoadmapTab(appData)
                 break
+            }
 
-            case 'sources':
+            case 'sources': {
+                const { renderSourcesTab } = await import('./tabs/sources.js')
                 content = await renderSourcesTab(appData)
                 break
+            }
 
             default:
                 content = '<h2>Tab not found</h2><p>This tab is under construction.</p>'
@@ -372,6 +393,7 @@ function setupMobileMenu() {
     const hamburgerBtn = document.querySelector('.hamburger-btn')
     const tabNavContainer = document.querySelector('.tab-nav-container')
     const navButtons = document.querySelectorAll('.nav-btn')
+    const categoryButtons = document.querySelectorAll('.category-btn')
 
     if (!hamburgerBtn) return
 
@@ -385,6 +407,14 @@ function setupMobileMenu() {
     navButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             tabNavContainer.classList.remove('mobile-menu-open')
+        })
+    })
+
+    // Close menu when a category is clicked
+    categoryButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Don't close immediately on category click - let user see the tabs
+            // Only close when they click a tab
         })
     })
 
