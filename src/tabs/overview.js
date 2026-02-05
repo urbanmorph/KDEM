@@ -42,14 +42,14 @@ export async function renderOverviewTab(appData) {
                     }).join('')}
                 </div>
 
-                <!-- Geographic Distribution Preview -->
+                <!-- Year-wise Growth Trends -->
                 <div class="section-header mt-4">
-                    <h3>Geographic Distribution</h3>
-                    <p>Digital economy spread across Bengaluru and 8 strategic clusters</p>
+                    <h3>Growth Trends & Projections</h3>
+                    <p>Historical performance and future projections for India and Karnataka's digital economy</p>
                 </div>
 
-                <div class="geographic-preview">
-                    ${renderGeographicPreview(appData)}
+                <div class="growth-trends">
+                    ${renderGrowthTrends()}
                 </div>
 
                 <!-- Vision Progress -->
@@ -140,30 +140,102 @@ function renderPillarCard(vertical, data) {
     `
 }
 
-function renderGeographicPreview(appData) {
-    const tier1 = appData.geographies.filter(g => g.tier === 'tier1-invest-aggressively')
-    const tier2 = appData.geographies.filter(g => g.tier === 'tier2-invest-as-anchor')
-    const tier3 = appData.geographies.filter(g => g.tier === 'tier3-invest-later')
+function renderGrowthTrends() {
+    // India Digital Economy Growth (2022-23 to 2029-30)
+    const indiaDigitalEconomy = [
+        { year: '2022-23', value: 402 },
+        { year: '2023-24', value: 448 },
+        { year: '2024-25', value: 529 },
+        { year: '2025-26', value: 625 },
+        { year: '2026-27', value: 740 },
+        { year: '2027-28', value: 879 },
+        { year: '2028-29', value: 1046 },
+        { year: '2029-30', value: 1247 }
+    ]
+
+    // Karnataka IT Exports (2020-21 to 2024-25)
+    const karnatakaITExports = [
+        { year: '2020-21', value: 28.69 },
+        { year: '2021-22', value: 34.94 },
+        { year: '2022-23', value: 38.74 },
+        { year: '2023-24', value: 48.89 },
+        { year: '2024-25', value: 52.04 }
+    ]
+
+    // ESDM Market Revenue
+    const esdmMarket = [
+        { year: '2022-23', value: 24 },
+        { year: '2024-25', value: 36.69 },
+        { year: '2025-26', value: 43.74 }
+    ]
+
+    const maxIndiaValue = Math.max(...indiaDigitalEconomy.map(d => d.value))
+    const maxKarnatakaValue = Math.max(...karnatakaITExports.map(d => d.value))
+    const maxESDMValue = Math.max(...esdmMarket.map(d => d.value))
 
     return `
-        <div class="geo-preview-grid">
-            <div class="geo-preview-card">
-                <div class="geo-tier-label tier1">Tier 1: Invest Aggressively</div>
-                <div class="geo-list">
-                    ${tier1.map(g => `<div class="geo-item">${g.name}</div>`).join('')}
+        <div class="growth-charts-grid">
+            <!-- India Digital Economy Chart -->
+            <div class="growth-chart-card">
+                <h4>India Digital Economy Growth</h4>
+                <p class="chart-subtitle">Projected to reach $1.2 Trillion by 2029-30</p>
+                <div class="bar-chart">
+                    ${indiaDigitalEconomy.map(data => {
+                        const height = (data.value / maxIndiaValue) * 100
+                        return `
+                            <div class="bar-container">
+                                <div class="bar-value">$${data.value}B</div>
+                                <div class="bar" style="height: ${height}%">
+                                    <div class="bar-fill" style="height: 100%"></div>
+                                </div>
+                                <div class="bar-label">${data.year}</div>
+                            </div>
+                        `
+                    }).join('')}
                 </div>
+                <div class="chart-source">Source: ICRIER estimates, MoSPI and IMF</div>
             </div>
-            <div class="geo-preview-card">
-                <div class="geo-tier-label tier2">Tier 2: Invest as Anchor</div>
-                <div class="geo-list">
-                    ${tier2.map(g => `<div class="geo-item">${g.name}</div>`).join('')}
+
+            <!-- Karnataka IT Exports Chart -->
+            <div class="growth-chart-card">
+                <h4>Karnataka IT Exports</h4>
+                <p class="chart-subtitle">Steady growth from $28.7B to $52B</p>
+                <div class="bar-chart">
+                    ${karnatakaITExports.map(data => {
+                        const height = (data.value / maxKarnatakaValue) * 100
+                        return `
+                            <div class="bar-container">
+                                <div class="bar-value">$${data.value.toFixed(1)}B</div>
+                                <div class="bar" style="height: ${height}%">
+                                    <div class="bar-fill bar-fill-karnataka" style="height: 100%"></div>
+                                </div>
+                                <div class="bar-label">${data.year}</div>
+                            </div>
+                        `
+                    }).join('')}
                 </div>
+                <div class="chart-source">Source: STPI Karnataka</div>
             </div>
-            <div class="geo-preview-card">
-                <div class="geo-tier-label tier3">Tier 3: Invest Later</div>
-                <div class="geo-list">
-                    ${tier3.map(g => `<div class="geo-item">${g.name}</div>`).join('')}
+
+            <!-- ESDM Market Chart -->
+            <div class="growth-chart-card">
+                <h4>India ESDM Market Revenue</h4>
+                <p class="chart-subtitle">Rapid expansion in electronics manufacturing</p>
+                <div class="bar-chart">
+                    ${esdmMarket.map(data => {
+                        const height = (data.value / maxESDMValue) * 100
+                        return `
+                            <div class="bar-container">
+                                <div class="bar-value">$${data.value.toFixed(1)}B</div>
+                                <div class="bar" style="height: ${height}%">
+                                    <div class="bar-fill bar-fill-esdm" style="height: 100%"></div>
+                                </div>
+                                <div class="bar-label">${data.year}</div>
+                            </div>
+                        `
+                    }).join('')}
                 </div>
+                <div class="chart-source">Source: MEITY, IBEF, Care Edge</div>
             </div>
         </div>
     `

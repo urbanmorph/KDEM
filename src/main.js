@@ -227,6 +227,9 @@ async function loadTab(tabId) {
         // Update content
         contentContainer.innerHTML = content
 
+        // Setup event listeners for view details links (in overview tab)
+        setupViewDetailsLinks()
+
         // Hide loading, show content
         hideLoading()
 
@@ -293,6 +296,22 @@ window.KDEM = {
     appData,
     loadTab,
     currentTab: () => currentTab
+}
+
+/**
+ * Setup event listeners for "View Details" links in pillar cards
+ */
+function setupViewDetailsLinks() {
+    const viewDetailsLinks = document.querySelectorAll('.view-details-link')
+    viewDetailsLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault()
+            const verticalId = link.dataset.vertical
+            if (verticalId) {
+                loadTab(verticalId)
+            }
+        })
+    })
 }
 
 /**
