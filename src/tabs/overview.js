@@ -4,6 +4,10 @@
  */
 
 import { getVerticalOverview, getTotalMetrics } from '../services/dataService.js'
+import { Chart, registerables } from 'chart.js'
+
+// Register Chart.js components
+Chart.register(...registerables)
 
 export async function renderOverviewTab(appData) {
     try {
@@ -141,37 +145,8 @@ function renderPillarCard(vertical, data) {
 }
 
 function renderGrowthTrends() {
-    // India Digital Economy Growth (2022-23 to 2029-30)
-    const indiaDigitalEconomy = [
-        { year: '2022-23', value: 402 },
-        { year: '2023-24', value: 448 },
-        { year: '2024-25', value: 529 },
-        { year: '2025-26', value: 625 },
-        { year: '2026-27', value: 740 },
-        { year: '2027-28', value: 879 },
-        { year: '2028-29', value: 1046 },
-        { year: '2029-30', value: 1247 }
-    ]
-
-    // Karnataka IT Exports (2020-21 to 2024-25)
-    const karnatakaITExports = [
-        { year: '2020-21', value: 28.69 },
-        { year: '2021-22', value: 34.94 },
-        { year: '2022-23', value: 38.74 },
-        { year: '2023-24', value: 48.89 },
-        { year: '2024-25', value: 52.04 }
-    ]
-
-    // ESDM Market Revenue
-    const esdmMarket = [
-        { year: '2022-23', value: 24 },
-        { year: '2024-25', value: 36.69 },
-        { year: '2025-26', value: 43.74 }
-    ]
-
-    const maxIndiaValue = Math.max(...indiaDigitalEconomy.map(d => d.value))
-    const maxKarnatakaValue = Math.max(...karnatakaITExports.map(d => d.value))
-    const maxESDMValue = Math.max(...esdmMarket.map(d => d.value))
+    // Initialize charts after DOM is rendered
+    setTimeout(() => initializeCharts(), 0)
 
     return `
         <div class="growth-charts-grid">
@@ -179,19 +154,8 @@ function renderGrowthTrends() {
             <div class="growth-chart-card">
                 <h4>India Digital Economy Growth</h4>
                 <p class="chart-subtitle">Projected to reach $1.2 Trillion by 2029-30</p>
-                <div class="bar-chart">
-                    ${indiaDigitalEconomy.map(data => {
-                        const heightPx = ((data.value / maxIndiaValue) * 180).toFixed(1)
-                        return `
-                            <div class="bar-container">
-                                <div class="bar-value">$${data.value}B</div>
-                                <div class="bar" style="height: ${heightPx}px">
-                                    <div class="bar-fill"></div>
-                                </div>
-                                <div class="bar-label">${data.year}</div>
-                            </div>
-                        `
-                    }).join('')}
+                <div class="chart-container">
+                    <canvas id="india-digital-economy-chart"></canvas>
                 </div>
                 <div class="chart-source">Source: ICRIER estimates, MoSPI and IMF</div>
             </div>
@@ -200,19 +164,8 @@ function renderGrowthTrends() {
             <div class="growth-chart-card">
                 <h4>Karnataka IT Exports</h4>
                 <p class="chart-subtitle">Steady growth from $28.7B to $52B</p>
-                <div class="bar-chart">
-                    ${karnatakaITExports.map(data => {
-                        const heightPx = ((data.value / maxKarnatakaValue) * 180).toFixed(1)
-                        return `
-                            <div class="bar-container">
-                                <div class="bar-value">$${data.value.toFixed(1)}B</div>
-                                <div class="bar" style="height: ${heightPx}px">
-                                    <div class="bar-fill bar-fill-karnataka"></div>
-                                </div>
-                                <div class="bar-label">${data.year}</div>
-                            </div>
-                        `
-                    }).join('')}
+                <div class="chart-container">
+                    <canvas id="karnataka-it-exports-chart"></canvas>
                 </div>
                 <div class="chart-source">Source: STPI Karnataka</div>
             </div>
@@ -221,24 +174,127 @@ function renderGrowthTrends() {
             <div class="growth-chart-card">
                 <h4>India ESDM Market Revenue</h4>
                 <p class="chart-subtitle">Rapid expansion in electronics manufacturing</p>
-                <div class="bar-chart">
-                    ${esdmMarket.map(data => {
-                        const heightPx = ((data.value / maxESDMValue) * 180).toFixed(1)
-                        return `
-                            <div class="bar-container">
-                                <div class="bar-value">$${data.value.toFixed(1)}B</div>
-                                <div class="bar" style="height: ${heightPx}px">
-                                    <div class="bar-fill bar-fill-esdm"></div>
-                                </div>
-                                <div class="bar-label">${data.year}</div>
-                            </div>
-                        `
-                    }).join('')}
+                <div class="chart-container">
+                    <canvas id="esdm-market-chart"></canvas>
                 </div>
                 <div class="chart-source">Source: MEITY, IBEF, Care Edge</div>
             </div>
         </div>
     `
+}
+
+function initializeCharts() {
+    // India Digital Economy Growth (2022-23 to 2029-30)
+    const indiaDigitalEconomy = {
+        labels: ['2022-23', '2023-24', '2024-25', '2025-26', '2026-27', '2027-28', '2028-29', '2029-30'],
+        values: [402, 448, 529, 625, 740, 879, 1046, 1247]
+    }
+
+    // Karnataka IT Exports (2020-21 to 2024-25)
+    const karnatakaITExports = {
+        labels: ['2020-21', '2021-22', '2022-23', '2023-24', '2024-25'],
+        values: [28.69, 34.94, 38.74, 48.89, 52.04]
+    }
+
+    // ESDM Market Revenue
+    const esdmMarket = {
+        labels: ['2022-23', '2024-25', '2025-26'],
+        values: [24, 36.69, 43.74]
+    }
+
+    // Common chart options
+    const commonOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            },
+            tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                padding: 12,
+                titleFont: { size: 14 },
+                bodyFont: { size: 13 },
+                callbacks: {
+                    label: function(context) {
+                        return '$' + context.parsed.y + 'B'
+                    }
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    callback: function(value) {
+                        return '$' + value + 'B'
+                    }
+                },
+                grid: {
+                    color: 'rgba(0, 0, 0, 0.05)'
+                }
+            },
+            x: {
+                grid: {
+                    display: false
+                }
+            }
+        }
+    }
+
+    // India Digital Economy Chart
+    const indiaCtx = document.getElementById('india-digital-economy-chart')
+    if (indiaCtx) {
+        new Chart(indiaCtx, {
+            type: 'bar',
+            data: {
+                labels: indiaDigitalEconomy.labels,
+                datasets: [{
+                    data: indiaDigitalEconomy.values,
+                    backgroundColor: '#E96337',
+                    borderRadius: 4,
+                    barThickness: 40
+                }]
+            },
+            options: commonOptions
+        })
+    }
+
+    // Karnataka IT Exports Chart
+    const karnatakaCtx = document.getElementById('karnataka-it-exports-chart')
+    if (karnatakaCtx) {
+        new Chart(karnatakaCtx, {
+            type: 'bar',
+            data: {
+                labels: karnatakaITExports.labels,
+                datasets: [{
+                    data: karnatakaITExports.values,
+                    backgroundColor: '#5BB9EC',
+                    borderRadius: 4,
+                    barThickness: 40
+                }]
+            },
+            options: commonOptions
+        })
+    }
+
+    // ESDM Market Chart
+    const esdmCtx = document.getElementById('esdm-market-chart')
+    if (esdmCtx) {
+        new Chart(esdmCtx, {
+            type: 'bar',
+            data: {
+                labels: esdmMarket.labels,
+                datasets: [{
+                    data: esdmMarket.values,
+                    backgroundColor: '#8B5CF6',
+                    borderRadius: 4,
+                    barThickness: 40
+                }]
+            },
+            options: commonOptions
+        })
+    }
 }
 
 function renderVisionProgress(totalMetrics) {

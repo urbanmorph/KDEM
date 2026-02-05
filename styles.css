@@ -634,6 +634,13 @@ body {
     margin-bottom: 1.5rem;
 }
 
+.chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
 .bar-chart {
     display: flex;
     align-items: flex-end;
