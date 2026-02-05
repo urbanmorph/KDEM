@@ -130,6 +130,9 @@ function setupEventListeners() {
 function switchCategory(category) {
     console.log(`Switching to category: ${category}`)
 
+    // Update current category FIRST before loading tab
+    currentCategory = category
+
     // Update active category button
     const categoryButtons = document.querySelectorAll('.category-btn')
     categoryButtons.forEach(btn => {
@@ -155,8 +158,6 @@ function switchCategory(category) {
             group.style.display = 'none'
         }
     })
-
-    currentCategory = category
 }
 
 /**
