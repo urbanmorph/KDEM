@@ -2,14 +2,13 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   root: './',
-  base: '/KDEM/',
+  base: '/',
   build: {
     outDir: 'dist',
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        main: './index.html',
-        admin: './admin/index.html'
+        main: './index.html'
       }
     }
   },
@@ -19,5 +18,16 @@ export default defineConfig({
   },
   preview: {
     port: 4173
+  },
+  define: {
+    'global': 'globalThis',
+    'process.env': {}
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      define: {
+        global: 'globalThis'
+      }
+    }
   }
 })

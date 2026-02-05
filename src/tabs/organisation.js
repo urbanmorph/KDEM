@@ -379,7 +379,8 @@ function renderPolicyFramework() {
 function renderCompetitiveBenchmarking() {
     return `
         <div class="benchmark-table-container">
-            <table class="data-table benchmark-table">
+            <div class="table-scroll-wrapper">
+                <table class="data-table benchmark-table">
                 <thead>
                     <tr>
                         <th>Metric</th>
@@ -434,6 +435,7 @@ function renderCompetitiveBenchmarking() {
                     </tr>
                 </tbody>
             </table>
+            </div>
             <p class="benchmark-note">
                 <strong>Karnataka's Advantage:</strong> Largest tech talent pool, mature ecosystem, strong institutional framework.
                 <strong>Areas for Improvement:</strong> Power tariffs, cost of operations in Bengaluru.

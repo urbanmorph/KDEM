@@ -109,7 +109,8 @@ function renderDependencies() {
 function renderConversionInfo() {
     return `
         <div class="conversion-table">
-            <table class="data-table">
+            <div class="table-scroll-wrapper">
+                <table class="data-table">
                 <thead>
                     <tr>
                         <th>Vertical</th>
@@ -163,6 +164,7 @@ function renderConversionInfo() {
                     </tr>
                 </tbody>
             </table>
+            </div>
             <p class="conversion-note">
                 <strong>Note:</strong> These conversion ratios are based on industry benchmarks and are used to auto-calculate factor targets when revenue targets are set in the admin interface.
             </p>

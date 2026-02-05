@@ -173,26 +173,28 @@ function renderConfidenceFramework() {
     ]
 
     return `
-        <table class="data-table confidence-table">
-            <thead>
-                <tr>
-                    <th>Rating</th>
-                    <th>Definition</th>
-                    <th>Verification Level</th>
-                    <th>Dashboard Treatment</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${framework.map(f => `
+        <div class="table-scroll-wrapper">
+            <table class="data-table confidence-table">
+                <thead>
                     <tr>
-                        <td><span class="confidence-badge">${f.rating}</span></td>
-                        <td><strong>${f.level}</strong></td>
-                        <td>${f.verification}</td>
-                        <td>${f.treatment}</td>
+                        <th>Rating</th>
+                        <th>Definition</th>
+                        <th>Verification Level</th>
+                        <th>Dashboard Treatment</th>
                     </tr>
-                `).join('')}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    ${framework.map(f => `
+                        <tr>
+                            <td><span class="confidence-badge">${f.rating}</span></td>
+                            <td><strong>${f.level}</strong></td>
+                            <td>${f.verification}</td>
+                            <td>${f.treatment}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        </div>
     `
 }
 
@@ -328,30 +330,32 @@ function renderCompetitorPolicies() {
 
 function renderSourceTable(sources) {
     return `
-        <table class="data-table sources-table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Source</th>
-                    <th>Data Used</th>
-                    <th>Confidence</th>
-                    <th>Date/Notes</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${sources.map(s => `
+        <div class="table-scroll-wrapper">
+            <table class="data-table sources-table">
+                <thead>
                     <tr>
-                        <td>${s.id}</td>
-                        <td>
-                            ${s.link ? `<a href="${s.link}" target="_blank" class="source-link">${s.name} →</a>` : `<strong>${s.name}</strong>`}
-                        </td>
-                        <td>${s.data}</td>
-                        <td><span class="confidence-badge">${s.confidence}</span></td>
-                        <td>${s.date || s.notes || s.verified || '-'}</td>
+                        <th>#</th>
+                        <th>Source</th>
+                        <th>Data Used</th>
+                        <th>Confidence</th>
+                        <th>Date/Notes</th>
                     </tr>
-                `).join('')}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    ${sources.map(s => `
+                        <tr>
+                            <td>${s.id}</td>
+                            <td>
+                                ${s.link ? `<a href="${s.link}" target="_blank" class="source-link">${s.name} →</a>` : `<strong>${s.name}</strong>`}
+                            </td>
+                            <td>${s.data}</td>
+                            <td><span class="confidence-badge">${s.confidence}</span></td>
+                            <td>${s.date || s.notes || s.verified || '-'}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        </div>
     `
 }
 
@@ -368,26 +372,28 @@ function renderDataGaps() {
     return `
         <div class="data-gaps-card">
             <h4>Data Gaps Identified</h4>
-            <table class="data-table gaps-table">
-                <thead>
-                    <tr>
-                        <th>Gap</th>
-                        <th>Current State</th>
-                        <th>Required Action</th>
-                        <th>Priority</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${gaps.map(g => `
+            <div class="table-scroll-wrapper">
+                <table class="data-table gaps-table">
+                    <thead>
                         <tr>
-                            <td>${g.gap}</td>
-                            <td>${g.current}</td>
-                            <td>${g.action}</td>
-                            <td><span class="priority-badge priority-${g.priority.toLowerCase()}">${g.priority}</span></td>
+                            <th>Gap</th>
+                            <th>Current State</th>
+                            <th>Required Action</th>
+                            <th>Priority</th>
                         </tr>
-                    `).join('')}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        ${gaps.map(g => `
+                            <tr>
+                                <td>${g.gap}</td>
+                                <td>${g.current}</td>
+                                <td>${g.action}</td>
+                                <td><span class="priority-badge priority-${g.priority.toLowerCase()}">${g.priority}</span></td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
         </div>
     `
 }
@@ -405,26 +411,28 @@ function renderUpdateSchedule() {
     return `
         <div class="update-schedule-card">
             <h4>Update Schedule</h4>
-            <table class="data-table schedule-table">
-                <thead>
-                    <tr>
-                        <th>Data Category</th>
-                        <th>Frequency</th>
-                        <th>Next Update</th>
-                        <th>Owner</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${schedule.map(s => `
+            <div class="table-scroll-wrapper">
+                <table class="data-table schedule-table">
+                    <thead>
                         <tr>
-                            <td>${s.category}</td>
-                            <td>${s.frequency}</td>
-                            <td>${s.next}</td>
-                            <td>${s.owner}</td>
+                            <th>Data Category</th>
+                            <th>Frequency</th>
+                            <th>Next Update</th>
+                            <th>Owner</th>
                         </tr>
-                    `).join('')}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        ${schedule.map(s => `
+                            <tr>
+                                <td>${s.category}</td>
+                                <td>${s.frequency}</td>
+                                <td>${s.next}</td>
+                                <td>${s.owner}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
         </div>
     `
 }

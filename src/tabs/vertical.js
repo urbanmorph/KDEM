@@ -91,7 +91,8 @@ function renderGeographicBreakdown(breakdown) {
     }
 
     return `
-        <table class="data-table">
+        <div class="table-scroll-wrapper">
+            <table class="data-table">
             <thead>
                 <tr>
                     <th>Geography</th>
@@ -115,6 +116,7 @@ function renderGeographicBreakdown(breakdown) {
                 `).join('')}
             </tbody>
         </table>
+        </div>
     `
 }
 
@@ -124,7 +126,8 @@ function renderApportionmentTable(rules) {
     }
 
     return `
-        <table class="data-table">
+        <div class="table-scroll-wrapper">
+            <table class="data-table">
             <thead>
                 <tr>
                     <th>From Geography</th>
@@ -146,6 +149,7 @@ function renderApportionmentTable(rules) {
                 `).join('')}
             </tbody>
         </table>
+        </div>
     `
 }
 

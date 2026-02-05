@@ -38,3 +38,4 @@ temp/
 # Backups
 backups/*
 !backups/.gitkeep
+.vercel

@@ -195,7 +195,8 @@ function renderGeographyPremiums() {
     ]
 
     return `
-        <table class="data-table">
+        <div class="table-scroll-wrapper">
+            <table class="data-table">
             <thead>
                 <tr>
                     <th>Geography</th>
@@ -215,6 +216,7 @@ function renderGeographyPremiums() {
                 `).join('')}
             </tbody>
         </table>
+        </div>
         <p class="premium-note">
             <strong>Note:</strong> Cost premiums/discounts are applied to baseline land and construction costs.
             Bengaluru premium reflects mature ecosystem and high demand. Beyond Bengaluru locations offer

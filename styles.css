@@ -327,7 +327,7 @@ body {
         font-size: 1.5rem;
     }
 
-    .tab-navigation-grid {
+    .secondary-nav {
         padding: var(--spacing-sm);
         gap: 0.75rem;
         grid-template-columns: 1fr;
@@ -358,7 +358,7 @@ body {
 
 /* Medium screens - 3 columns */
 @media (min-width: 769px) and (max-width: 1024px) {
-    .tab-navigation-grid {
+    .secondary-nav {
         grid-template-columns: repeat(3, 1fr);
         gap: 0.75rem;
     }
@@ -375,7 +375,7 @@ body {
 
 /* Large tablets - 4 columns */
 @media (min-width: 1025px) and (max-width: 1200px) {
-    .tab-navigation-grid {
+    .secondary-nav {
         grid-template-columns: repeat(4, 1fr);
         gap: 0.875rem;
     }
@@ -811,11 +811,19 @@ body {
     color: var(--text-secondary);
 }
 
+/* Table Scroll Wrapper for Mobile */
+.table-scroll-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 2rem;
+}
+
 /* Data Tables */
 .data-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 2rem;
+    margin-bottom: 0;
     background: white;
     border-radius: 8px;
     overflow: hidden;
@@ -1254,7 +1262,7 @@ body {
    ======================================== */
 
 /* Collapsed state when scrolled - smart 3-row layout */
-.tab-nav-container.collapsed .tab-navigation-grid {
+.tab-nav-container.collapsed .secondary-nav {
     display: flex;
     flex-wrap: wrap;
     padding: 0.5rem var(--spacing-lg);
@@ -1342,7 +1350,7 @@ body {
     transition: all 0.3s ease;
 }
 
-.tab-navigation-grid {
+.secondary-nav {
     transition: all 0.3s ease;
 }
 
@@ -1356,7 +1364,7 @@ body {
 
 /* Mobile: don't collapse, already compact */
 @media (max-width: 768px) {
-    .tab-nav-container.collapsed .tab-navigation-grid {
+    .tab-nav-container.collapsed .secondary-nav {
         grid-template-columns: 1fr;
         padding: var(--spacing-sm);
     }
@@ -1426,7 +1434,7 @@ body {
         display: flex;
     }
 
-    .tab-navigation-grid {
+    .secondary-nav {
         display: none;
         position: absolute;
         top: 100%;
@@ -1439,7 +1447,7 @@ body {
         z-index: 999;
     }
 
-    .tab-nav-container.mobile-menu-open .tab-navigation-grid {
+    .tab-nav-container.mobile-menu-open .secondary-nav {
         display: grid;
     }
 
@@ -1448,7 +1456,7 @@ body {
     }
 
     /* Collapsed state doesn't apply on mobile */
-    .tab-nav-container.collapsed:not(.mobile-menu-open) .tab-navigation-grid {
+    .tab-nav-container.collapsed:not(.mobile-menu-open) .secondary-nav {
         display: none;
     }
 }

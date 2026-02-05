@@ -199,7 +199,8 @@ function renderInterventions() {
 
 function renderInvestmentSchedule() {
     return `
-        <table class="data-table">
+        <div class="table-scroll-wrapper">
+            <table class="data-table">
             <thead>
                 <tr>
                     <th>Year</th>
@@ -254,6 +255,7 @@ function renderInvestmentSchedule() {
                 </tr>
             </tbody>
         </table>
+        </div>
     `
 }
 
@@ -292,7 +294,8 @@ function renderRisks() {
     ]
 
     return `
-        <table class="data-table">
+        <div class="table-scroll-wrapper">
+            <table class="data-table">
             <thead>
                 <tr>
                     <th>Risk</th>
@@ -312,6 +315,7 @@ function renderRisks() {
                 `).join('')}
             </tbody>
         </table>
+        </div>
     `
 }
 

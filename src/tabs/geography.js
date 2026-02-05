@@ -176,7 +176,8 @@ function renderVerticalBreakdown(breakdown) {
     }
 
     return `
-        <table class="data-table">
+        <div class="table-scroll-wrapper">
+            <table class="data-table">
             <thead>
                 <tr>
                     <th>Vertical</th>
@@ -200,6 +201,7 @@ function renderVerticalBreakdown(breakdown) {
                 `).join('')}
             </tbody>
         </table>
+        </div>
     `
 }
 

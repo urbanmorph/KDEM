@@ -376,7 +376,8 @@ function renderCoESkilling() {
 
 function renderEmploymentRatios() {
     return `
-        <table class="data-table">
+        <div class="table-scroll-wrapper">
+            <table class="data-table">
             <thead>
                 <tr>
                     <th>Vertical</th>
@@ -406,6 +407,7 @@ function renderEmploymentRatios() {
                 </tr>
             </tbody>
         </table>
+        </div>
         <p class="conversion-note">
             <strong>Note:</strong> These conversion ratios are based on industry benchmarks from NASSCOM and ICEA.
             They are used to calculate employment targets from revenue goals across Karnataka's digital economy verticals.
