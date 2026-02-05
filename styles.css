@@ -599,9 +599,10 @@ body {
 /* Growth Trends Charts */
 .growth-charts-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
     gap: 2rem;
     margin-bottom: 3rem;
+    width: 100%;
 }
 
 .growth-chart-card {
@@ -610,6 +611,9 @@ body {
     border-radius: 8px;
     padding: 1.5rem;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .growth-chart-card:hover {
