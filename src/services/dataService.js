@@ -234,11 +234,11 @@ export async function getVerticalOverview(year = 2030) {
         .reduce((sum, t) => sum + Number(t.value), 0)
 
       const land = verticalTargets
-        .filter(t => t.metric === 'land')
+        .filter(t => t.metric === 'land_required' || t.metric === 'land')
         .reduce((sum, t) => sum + Number(t.value), 0)
 
       const capital = verticalTargets
-        .filter(t => t.metric === 'capital')
+        .filter(t => t.metric === 'capital_required' || t.metric === 'capital')
         .reduce((sum, t) => sum + Number(t.value), 0)
 
       return {
@@ -285,11 +285,11 @@ export async function getGeographyOverview(year = 2030) {
         .reduce((sum, t) => sum + Number(t.value), 0)
 
       const land = geoTargets
-        .filter(t => t.metric === 'land')
+        .filter(t => t.metric === 'land_required' || t.metric === 'land')
         .reduce((sum, t) => sum + Number(t.value), 0)
 
       const capital = geoTargets
-        .filter(t => t.metric === 'capital')
+        .filter(t => t.metric === 'capital_required' || t.metric === 'capital')
         .reduce((sum, t) => sum + Number(t.value), 0)
 
       return {
@@ -331,11 +331,11 @@ export async function getTotalMetrics(year = 2030) {
       .reduce((sum, t) => sum + Number(t.value), 0)
 
     const land = uniqueTargets
-      .filter(t => t.metric === 'land')
+      .filter(t => t.metric === 'land_required' || t.metric === 'land')
       .reduce((sum, t) => sum + Number(t.value), 0)
 
     const capital = uniqueTargets
-      .filter(t => t.metric === 'capital')
+      .filter(t => t.metric === 'capital_required' || t.metric === 'capital')
       .reduce((sum, t) => sum + Number(t.value), 0)
 
     return {
@@ -384,11 +384,11 @@ export async function getVerticalDetails(verticalId, year = 2030) {
         .reduce((sum, t) => sum + Number(t.value), 0)
 
       const land = geoTargets
-        .filter(t => t.metric === 'land')
+        .filter(t => t.metric === 'land_required' || t.metric === 'land')
         .reduce((sum, t) => sum + Number(t.value), 0)
 
       const capital = geoTargets
-        .filter(t => t.metric === 'capital')
+        .filter(t => t.metric === 'capital_required' || t.metric === 'capital')
         .reduce((sum, t) => sum + Number(t.value), 0)
 
       return {
@@ -453,11 +453,11 @@ export async function getGeographyDetails(geographyId, year = 2030) {
         .reduce((sum, t) => sum + Number(t.value), 0)
 
       const land = vertTargets
-        .filter(t => t.metric === 'land')
+        .filter(t => t.metric === 'land_required' || t.metric === 'land')
         .reduce((sum, t) => sum + Number(t.value), 0)
 
       const capital = vertTargets
-        .filter(t => t.metric === 'capital')
+        .filter(t => t.metric === 'capital_required' || t.metric === 'capital')
         .reduce((sum, t) => sum + Number(t.value), 0)
 
       return {
