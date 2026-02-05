@@ -56,6 +56,26 @@ export async function renderOverviewTab(appData) {
                     ${renderGrowthTrends()}
                 </div>
 
+                <!-- Economic Context -->
+                <div class="section-header mt-4">
+                    <h3>Economic Context: GDP & GSDP</h3>
+                    <p>India's GDP and Karnataka's contribution to the national economy</p>
+                </div>
+
+                <div class="economic-context">
+                    ${renderEconomicContext()}
+                </div>
+
+                <!-- India IT Market Breakdown -->
+                <div class="section-header mt-4">
+                    <h3>India IT Market: Exports vs Domestic</h3>
+                    <p>Comparison of India's IT services export and domestic market</p>
+                </div>
+
+                <div class="it-market-breakdown">
+                    ${renderITMarketBreakdown()}
+                </div>
+
                 <!-- Vision Progress -->
                 <div class="section-header mt-4">
                     <h3>Progress Towards 2030 Vision</h3>
@@ -342,6 +362,172 @@ function getVerticalDescription(verticalId) {
         'digitizing-sectors': 'Traditional sectors adopting digital technologies. Includes healthcare, education, agriculture, and finance digitization.'
     }
     return descriptions[verticalId] || ''
+}
+
+function renderEconomicContext() {
+    // Initialize chart after DOM render
+    setTimeout(() => initializeEconomicChart(), 0)
+
+    return `
+        <div class="growth-charts-grid">
+            <div class="growth-chart-card" style="grid-column: 1 / -1;">
+                <h4>GDP Comparison: India vs Karnataka</h4>
+                <p class="chart-subtitle">Karnataka contributes ~8% to India's GDP</p>
+                <div class="chart-container">
+                    <canvas id="gdp-comparison-chart"></canvas>
+                </div>
+                <div class="chart-source">Source: Ministry of Statistics and Programme Implementation (MoSPI)</div>
+            </div>
+        </div>
+    `
+}
+
+function renderITMarketBreakdown() {
+    // Initialize chart after DOM render
+    setTimeout(() => initializeITMarketChart(), 0)
+
+    return `
+        <div class="growth-charts-grid">
+            <div class="growth-chart-card" style="grid-column: 1 / -1;">
+                <h4>India IT Market: Exports vs Domestic Services</h4>
+                <p class="chart-subtitle">IT Exports significantly larger than domestic market</p>
+                <div class="chart-container">
+                    <canvas id="it-market-chart"></canvas>
+                </div>
+                <div class="chart-source">Source: Industry estimates</div>
+            </div>
+        </div>
+    `
+}
+
+function initializeEconomicChart() {
+    const ctx = document.getElementById('gdp-comparison-chart')
+    if (!ctx) return
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['2020-21', '2021-22', '2022-23', '2023-24', '2024-25'],
+            datasets: [{
+                label: 'India GDP (USD Billion)',
+                data: [2690, 3190, 3260, 3600, 3790],
+                borderColor: '#E96337',
+                backgroundColor: 'rgba(233, 99, 55, 0.1)',
+                yAxisID: 'y',
+                tension: 0.4
+            }, {
+                label: 'Karnataka GSDP (USD Billion)',
+                data: [222, 270, 281, 306, 331],
+                borderColor: '#5BB9EC',
+                backgroundColor: 'rgba(91, 185, 236, 0.1)',
+                yAxisID: 'y1',
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    padding: 12
+                }
+            },
+            scales: {
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    title: {
+                        display: true,
+                        text: 'India GDP (USD Billion)'
+                    },
+                    ticks: {
+                        callback: function(value) {
+                            return '$' + value + 'B'
+                        }
+                    }
+                },
+                y1: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    title: {
+                        display: true,
+                        text: 'Karnataka GSDP (USD Billion)'
+                    },
+                    ticks: {
+                        callback: function(value) {
+                            return '$' + value + 'B'
+                        }
+                    },
+                    grid: {
+                        drawOnChartArea: false
+                    }
+                }
+            }
+        }
+    })
+}
+
+function initializeITMarketChart() {
+    const ctx = document.getElementById('it-market-chart')
+    if (!ctx) return
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['2019-20', '2020-21', '2021-22', '2022-23'],
+            datasets: [{
+                label: 'IT Exports (USD Billion)',
+                data: [147, 150, 170, 193],
+                backgroundColor: '#E96337',
+                borderRadius: 4
+            }, {
+                label: 'IT Domestic (USD Billion)',
+                data: [44, 46, 57, 53],
+                backgroundColor: '#5BB9EC',
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    padding: 12,
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label + ': $' + context.parsed.y + 'B'
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '$' + value + 'B'
+                        }
+                    }
+                }
+            }
+        }
+    })
 }
 
 function formatNumber(value) {
