@@ -2686,3 +2686,347 @@ body {
     background: linear-gradient(135deg, #fff 0%, #fff5f2 100%);
 }
 
+
+/* ============================================
+   ORGANISATION TAB STYLES
+   ============================================ */
+
+.organisation-tab .metric-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.regulatory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.regulatory-card {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.regulatory-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary-color);
+}
+
+.regulatory-icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.regulatory-card h4 {
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+.status-badge {
+    display: inline-block;
+    background: rgba(91, 185, 236, 0.1);
+    color: var(--tertiary-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+}
+
+.regulatory-card .description {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.regulatory-card .benchmark,
+.regulatory-card .process,
+.regulatory-card .note {
+    font-size: 0.9rem;
+    color: var(--text-tertiary);
+    margin-top: var(--spacing-xs);
+}
+
+.regulatory-card .benchmark {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.external-link {
+    display: inline-block;
+    margin-top: var(--spacing-sm);
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.external-link:hover {
+    text-decoration: underline;
+}
+
+.infrastructure-readiness {
+    margin-bottom: var(--spacing-xl);
+}
+
+.infra-readiness-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.infra-card {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+}
+
+.infra-card h4 {
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+    font-size: 1.1rem;
+}
+
+.infra-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.infra-metric {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-xs) 0;
+    border-bottom: 1px solid var(--bg-secondary);
+}
+
+.infra-metric:last-child {
+    border-bottom: none;
+}
+
+.quality-of-life-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.qol-card {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    text-align: center;
+}
+
+.qol-icon {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.qol-card h4 {
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+.qol-data {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    text-align: left;
+}
+
+.qol-item {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-xs) 0;
+    border-bottom: 1px solid var(--bg-secondary);
+}
+
+.qol-item:last-child {
+    border-bottom: none;
+}
+
+.qol-note {
+    margin-top: var(--spacing-md);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.institutional-capacity {
+    margin-bottom: var(--spacing-xl);
+}
+
+.capacity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.capacity-card {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+}
+
+.capacity-card h4 {
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+.capacity-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.capacity-card li {
+    padding: var(--spacing-sm) 0;
+    padding-left: var(--spacing-md);
+    position: relative;
+}
+
+.capacity-card li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--tertiary-color);
+    font-weight: 700;
+}
+
+.coe-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.coe-item {
+    padding: var(--spacing-sm);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-sm);
+    font-size: 0.95rem;
+}
+
+.benchmarking-section {
+    margin-bottom: var(--spacing-xl);
+}
+
+.benchmark-table-container {
+    overflow-x: auto;
+}
+
+.benchmark-table {
+    width: 100%;
+    min-width: 600px;
+}
+
+.benchmark-table td.highlight {
+    background: rgba(91, 185, 236, 0.1);
+    font-weight: 600;
+    color: var(--tertiary-color);
+}
+
+.benchmark-note {
+    background: var(--bg-secondary);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-sm);
+    margin-top: var(--spacing-lg);
+    font-size: 0.95rem;
+}
+
+.cluster-governance {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.cluster-gov-card {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+}
+
+.cluster-gov-card h4 {
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+    font-size: 1.2rem;
+}
+
+.governance-body {
+    background: var(--bg-secondary);
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-md);
+    font-size: 0.95rem;
+}
+
+.cluster-initiatives {
+    margin-bottom: var(--spacing-md);
+}
+
+.cluster-initiatives ul {
+    list-style: none;
+    padding: 0;
+}
+
+.cluster-initiatives li {
+    padding: var(--spacing-xs) 0;
+    padding-left: var(--spacing-md);
+    position: relative;
+}
+
+.cluster-initiatives li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.cluster-status {
+    background: rgba(230, 134, 52, 0.1);
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    color: var(--secondary-color);
+    font-weight: 600;
+}
+
+/* ============================================
+   STARTUPS TAB STYLES  
+   ============================================ */
+
+.startups-tab .metric-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* Reuse entrepreneurship styles for startups tab */
+.startups-tab .policies-grid,
+.startups-tab .infra-stats-grid,
+.startups-tab .innovation-grid,
+.startups-tab .rankings-grid,
+.startups-tab .cluster-ecosystem,
+.startups-tab .support-programs {
+    /* Inherits from entrepreneurship-tab styles already defined */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .regulatory-grid,
+    .infra-readiness-grid,
+    .quality-of-life-grid,
+    .capacity-grid,
+    .cluster-governance {
+        grid-template-columns: 1fr;
+    }
+}

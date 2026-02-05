@@ -1,15 +1,15 @@
 /**
- * Entrepreneurship Tab Renderer
- * Shows startup ecosystem, policies, and institutional readiness
+ * Startups & Digitizing Sectors Tab Renderer
+ * Shows startup ecosystem, unicorns, innovation metrics, and support programs
  */
 
-export async function renderEntrepreneurshipTab(appData) {
+export async function renderStartupsTab(appData) {
     try {
         return `
-            <div class="entrepreneurship-tab">
+            <div class="startups-tab">
                 <div class="tab-header">
-                    <h2>⚙️ Entrepreneurship & Ecosystem</h2>
-                    <p class="tab-subtitle">Startup ecosystem, policy framework, and institutional readiness for Karnataka's digital economy</p>
+                    <h2>🚀 Startups & Digitizing Sectors</h2>
+                    <p class="tab-subtitle">Startup ecosystem, unicorns, soonicorns, innovation excellence, and support programs across Karnataka</p>
                 </div>
 
                 <!-- Startup Ecosystem Overview -->
@@ -100,10 +100,10 @@ export async function renderEntrepreneurshipTab(appData) {
             </div>
         `
     } catch (error) {
-        console.error('Error rendering entrepreneurship tab:', error)
+        console.error('Error rendering startups tab:', error)
         return `
             <div class="error-message">
-                <h3>Unable to load entrepreneurship data</h3>
+                <h3>Unable to load startups & digitizing sectors data</h3>
                 <p>${error.message}</p>
             </div>
         `

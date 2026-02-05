@@ -12,8 +12,9 @@ import { renderRoadmapTab } from './tabs/roadmap.js'
 import { renderLandTab } from './tabs/land.js'
 import { renderLaborTab } from './tabs/labor.js'
 import { renderCapitalTab } from './tabs/capital.js'
-import { renderEntrepreneurshipTab } from './tabs/entrepreneurship.js'
+import { renderOrganisationTab } from './tabs/organisation.js'
 import { renderSourcesTab } from './tabs/sources.js'
+import { renderStartupsTab } from './tabs/startups.js'
 
 // State
 let currentTab = 'overview'
@@ -180,7 +181,7 @@ async function loadTab(tabId) {
                 break
 
             case 'startups':
-                content = await renderVerticalTab('startups', appData)
+                content = await renderStartupsTab(appData)
                 break
 
             case 'bengaluru':
@@ -207,8 +208,8 @@ async function loadTab(tabId) {
                 content = await renderCapitalTab(appData)
                 break
 
-            case 'entrepreneurship':
-                content = await renderEntrepreneurshipTab(appData)
+            case 'organisation':
+                content = await renderOrganisationTab(appData)
                 break
 
             case 'roadmap':
