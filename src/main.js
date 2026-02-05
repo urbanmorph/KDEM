@@ -140,29 +140,16 @@ function switchCategory(category) {
         }
     })
 
-    // Show appropriate tab group
+    // Show appropriate tab group and load first tab
     const tabGroups = document.querySelectorAll('.secondary-nav .tab-group')
-    let categoryHasCurrentTab = false
-
     tabGroups.forEach(group => {
         if (group.dataset.category === category) {
             group.style.display = 'flex'
 
-            // Check if the current tab belongs to this category
-            const currentTabBtn = group.querySelector(`.nav-btn[data-tab="${currentTab}"]`)
-            if (currentTabBtn) {
-                categoryHasCurrentTab = true
-                // Current tab is in this category, just highlight it
-                const navButtons = group.querySelectorAll('.nav-btn')
-                navButtons.forEach(btn => {
-                    btn.classList.toggle('active', btn === currentTabBtn)
-                })
-            } else {
-                // Current tab is not in this category, load the first tab
-                const firstTab = group.querySelector('.nav-btn')
-                if (firstTab) {
-                    loadTab(firstTab.dataset.tab)
-                }
+            // Load the first tab in this category
+            const firstTab = group.querySelector('.nav-btn')
+            if (firstTab) {
+                loadTab(firstTab.dataset.tab)
             }
         } else {
             group.style.display = 'none'
@@ -202,24 +189,17 @@ async function loadTab(tabId) {
     console.log(`Loading tab: ${tabId}`)
 
     try {
-        // Determine which category this tab belongs to
-        const tabButton = document.querySelector(`.nav-btn[data-tab="${tabId}"]`)
-        if (tabButton) {
-            const tabGroup = tabButton.closest('.tab-group')
-            if (tabGroup) {
-                const tabCategory = tabGroup.dataset.category
-
-                // Switch to the correct category if needed
-                if (tabCategory !== currentCategory) {
-                    switchCategory(tabCategory)
+        // Update active tab button within the current category
+        const activeTabGroup = document.querySelector(`.secondary-nav .tab-group[data-category="${currentCategory}"]`)
+        if (activeTabGroup) {
+            const navButtons = activeTabGroup.querySelectorAll('.nav-btn')
+            navButtons.forEach(btn => {
+                if (btn.dataset.tab === tabId) {
+                    btn.classList.add('active')
+                } else {
+                    btn.classList.remove('active')
                 }
-
-                // Update active tab button within the category
-                const navButtons = tabGroup.querySelectorAll('.nav-btn')
-                navButtons.forEach(btn => {
-                    btn.classList.toggle('active', btn.dataset.tab === tabId)
-                })
-            }
+            })
         }
 
         // Get content container
