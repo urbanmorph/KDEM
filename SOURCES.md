@@ -86,12 +86,34 @@
 | 25 | **KDEM Vision Document 2025 - Mysuru Chapter** | $10B by 2030, 150,000 jobs, 2,800 startups | ⭐⭐⭐⭐ | Jul 2025 |
 | 26 | **Draft Mangaluru Cluster Vision Document 2025** | ₹40,000 Cr by 2034, 200,000 jobs, 4,000 startups | ⭐⭐⭐⭐ | Sep 2025 |
 | 27 | **HDB Cluster Vision Report 2025-2030** | EMC 2.0, industrial corridor | ⭐⭐⭐⭐ | 2025 |
-| 28 | **Silicon Beach Skills Report (Xpheno-KDEM)** | 3.1 lakh talent, 90,000 experienced | ⭐⭐⭐⭐ | 2025 |
+| 28 | **Silicon Beach Skills Report (Xpheno-KDEM)** | 3.1 lakh talent, 90,000 experienced, 15,000+ grads/year | ⭐⭐⭐⭐ | Sep 2025 |
 | 29 | **KDEM-SBP-Deloitte Mangaluru Data Center Study** | 1 GW+ feasibility, cost comparisons | ⭐⭐⭐⭐ | 2025 |
+| 30 | **Bengaluru Innovation Report 2025** | 2.5M+ tech workforce, 600K AI/ML professionals, ecosystem metrics | ⭐⭐⭐⭐⭐ | 2025 |
+
+---
+
+## SKILLING & TALENT DEVELOPMENT
+
+| # | Source | Data Used | Confidence | Date | Link |
+|---|--------|-----------|------------|------|------|
+| 31 | **Karnataka Skill Development Policy 2025-32** | ₹4,432.5 Cr investment, 3M youth target, digital & AI focus | ⭐⭐⭐⭐⭐ | Jan 2026 | [Karnataka Skill Policy](https://thesouthfirst.com/karnataka/karnataka-government-approves-skill-development-policy-2025-32/) |
+| 32 | **Bengaluru Skill Summit 2025** (KDEM Knowledge Partner) | Skills & Innovation event, industry partnerships | ⭐⭐⭐⭐⭐ | Feb 2026 | [Skill Summit](https://bengaluruskillsummit.com/) |
+| 33 | **Silicon Beach Skills Report - Full Report** (Xpheno-KDEM) | Mangaluru-Udupi region talent depth analysis | ⭐⭐⭐⭐ | Sep 2025 | [News Coverage](https://newskarnataka.com/karnataka/mangaluru/mangaluru-has-potential-to-be-the-next-bengaluru-says-priyank-kharge/25092025) |
+| 34 | **ARTPARK (IISc) Skilling Data** | 9,000+ skilled, 23 startups, ₹750 Cr valuation, 32 patents | ⭐⭐⭐⭐ | 2025 | From Bengaluru Innovation Report |
+| 35 | **C-CAMP Agri Innovation Skilling** | 90+ startups, 5 lakh farmers impacted, 42 patents | ⭐⭐⭐⭐ | 2025 | From Bengaluru Innovation Report |
+| 36 | **Bangalore Bioinnovation Centre** | 486+ startups, 6,000+ jobs, 71 IPR/patents | ⭐⭐⭐⭐ | 2025 | From Bengaluru Innovation Report |
+| 37 | **ELEVATE Program Skilling Metrics** | 1,227+ startups supported, ₹280+ Cr funding, 25% women-led | ⭐⭐⭐⭐ | 2025 | From Bengaluru Innovation Report |
+| 38 | **Karnataka Positive Talent Balance Report** (Xpheno) | Karnataka #1 state in positive talent balance | ⭐⭐⭐⭐ | Nov 2024 | [YourStory Coverage](https://yourstory.com/enterprise-story/2025/06/karnataka-wide-talent-pool-for-gccs-xpheno-report) |
 
 ---
 
 ## NEWS & EVENT COVERAGE
+
+| # | Source | Data Used | Confidence | Date |
+|---|--------|-----------|------------|------|
+| 38 | **TheHansIndia - Mysuru Big Tech Show** | 80+ startups, 1,100+ delegates | ⭐⭐⭐ | Jul 2025 |
+| 39 | **Daijiworld - Mangaluru Technovanza** | Vision document unveiling, metrics | ⭐⭐⭐ | Sep 2025 |
+| 40 | **Inc42 - BTS 2025 Coverage** | DeepTech, AI focus | ⭐⭐⭐ | Nov 2025 |
 
 | # | Source | Data Used | Confidence | Date |
 |---|--------|-----------|------------|------|
@@ -105,12 +127,12 @@
 
 | # | Source | Data Used | Confidence | Date |
 |---|--------|-----------|------------|------|
-| 33 | **Singapore Digital Economy Report 2025 (IMDA)** | $128.1B (18.6% GDP), 12% CAGR | ⭐⭐⭐⭐⭐ | Oct 2025 |
-| 34 | **e-Conomy SEA 2025 (Google/Temasek/Bain)** | $300B+ GMV, AI adoption | ⭐⭐⭐⭐ | Nov 2025 |
-| 35 | **ASEAN Digital Economy Framework Agreement** | $2T regional target by 2030 | ⭐⭐⭐⭐⭐ | 2025 |
-| 36 | **APEC Internet & Digital Economy Roadmap** | 11 key focus areas | ⭐⭐⭐⭐ | 2017-2025 |
-| 37 | **World Bank Digital Economy Framework** | 5 foundations framework | ⭐⭐⭐⭐⭐ | 2016-2024 |
-| 38 | **Singapore Services & DE Technology Roadmap (IMDA)** | Services 4.0, 9 tech trends | ⭐⭐⭐⭐ | 2019-2025 |
+| 41 | **Singapore Digital Economy Report 2025 (IMDA)** | $128.1B (18.6% GDP), 12% CAGR | ⭐⭐⭐⭐⭐ | Oct 2025 |
+| 42 | **e-Conomy SEA 2025 (Google/Temasek/Bain)** | $300B+ GMV, AI adoption | ⭐⭐⭐⭐ | Nov 2025 |
+| 43 | **ASEAN Digital Economy Framework Agreement** | $2T regional target by 2030 | ⭐⭐⭐⭐⭐ | 2025 |
+| 44 | **APEC Internet & Digital Economy Roadmap** | 11 key focus areas | ⭐⭐⭐⭐ | 2017-2025 |
+| 45 | **World Bank Digital Economy Framework** | 5 foundations framework | ⭐⭐⭐⭐⭐ | 2016-2024 |
+| 46 | **Singapore Services & DE Technology Roadmap (IMDA)** | Services 4.0, 9 tech trends | ⭐⭐⭐⭐ | 2019-2025 |
 
 ---
 
@@ -118,12 +140,12 @@
 
 | # | Source | Data Used | Confidence | Date |
 |---|--------|-----------|------------|------|
-| 39 | **Gujarat GCC Policy 2025-30** | 250+ GCCs, ₹10,000 Cr, 50,000 jobs | ⭐⭐⭐⭐⭐ | 2025 |
-| 40 | **Odisha GCC Policy 2025** | 5 hubs, ₹1,000 Cr, 50,000 jobs | ⭐⭐⭐⭐⭐ | 2025 |
-| 41 | **Telangana ICT Policy & TASK Program** | Skilling, ease of business | ⭐⭐⭐⭐ | Ongoing |
-| 42 | **Maharashtra GCC Policy (Draft)** | Under development | ⭐⭐⭐ | 2025 |
-| 43 | **Tamil Nadu GCC Push** | Coimbatore, Madurai, Tiruchirappalli | ⭐⭐⭐ | 2025 |
-| 44 | **Union Budget 2025-26 GCC Framework** | National guidance framework | ⭐⭐⭐⭐⭐ | Feb 2025 |
+| 47 | **Gujarat GCC Policy 2025-30** | 250+ GCCs, ₹10,000 Cr, 50,000 jobs | ⭐⭐⭐⭐⭐ | 2025 |
+| 48 | **Odisha GCC Policy 2025** | 5 hubs, ₹1,000 Cr, 50,000 jobs | ⭐⭐⭐⭐⭐ | 2025 |
+| 49 | **Telangana ICT Policy & TASK Program** | Skilling, ease of business | ⭐⭐⭐⭐ | Ongoing |
+| 50 | **Maharashtra GCC Policy (Draft)** | Under development | ⭐⭐⭐ | 2025 |
+| 51 | **Tamil Nadu GCC Push** | Coimbatore, Madurai, Tiruchirappalli | ⭐⭐⭐ | 2025 |
+| 52 | **Union Budget 2025-26 GCC Framework** | National guidance framework | ⭐⭐⭐⭐⭐ | Feb 2025 |
 
 ---
 
@@ -131,11 +153,11 @@
 
 | # | Metric | Source | Confidence | Verification Needed |
 |---|--------|--------|------------|---------------------|
-| 45 | Beyond Bengaluru 126 companies | KDEM Internal | ⭐⭐ | Company Registry system |
-| 46 | Beyond Bengaluru 5,500+ jobs | Company self-report | ⭐⭐ | EPFO verification |
-| 47 | ELEVATE 1,000+ startups | Program records | ⭐⭐⭐⭐ | Internal validation |
-| 48 | Mysuru 750+ recent jobs | Cluster reporting | ⭐⭐ | EPFO verification |
-| 49 | Mangaluru 250 tech companies | STPI Mangaluru | ⭐⭐⭐ | Cross-reference needed |
+| 53 | Beyond Bengaluru 126 companies | KDEM Internal | ⭐⭐ | Company Registry system |
+| 54 | Beyond Bengaluru 5,500+ jobs | Company self-report | ⭐⭐ | EPFO verification |
+| 55 | ELEVATE 1,000+ startups | Program records | ⭐⭐⭐⭐ | Internal validation |
+| 56 | Mysuru 750+ recent jobs | Cluster reporting | ⭐⭐ | EPFO verification |
+| 57 | Mangaluru 250 tech companies | STPI Mangaluru | ⭐⭐⭐ | Cross-reference needed |
 
 ---
 
@@ -143,11 +165,11 @@
 
 | # | Metric | Methodology | Confidence | Assumptions |
 |---|--------|-------------|------------|-------------|
-| 50 | Karnataka Digital Economy ~$110B | State GSDP digital sector estimate | ⭐⭐⭐ | 15% of GSDP methodology |
-| 51 | $400B by 2030 target | 25-30% CAGR projection | ⭐ | Aspirational target |
-| 52 | Beyond Bengaluru $10B by 2030 | Vision document target | ⭐ | Aspirational target |
-| 53 | Mysuru $10B by 2030 | Vision document, ~55% CAGR required | ⭐ | Ambitious trajectory |
-| 54 | 1,000 GCCs by 2030 | Current 550+ + 500 new (policy target) | ⭐⭐ | Policy target |
+| 58 | Karnataka Digital Economy ~$110B | State GSDP digital sector estimate | ⭐⭐⭐ | 15% of GSDP methodology |
+| 59 | $400B by 2030 target | 25-30% CAGR projection | ⭐ | Aspirational target |
+| 60 | Beyond Bengaluru $10B by 2030 | Vision document target | ⭐ | Aspirational target |
+| 61 | Mysuru $10B by 2030 | Vision document, ~55% CAGR required | ⭐ | Ambitious trajectory |
+| 62 | 1,000 GCCs by 2030 | Current 550+ + 500 new (policy target) | ⭐⭐ | Policy target |
 
 ---
 
@@ -206,7 +228,7 @@ Government of Karnataka
 
 ---
 
-**Document Version:** 2.0 (with confidence ratings)
-**Last Updated:** January 15, 2026
+**Document Version:** 2.1 (with skilling & talent sources added)
+**Last Updated:** February 5, 2026
 **Next Review:** April 2026
 

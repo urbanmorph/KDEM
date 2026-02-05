@@ -302,6 +302,27 @@ This dashboard is built based on comprehensive analysis of publicly available KD
 
 ---
 
+## 📚 Restructure Documentation
+
+**Comprehensive guides for the upcoming v3.0 dashboard restructure:**
+
+| Document | Purpose | Audience |
+|----------|---------|----------|
+| **[IMPLEMENTATION_GUIDE.md](docs/IMPLEMENTATION_GUIDE.md)** | 👈 **START HERE** - Complete implementation plan | Project managers, stakeholders |
+| **[TECHNICAL_GUIDE.md](docs/TECHNICAL_GUIDE.md)** | 3D data architecture, database schema, API reference | Developers, database admins |
+| **[ADMIN_GUIDE.md](docs/ADMIN_GUIDE.md)** | Admin interface for target setting with AI apportionment | Data managers, policy analysts |
+
+**What's Coming in v3.0:**
+- 🎯 **9-tab structure** aligned with 5-pillar Digital Economy framework
+- 🗄️ **3D relational database** (Verticals × Geography × Factors)
+- 🤖 **AI-powered admin panel** for intelligent target setting
+- ⚡ **Real-time updates** via Supabase + WebSocket
+- 📊 **Enhanced analytics** with factor-based tracking
+
+**Timeline:** 13 weeks (9 weeks core + 4 weeks admin interface)
+
+---
+
 ## 🙏 Acknowledgments
 
 This dashboard synthesizes data and insights from:
