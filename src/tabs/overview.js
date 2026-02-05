@@ -181,12 +181,12 @@ function renderGrowthTrends() {
                 <p class="chart-subtitle">Projected to reach $1.2 Trillion by 2029-30</p>
                 <div class="bar-chart">
                     ${indiaDigitalEconomy.map(data => {
-                        const height = (data.value / maxIndiaValue) * 100
+                        const heightPx = ((data.value / maxIndiaValue) * 180).toFixed(1)
                         return `
                             <div class="bar-container">
                                 <div class="bar-value">$${data.value}B</div>
-                                <div class="bar" style="height: ${height}%">
-                                    <div class="bar-fill" style="height: 100%"></div>
+                                <div class="bar" style="height: ${heightPx}px">
+                                    <div class="bar-fill"></div>
                                 </div>
                                 <div class="bar-label">${data.year}</div>
                             </div>
@@ -202,12 +202,12 @@ function renderGrowthTrends() {
                 <p class="chart-subtitle">Steady growth from $28.7B to $52B</p>
                 <div class="bar-chart">
                     ${karnatakaITExports.map(data => {
-                        const height = (data.value / maxKarnatakaValue) * 100
+                        const heightPx = ((data.value / maxKarnatakaValue) * 180).toFixed(1)
                         return `
                             <div class="bar-container">
                                 <div class="bar-value">$${data.value.toFixed(1)}B</div>
-                                <div class="bar" style="height: ${height}%">
-                                    <div class="bar-fill bar-fill-karnataka" style="height: 100%"></div>
+                                <div class="bar" style="height: ${heightPx}px">
+                                    <div class="bar-fill bar-fill-karnataka"></div>
                                 </div>
                                 <div class="bar-label">${data.year}</div>
                             </div>
@@ -223,12 +223,12 @@ function renderGrowthTrends() {
                 <p class="chart-subtitle">Rapid expansion in electronics manufacturing</p>
                 <div class="bar-chart">
                     ${esdmMarket.map(data => {
-                        const height = (data.value / maxESDMValue) * 100
+                        const heightPx = ((data.value / maxESDMValue) * 180).toFixed(1)
                         return `
                             <div class="bar-container">
                                 <div class="bar-value">$${data.value.toFixed(1)}B</div>
-                                <div class="bar" style="height: ${height}%">
-                                    <div class="bar-fill bar-fill-esdm" style="height: 100%"></div>
+                                <div class="bar" style="height: ${heightPx}px">
+                                    <div class="bar-fill bar-fill-esdm"></div>
                                 </div>
                                 <div class="bar-label">${data.year}</div>
                             </div>
