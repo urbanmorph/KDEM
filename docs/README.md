@@ -1,202 +1,247 @@
-# KDEM v3.0 Documentation
+# KDEM Dashboard Documentation
 
-> Complete implementation guides for restructuring the KDEM dashboard
-
----
-
-## 📖 Documentation Index
-
-### 1. [IMPLEMENTATION_GUIDE.md](IMPLEMENTATION_GUIDE.md) ⭐ START HERE
-
-**1,412 lines | For: Project managers, stakeholders, everyone**
-
-Complete implementation plan including:
-- Executive summary (what's changing and why)
-- Current vs proposed structure (6 tabs → 9 tabs)
-- Implementation timeline (Phases 1-5, 13 weeks)
-- Tech stack (Vite + Supabase + Vercel)
-- Getting started (quick start, environment setup)
-- Success criteria and FAQ
-
-**Start here to understand the overall vision and plan.**
+> Complete guides for the Karnataka Digital Economy Mission Dashboard v3.0
 
 ---
 
-### 2. [TECHNICAL_GUIDE.md](TECHNICAL_GUIDE.md)
+## 📖 Quick Navigation
 
-**2,892 lines | For: Developers, database administrators**
+### For Everyone
+- **[Main README](../README.md)** - Project overview, key metrics, current status
 
-Technical reference covering:
-- 3D data architecture (Verticals × Geography × Factors)
-- Complete PostgreSQL database schema
-- Supabase implementation (setup, functions, triggers)
-- Auto-apportionment system (historical defaults, AI predictions)
-- Query patterns and API reference
-- Frontend integration examples
-
-**Use this for actual implementation and development work.**
-
----
-
-### 3. [ADMIN_GUIDE.md](ADMIN_GUIDE.md)
-
-**1,395 lines | For: Data managers, policy analysts, admins**
-
-Admin interface design covering:
-- Password-protected admin panel workflow
-- Intelligent target setting with AI suggestions
-- Apportionment across dimensions (auto-populated defaults)
-- Preview and validation before committing
-- Role-based access control (admin, editor, reviewer, viewer)
-- Audit trail and draft workflow
-
-**Use this to understand and use the admin interface for managing targets.**
-
----
-
-## 🚀 Quick Start
-
-### For Project Managers
-1. Read **IMPLEMENTATION_GUIDE.md** sections 1-3 (Executive Summary, Current vs Proposed, Implementation Plan)
-2. Review timeline and approve phases
-3. Assign resources and begin Phase 1
+### For Users
+- **[SETUP.md](../SETUP.md)** - Quick start guide for local development
+- **[SOURCES.md](../SOURCES.md)** - Data sources with confidence ratings
 
 ### For Developers
-1. Skim **IMPLEMENTATION_GUIDE.md** for context
-2. Read **TECHNICAL_GUIDE.md** sections 1-6 (Architecture → Supabase Implementation)
-3. Set up Supabase project and run database migrations
-4. Start building frontend components
+- **[TECHNICAL_GUIDE.md](TECHNICAL_GUIDE.md)** - Database schema, 3D architecture, query patterns
+- **[API_REFERENCE.md](API_REFERENCE.md)** - Data service layer, API endpoints, examples
+- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Production deployment to Vercel
+- **[SUPABASE_SETUP.md](SUPABASE_SETUP.md)** - Database setup instructions
+- **[claude.md](../claude.md)** - Claude AI development guide
 
 ### For Data Managers
-1. Read **IMPLEMENTATION_GUIDE.md** Executive Summary
-2. Read **ADMIN_GUIDE.md** for admin workflow
-3. Request admin account access
-4. Learn target setting and apportionment workflow
+- **[DATA_GUIDE.md](DATA_GUIDE.md)** - How to view and update targets via Supabase
+
+### For Project Managers
+- **[IMPLEMENTATION_GUIDE.md](IMPLEMENTATION_GUIDE.md)** - Complete restructure plan (Phases 1-5)
+- **[CHANGELOG.md](CHANGELOG.md)** - Version history and release notes
+
+### For Future Development
+- **[ADMIN_GUIDE.md](ADMIN_GUIDE.md)** - Admin interface design (Phase 5)
 
 ---
 
-## 📊 What We're Building
+## 📚 Documentation by Purpose
 
-### Current (v2.0)
-- 6-tab single-page dashboard
-- Static data embedded in HTML
-- Manual updates required
-- No admin interface
+### Getting Started
 
-### Proposed (v3.0)
-- **9-tab framework-aligned dashboard**
-  - 5 vertical tabs (IT Services, ESDM, Startups, Digitizing Sectors, Overview)
-  - 2 geographic tabs (Bengaluru, Beyond Bengaluru)
-  - 2 cross-cutting tabs (Factors of Production, Roadmap & Data)
+**I want to run the dashboard locally:**
+1. Read [SETUP.md](../SETUP.md) - Install dependencies
+2. Read [SUPABASE_SETUP.md](SUPABASE_SETUP.md) - Setup database
+3. Run `npm run dev`
 
-- **3D relational database (Supabase)**
-  - Verticals × Geography × Factors = synchronized targets
-  - Auto-cascade updates (revenue → labour → land → capital)
-  - Real-time sync via WebSocket
-
-- **AI-powered admin interface**
-  - Auto-populated apportionment from historical data
-  - Claude API predictions for optimal distribution
-  - Constraint validation and preview before commit
+**I want to understand the project:**
+1. Read [Main README](../README.md) - Overview
+2. Read [IMPLEMENTATION_GUIDE.md](IMPLEMENTATION_GUIDE.md) - Project plan
+3. Read [TECHNICAL_GUIDE.md](TECHNICAL_GUIDE.md) - Architecture
 
 ---
 
-## 🎯 Key Benefits
+### Working with Data
 
-### Data Integrity
-✅ Single source of truth (PostgreSQL)
-✅ Automatic cascade updates
-✅ No data sync issues
-✅ Built-in validation rules
+**I want to add/update dashboard data:**
+→ Read [DATA_GUIDE.md](DATA_GUIDE.md)
 
-### Developer Experience
-✅ Auto-generated API (Supabase)
-✅ Real-time subscriptions
-✅ Type-safe queries
-✅ Fast local development
+**I want to understand the data model:**
+→ Read [TECHNICAL_GUIDE.md](TECHNICAL_GUIDE.md) - Sections 1-2
 
-### User Experience
-✅ Real-time dashboard updates
-✅ Fast queries (< 2 sec load time)
-✅ Always consistent data
-✅ Mobile responsive
+**I want to know where data comes from:**
+→ Read [SOURCES.md](../SOURCES.md)
 
-### Maintainability
-✅ Easy data updates (via admin panel)
-✅ Audit trail (who changed what, when)
-✅ Clear documentation
-✅ Scalable architecture
+**I want to validate data integrity:**
+→ Read [DATA_GUIDE.md](DATA_GUIDE.md) - Data Validation section
 
 ---
 
-## 📅 Timeline
+### Development
 
-| Phase | Weeks | Deliverables |
-|-------|-------|--------------|
-| **Phase 1** | 1-2 | Supabase setup, schema, data migration, backup |
-| **Phase 2** | 3-5 | 7 core tabs (Verticals + Geographic) |
-| **Phase 3** | 6-7 | 2 horizontal tabs (Factors, Roadmap) |
-| **Phase 4** | 8-9 | Testing, documentation, production launch |
-| **Phase 5** | 10-13 | Admin interface (optional) |
+**I want to add a new feature:**
+1. Read [TECHNICAL_GUIDE.md](TECHNICAL_GUIDE.md) - Architecture
+2. Read [API_REFERENCE.md](API_REFERENCE.md) - Data service layer
+3. Read [claude.md](../claude.md) - Development guidelines
 
-**Total: 9 weeks (core) + 4 weeks (admin) = 13 weeks**
+**I want to deploy to production:**
+→ Read [DEPLOYMENT.md](DEPLOYMENT.md)
+
+**I want to understand the API:**
+→ Read [API_REFERENCE.md](API_REFERENCE.md)
+
+**I want to see what changed:**
+→ Read [CHANGELOG.md](CHANGELOG.md)
 
 ---
 
-## 💰 Cost Estimate
+### Planning & Strategy
 
-| Tier | Monthly Cost | Includes |
-|------|--------------|----------|
-| **Free** | $0 | Core dashboard (no admin) |
-| **Production** | $46.50 | Dashboard + admin + AI predictions |
+**I want to see the implementation timeline:**
+→ Read [IMPLEMENTATION_GUIDE.md](IMPLEMENTATION_GUIDE.md) - Timeline section
 
-**Breakdown:**
-- Supabase Pro: $25/month
-- Vercel Pro: $20/month
-- Claude API: $1.50/month (~50 predictions)
+**I want to understand Phase 5 (Admin Interface):**
+→ Read [ADMIN_GUIDE.md](ADMIN_GUIDE.md)
+
+**I want to know what's next:**
+→ Read [CHANGELOG.md](CHANGELOG.md) - Upcoming Releases section
+
+---
+
+## 📊 Documentation Stats
+
+| Document | Lines | Audience | Status |
+|----------|-------|----------|--------|
+| **IMPLEMENTATION_GUIDE.md** | 1,412 | Project Managers | ✅ Complete |
+| **TECHNICAL_GUIDE.md** | 2,892 | Developers | ✅ Complete |
+| **ADMIN_GUIDE.md** | 1,395 | Data Managers | ✅ Design Complete |
+| **DATA_GUIDE.md** | 450 | Data Managers | ✅ Complete |
+| **API_REFERENCE.md** | 520 | Developers | ✅ Complete |
+| **DEPLOYMENT.md** | 300 | DevOps | ✅ Complete |
+| **CHANGELOG.md** | 250 | Everyone | ✅ Complete |
+| **SUPABASE_SETUP.md** | 200 | Developers | ✅ Complete |
+
+**Total Documentation:** ~7,500 lines
+
+---
+
+## 🎯 Key Concepts
+
+### 3D Data Architecture
+
+The core innovation of KDEM v3.0:
+
+```
+Verticals (5 pillars)
+    ×
+Geographies (13 locations)
+    ×
+Factors (4 production factors)
+    =
+Targets (single source of truth)
+```
+
+**Learn more:** [TECHNICAL_GUIDE.md](TECHNICAL_GUIDE.md) - Section 1
+
+---
+
+### Tech Stack
+
+- **Frontend:** Vite 5.4 + Vanilla JavaScript
+- **Backend:** Supabase (PostgreSQL + Auto-generated API)
+- **Deployment:** Vercel (automatic CD from main branch)
+- **Database:** 3D relational model with 9 migrations
+
+**Learn more:** [TECHNICAL_GUIDE.md](TECHNICAL_GUIDE.md) - Section 3
+
+---
+
+### Data Model
+
+```sql
+-- Dimension Tables (Define coordinates)
+verticals      -- 25 records (5 core + sub-sectors)
+geographies    -- 13 records (Karnataka + clusters)
+factors        -- 4 records (Land, Labour, Capital, Organisation)
+
+-- Fact Table (Single source of truth)
+targets        -- 248 records (all metrics)
+
+-- Reference Tables (Rules & ratios)
+conversion_ratios          -- 15 rules
+apportionment_rules        -- 37 rules
+skill_requirements         -- Skill breakdown by vertical
+```
+
+**Learn more:** [TECHNICAL_GUIDE.md](TECHNICAL_GUIDE.md) - Section 2
+
+---
+
+## 🚀 Implementation Status
+
+### ✅ Completed (v3.0)
+- Phase 1: Database & infrastructure
+- Phase 2: Core dashboard (9 tabs)
+- Phase 3: Factors & roadmap
+- Phase 4: Testing & deployment
+
+### 🔄 In Progress (v3.1)
+- Documentation sprint
+- Data quality improvements
+- Performance optimization
+
+### 📋 Planned (v4.0)
+- Phase 5: Admin interface
+- AI-powered target setting
+- Public API endpoints
+
+**Learn more:** [CHANGELOG.md](CHANGELOG.md)
 
 ---
 
 ## 🆘 Need Help?
 
-### Questions About Implementation
-- Read **IMPLEMENTATION_GUIDE.md** FAQ section
-- Check GitHub Issues (planned)
-- Contact technical lead
+### Common Questions
 
-### Questions About Data Model
-- Read **TECHNICAL_GUIDE.md** sections 1-2
-- Review database schema diagrams
-- Check query pattern examples
+**Q: How do I add a new target to the dashboard?**
+→ [DATA_GUIDE.md](DATA_GUIDE.md) - "Add a New Target" section
 
-### Questions About Admin Interface
-- Read **ADMIN_GUIDE.md** workflow section
-- Review UI mockups and screenshots
-- Test on staging environment first
+**Q: How do I deploy changes to production?**
+→ [DEPLOYMENT.md](DEPLOYMENT.md) - "Deployment Workflow" section
 
----
+**Q: What API functions are available?**
+→ [API_REFERENCE.md](API_REFERENCE.md) - "Data Service Layer" section
 
-## 📝 Document Changelog
+**Q: How do I understand the database schema?**
+→ [TECHNICAL_GUIDE.md](TECHNICAL_GUIDE.md) - "Database Schema" section
 
-### 2026-02-05 - Consolidation
-- ✅ Consolidated 11 files → 3 comprehensive guides
-- ✅ Removed ~2,500 lines of redundancy
-- ✅ Better organization by audience and purpose
-- ✅ Added this index file
-
-### 2026-02-05 - Initial Creation
-- Created RESTRUCTURE_PLAN.md
-- Created IMPLEMENTATION_SUMMARY.md
-- Created FINAL_IMPLEMENTATION_SUMMARY.md
-- Created BEFORE_AFTER_COMPARISON.md
-- Created DATA_ARCHITECTURE_3D.md
-- Created SUPABASE_IMPLEMENTATION.md
-- Created ADMIN_INTERFACE_DESIGN.md
-- Created AUTO_APPORTIONMENT_GUIDE.md
-- Created QUICK_REFERENCE.md
+**Q: Where do I find data sources?**
+→ [SOURCES.md](../SOURCES.md)
 
 ---
 
-**Last Updated:** 2026-02-05
-**Status:** Ready for implementation
-**Contact:** KDEM Technical Team
+## 📞 Support
+
+**For Technical Issues:**
+- Check relevant documentation above
+- Review error logs in Supabase dashboard
+- Contact technical team
+
+**For Data Questions:**
+- Review [DATA_GUIDE.md](DATA_GUIDE.md)
+- Check [SOURCES.md](../SOURCES.md) for provenance
+- Consult KDEM strategic planning documents
+
+**For Feature Requests:**
+- Review [CHANGELOG.md](CHANGELOG.md) - Upcoming Releases
+- Check if feature is planned in Phase 5
+- Contact project lead
+
+---
+
+## 📝 Contributing to Documentation
+
+When updating documentation:
+
+1. **Keep it concise** - Remove redundancy
+2. **Use examples** - Show, don't just tell
+3. **Update this index** - Keep navigation current
+4. **Update CHANGELOG** - Document changes
+5. **Follow existing style** - Consistent formatting
+
+---
+
+**Last Updated:** February 6, 2026  
+**Dashboard Version:** 3.0  
+**Documentation Status:** Complete
+
+---
+
+**Built with ❤️ by KDEM Technical Team & Urban Morph**

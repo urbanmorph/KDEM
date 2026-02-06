@@ -21,23 +21,40 @@ This dashboard provides a comprehensive, public-facing view of Karnataka Digital
 
 ## 📌 Current Dashboard Status (v3.0)
 
-**What's Available:**
-- ✅ **Read-Only Analytics Dashboard** - Complete with 13 interactive tabs
-- ✅ **Data Visualization** - Charts, metrics, and progress tracking
-- ✅ **13 Dashboard Sections** - Overview, Verticals, Geography, Factors, Roadmap, Sources
-- ✅ **Verified Data** - 248 targets across 5 verticals, 13 geographies, 8 years (2021-2030)
-- ✅ **Production Ready** - Optimized, tested, and deployed on Vercel
+**✅ Production-Ready Dashboard**
+- **Live URL:** [KDEM Dashboard](https://kdem.vercel.app)
+- **Version:** 3.0 (launched February 2026)
+- **Status:** Fully operational, optimized, and deployed
+
+**Features:**
+- 🎯 **13 Interactive Tabs** - Strategy, Verticals, Geography, Factors
+- 📊 **Real-Time Data** - Connected to Supabase PostgreSQL database
+- 🗄️ **248 Verified Targets** - Across 5 verticals, 13 geographies, 8 years (2021-2030)
+- 📱 **Fully Responsive** - Optimized for mobile, tablet, and desktop
+- ⚡ **Fast Performance** - Vite build, code splitting, lazy loading
+- 🎨 **KDEM Branding** - Official logo, colors, and design system
+
+**Tech Stack:**
+- **Frontend:** Vite 5.4 + Vanilla JavaScript (ES6 modules)
+- **Backend:** Supabase (PostgreSQL + Auto-generated REST API)
+- **Deployment:** Vercel (automatic deployments from main branch)
+- **Database:** 3D relational model (Verticals × Geography × Factors)
 
 **Not Yet Available:**
-- ⏳ **Admin Panel** (Phase 5) - Target editing and data management interface
-- ⏳ **AI Predictions** - Automated target projections
-- ⏳ **API Access** - Programmatic data access endpoints
+- ⏳ **Admin Panel** (Phase 5) - Target editing interface with AI suggestions
+- ⏳ **API Documentation** - Public API endpoints (planned)
+- ⏳ **Data Export** - CSV/Excel download functionality (planned)
 
-**Current Capabilities:** View-only analytics and reporting
-**Update Frequency:** Manual updates via database migrations
+**Current Capabilities:** View-only analytics dashboard with real-time data from Supabase
+**Update Frequency:** Real-time (via Supabase)
 **Data Accuracy:** Verified and corrected as of Feb 2026
 
-For development roadmap and admin features, see [Implementation Guide](docs/IMPLEMENTATION_GUIDE.md).
+📖 **Documentation:**
+- [Getting Started](SETUP.md) - Local development setup
+- [Deployment Guide](DEPLOYMENT.md) - Production deployment workflow
+- [Data Management](DATA_GUIDE.md) - How to update targets via Supabase
+- [API Reference](API_REFERENCE.md) - Query patterns and examples
+- [Implementation Guide](docs/IMPLEMENTATION_GUIDE.md) - Complete restructure plan
 
 ---
 
@@ -223,13 +240,50 @@ See [SOURCES.md](SOURCES.md) for complete attribution with confidence ratings.
 ## 🗂️ Repository Structure
 
 ```
-kdem/
-├── index.html          # Main dashboard HTML
-├── styles.css          # Comprehensive styling
-├── script.js           # Interactive animations & effects
-├── README.md           # This file
-├── SOURCES.md          # Data sources with confidence ratings
-└── .claude/            # Claude project configuration
+KDEM/
+├── index.html                    # Main dashboard entry point
+├── styles.css                    # Global styles with KDEM brand colors
+├── favicon.svg                   # KDEM favicon
+├── vite.config.js                # Vite build configuration
+├── package.json                  # Dependencies and scripts
+│
+├── src/                          # Source code
+│   ├── main.js                   # App initialization & routing
+│   ├── lib/
+│   │   └── supabaseClient.js     # Supabase connection
+│   ├── services/
+│   │   └── dataService.js        # Data fetching & aggregation
+│   └── tabs/                     # Tab components
+│       ├── overview.js           # Overview tab
+│       ├── vertical.js           # Vertical tabs (IT, ESDM, etc.)
+│       ├── geography.js          # Geographic tabs
+│       ├── factors.js            # Factors of production tabs
+│       ├── roadmap.js            # Roadmap tab
+│       └── sources.js            # Data sources tab
+│
+├── public/                       # Static assets
+│   └── assets/
+│       └── KDEM-Logo-1_white-2.png  # Official KDEM logo
+│
+├── supabase/                     # Database
+│   ├── migrations/               # Database schema migrations (9 files)
+│   └── seed/                     # Seed data scripts
+│
+├── docs/                         # Documentation
+│   ├── README.md                 # Documentation index
+│   ├── IMPLEMENTATION_GUIDE.md   # Implementation plan (Phases 1-5)
+│   ├── TECHNICAL_GUIDE.md        # 3D data architecture & schema
+│   ├── ADMIN_GUIDE.md            # Admin interface design (Phase 5)
+│   ├── DEPLOYMENT.md             # Production deployment guide
+│   ├── SUPABASE_SETUP.md         # Database setup instructions
+│   ├── DATA_GUIDE.md             # Data management guide
+│   ├── API_REFERENCE.md          # API documentation
+│   └── CHANGELOG.md              # Version history
+│
+├── README.md                     # This file - project overview
+├── SETUP.md                      # Quick start guide
+├── SOURCES.md                    # Data sources with confidence ratings
+└── claude.md                     # Claude development guide
 ```
 
 ### Related Analysis Documents
@@ -312,15 +366,17 @@ This dashboard is built based on comprehensive analysis of publicly available KD
 
 ---
 
-## 🚀 Roadmap for Dashboard Development
+## 🚀 Development Roadmap
 
-| Phase | Timeline | Deliverables |
-|-------|----------|--------------|
-| **v1.0** | Q1 2026 | Basic dashboard, static data |
-| **v2.0** | Q3 2026 | Automated refresh, APIs, roadmap tracker |
-| **v3.0** | Q2 2027 | Real-time updates, predictive analytics |
+| Version | Status | Highlights |
+|---------|--------|------------|
+| **v1.0** | ✅ Launched Q4 2025 | Single-page dashboard with 6 tabs, static data |
+| **v2.0** | ✅ Launched Q1 2026 | Tabbed navigation, enhanced UI/UX |
+| **v3.0** | ✅ **Current** (Feb 2026) | Vite + Supabase, 13 tabs, real-time data, 3D relational model |
+| **v3.1** | 🔄 In Progress | Documentation sprint, data quality improvements |
+| **v4.0** | 📋 Planned Q2-Q3 2026 | Admin panel with AI-powered target setting |
 
-**Target Launch:** BTS 2026 (November 17-19, 2026)
+**Next Milestone:** BTS 2026 (November 17-19, 2026) - Full admin interface launch
 
 ---
 
