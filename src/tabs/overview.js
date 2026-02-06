@@ -52,7 +52,7 @@ export async function renderOverviewTab(appData) {
                 <div class="metrics-grid">
                     ${renderMetricCard('Total Revenue', totalMetrics.total_revenue_usd_bn, 'USD Billion', '$400B Target', 'revenue')}
                     ${renderMetricCard('Total Employment', totalMetrics.total_employment, 'Jobs', '5M Target', 'employment')}
-                    ${renderMetricCard('Land Required', totalMetrics.total_land_sqft, 'Million Sq Ft', 'Infrastructure', 'land')}
+                    ${renderMetricCard('Land Required', totalMetrics.total_land_sqft, 'Sq Ft', 'Infrastructure', 'land')}
                     ${renderMetricCard('Capital Investment', totalMetrics.total_capital_inr_cr, 'INR Crores', 'Investment', 'capital')}
                 </div>
 
@@ -171,7 +171,7 @@ function renderPillarCard(vertical, data) {
                 </div>
                 <div class="pillar-metric">
                     <span class="metric-icon-small">🏗️</span>
-                    <span class="metric-label-small">Land (M Sq Ft)</span>
+                    <span class="metric-label-small">Land (Sq Ft)</span>
                     <span class="metric-value-small">${formatNumber(land)}</span>
                 </div>
                 <div class="pillar-metric">
@@ -556,7 +556,9 @@ function initializeITMarketChart() {
 function formatNumber(value) {
     if (!value || value === 0) return '0'
 
-    if (value >= 1000000) {
+    if (value >= 1000000000) {
+        return (value / 1000000000).toFixed(2) + 'B'
+    } else if (value >= 1000000) {
         return (value / 1000000).toFixed(2) + 'M'
     } else if (value >= 1000) {
         return (value / 1000).toFixed(2) + 'K'

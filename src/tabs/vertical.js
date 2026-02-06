@@ -21,7 +21,7 @@ export async function renderVerticalTab(verticalId, appData) {
                 <div class="metrics-grid">
                     ${renderMetricCard('Revenue', details.totals.revenue_usd_bn, 'USD Billion', 'revenue')}
                     ${renderMetricCard('Employment', details.totals.employment, 'Jobs', 'employment')}
-                    ${renderMetricCard('Land', details.totals.land_sqft, 'M Sq Ft', 'land')}
+                    ${renderMetricCard('Land', details.totals.land_sqft, 'Sq Ft', 'land')}
                     ${renderMetricCard('Capital', details.totals.capital_inr_cr, 'INR Crores', 'capital')}
                 </div>
 
@@ -99,7 +99,7 @@ function renderGeographicBreakdown(breakdown) {
                     <th>Tier</th>
                     <th>Revenue (USD Bn)</th>
                     <th>Employment</th>
-                    <th>Land (M Sq Ft)</th>
+                    <th>Land (Sq Ft)</th>
                     <th>Capital (Cr)</th>
                 </tr>
             </thead>
@@ -204,7 +204,9 @@ function getVerticalTagline(verticalId) {
 function formatNumber(value) {
     if (!value || value === 0) return '0'
 
-    if (value >= 1000000) {
+    if (value >= 1000000000) {
+        return (value / 1000000000).toFixed(2) + 'B'
+    } else if (value >= 1000000) {
         return (value / 1000000).toFixed(2) + 'M'
     } else if (value >= 1000) {
         return (value / 1000).toFixed(2) + 'K'

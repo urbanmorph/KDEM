@@ -48,7 +48,7 @@ async function renderSingleGeography(geographyId, appData) {
                         <div class="metric-content">
                             <div class="metric-label">Land Required</div>
                             <div class="metric-value">${formatNumber(details.totals.land_sqft)}</div>
-                            <div class="metric-unit">M Sq Ft</div>
+                            <div class="metric-unit">Sq Ft</div>
                         </div>
                     </div>
                     <div class="metric-card">
@@ -155,7 +155,7 @@ function renderClusterCard(cluster) {
                 </div>
                 <div class="cluster-metric">
                     <span class="metric-label">Land</span>
-                    <span class="metric-value">${formatNumber(cluster.land_sqft)} M Sq Ft</span>
+                    <span class="metric-value">${formatNumber(cluster.land_sqft)} Sq Ft</span>
                 </div>
                 <div class="cluster-metric">
                     <span class="metric-label">Capital</span>
@@ -184,7 +184,7 @@ function renderVerticalBreakdown(breakdown) {
                     <th>Category</th>
                     <th>Revenue (USD Bn)</th>
                     <th>Employment</th>
-                    <th>Land (M Sq Ft)</th>
+                    <th>Land (Sq Ft)</th>
                     <th>Capital (Cr)</th>
                 </tr>
             </thead>
@@ -208,7 +208,9 @@ function renderVerticalBreakdown(breakdown) {
 function formatNumber(value) {
     if (!value || value === 0) return '0'
 
-    if (value >= 1000000) {
+    if (value >= 1000000000) {
+        return (value / 1000000000).toFixed(2) + 'B'
+    } else if (value >= 1000000) {
         return (value / 1000000).toFixed(2) + 'M'
     } else if (value >= 1000) {
         return (value / 1000).toFixed(2) + 'K'
