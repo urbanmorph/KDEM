@@ -320,11 +320,9 @@ export async function getTotalMetrics(year = 2030) {
     const targets = await fetchTargets({ year })
 
     // Aggregate by unique metric (avoid double-counting across dimensions)
-    // Use state-level targets only to avoid counting both state and city-level data
-    const uniqueTargets = targets.filter(t =>
-      !t.parent_target_id &&
-      (t.geography_id === 'karnataka' || t.geography_id === null)
-    )
+    // Note: State-level targets have been removed from database (migration 009)
+    // Totals are computed from city-level targets
+    const uniqueTargets = targets.filter(t => !t.parent_target_id)
 
     const revenue = uniqueTargets
       .filter(t => t.metric === 'revenue')
