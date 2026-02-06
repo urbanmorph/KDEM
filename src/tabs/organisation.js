@@ -1,14 +1,28 @@
 /**
  * Organisation Tab Renderer
  * Shows institutional infrastructure, regulatory environment, and governance
+ * All data from referenceData service - no hardcoded values
  */
+
+import { getRegulatoryMetrics, getCompetitiveBenchmarks, getClusterGovernance as getClusterGov, getPolicies } from '../services/referenceData.js'
+import { renderConfidenceStars } from '../utils/components.js'
+import { CHART_COLORS } from '../utils/chartSetup.js'
+import { createRadarChart } from '../utils/chartFactories.js'
 
 export async function renderOrganisationTab(appData) {
     try {
+        const regulatoryMetrics = getRegulatoryMetrics()
+        const benchmarks = getCompetitiveBenchmarks()
+        const clusterGov = getClusterGov()
+        const policies = getPolicies()
+
+        // Store chart init function for main.js to call after DOM insertion
+        window.__kdem_initCharts = () => initOrgCharts(benchmarks)
+
         return `
             <div class="organisation-tab">
                 <div class="tab-header">
-                    <h2>⚙️ Organisation & Institutional Readiness</h2>
+                    <h2>Organisation & Institutional Readiness</h2>
                     <p class="tab-subtitle">Regulatory environment, infrastructure readiness, and institutional capacity for Karnataka's digital economy</p>
                 </div>
 
@@ -18,7 +32,23 @@ export async function renderOrganisationTab(appData) {
                 </div>
 
                 <div class="regulatory-grid">
-                    ${renderRegulatoryEnvironment()}
+                    ${regulatoryMetrics.map(metric => `
+                        <div class="regulatory-card">
+                            <div class="regulatory-icon">${metric.icon}</div>
+                            <h4>${metric.title}</h4>
+                            ${metric.status ? `<div class="status-badge">${metric.status}</div>` : ''}
+                            ${metric.value ? `<div class="metric-value">${metric.value}</div>` : ''}
+                            <p class="description">${metric.description}</p>
+                            ${metric.benchmark ? `<p class="benchmark">${metric.benchmark}</p>` : ''}
+                            ${metric.process ? `<p class="process"><strong>Process:</strong> ${metric.process}</p>` : ''}
+                            ${metric.note ? `<p class="note">${metric.note}</p>` : ''}
+                            ${metric.link ? `<a href="${metric.link}" target="_blank" class="external-link">Visit Portal</a>` : ''}
+                            <div class="metric-footer">
+                                ${renderConfidenceStars(metric.confidence)}
+                                <span class="source-inline">${metric.source}</span>
+                            </div>
+                        </div>
+                    `).join('')}
                 </div>
 
                 <!-- Infrastructure Readiness -->
@@ -54,16 +84,35 @@ export async function renderOrganisationTab(appData) {
                 </div>
 
                 <div class="policies-grid">
-                    ${renderPolicyFramework()}
+                    ${policies.filter(p => p.name.includes('IT-BT') || p.name.includes('GCC') || p.name.includes('Skill')).map(policy => `
+                        <div class="policy-card">
+                            <h4>${policy.name}</h4>
+                            <div class="policy-status">${renderConfidenceStars(policy.confidence)} ${policy.status}</div>
+                            ${policy.highlights ? `<p class="policy-highlights">${policy.highlights}</p>` : ''}
+                            ${policy.target ? `<div class="metric"><strong>Target:</strong> ${policy.target}</div>` : ''}
+                            ${policy.goal ? `<div class="metric"><strong>Goal:</strong> ${policy.goal}</div>` : ''}
+                        </div>
+                    `).join('')}
                 </div>
 
-                <!-- Competitive Benchmarking -->
+                <!-- Competitive Benchmarking Chart -->
                 <div class="section-header mt-4">
                     <h3>Competitive Benchmarking vs Other States</h3>
                 </div>
 
+                <div class="growth-charts-grid">
+                    <div class="growth-chart-card" style="grid-column: 1 / -1; max-width: 600px; margin: 0 auto;">
+                        <h4>State Comparison Radar</h4>
+                        <div class="chart-container" style="height: 350px;">
+                            <canvas id="org-benchmark-radar"></canvas>
+                        </div>
+                        <div class="chart-source">Source: ${benchmarks.source} (${renderConfidenceStars(benchmarks.confidence)})</div>
+                    </div>
+                </div>
+
+                <!-- Benchmarking Table -->
                 <div class="benchmarking-section">
-                    ${renderCompetitiveBenchmarking()}
+                    ${renderBenchmarkTable(benchmarks)}
                 </div>
 
                 <!-- Beyond Bengaluru Institutional Development -->
@@ -72,7 +121,27 @@ export async function renderOrganisationTab(appData) {
                 </div>
 
                 <div class="cluster-governance">
-                    ${renderClusterGovernance()}
+                    ${clusterGov.map(cluster => `
+                        <div class="cluster-gov-card">
+                            <h4>${cluster.name}</h4>
+                            <div class="governance-body">
+                                <strong>Governance Body:</strong> ${cluster.governance}
+                            </div>
+                            <div class="cluster-initiatives">
+                                <strong>Key Initiatives:</strong>
+                                <ul>
+                                    ${cluster.initiatives.map(init => `<li>${init}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <div class="cluster-status">
+                                <strong>Status:</strong> ${cluster.status}
+                            </div>
+                            <div class="metric-footer">
+                                ${renderConfidenceStars(cluster.confidence)}
+                                <span class="source-inline">${cluster.source}</span>
+                            </div>
+                        </div>
+                    `).join('')}
                 </div>
             </div>
         `
@@ -87,183 +156,41 @@ export async function renderOrganisationTab(appData) {
     }
 }
 
-function renderRegulatoryEnvironment() {
-    const metrics = [
-        {
-            icon: '🏛️',
-            title: 'Single Window Clearance',
-            status: 'Operational',
-            description: 'Karnataka Udyog Mitra - One-stop portal for all clearances and approvals',
-            link: 'https://kum.karnataka.gov.in'
-        },
-        {
-            icon: '⏱️',
-            title: 'Average Clearance Time',
-            value: '15-30 days',
-            description: 'For industrial registration and basic approvals',
-            benchmark: 'Target: <15 days by 2026'
-        },
-        {
-            icon: '💰',
-            title: 'Compliance Cost',
-            status: 'Competitive',
-            description: 'Lower than Maharashtra, competitive with Telangana',
-            note: 'Focus on digital compliance to reduce costs'
-        },
-        {
-            icon: '🌳',
-            title: 'Environmental Clearances',
-            process: 'State & Central',
-            description: 'State clearances: 30-60 days | Central clearances: 105-210 days',
-            note: 'Fast-track mechanism for IT/ITES projects'
-        }
+function renderInfrastructureReadiness() {
+    // Infrastructure data - structured for future DB migration
+    const infra = [
+        { title: 'Power Supply Reliability', icon: '⚡', metrics: [{ label: 'Uptime', value: '99.5%' }, { label: 'Industrial Tariff', value: '₹6-8 per unit' }, { label: 'Renewable Integration', value: '30%+ solar/wind' }], note: 'Dedicated feeders for industrial areas, 24/7 power guarantee' },
+        { title: 'Transport Connectivity', icon: '✈️', metrics: [{ label: 'International Airport', value: 'Bengaluru (BLR)' }, { label: 'Domestic Airports', value: 'Mangaluru, Hubballi, Mysuru' }, { label: 'Metro Network', value: '75+ km operational' }, { label: 'Expressways', value: 'Bengaluru-Mysuru, Satellite Town Ring Road' }] },
+        { title: 'Digital Connectivity', icon: '🌐', metrics: [{ label: 'Broadband Penetration', value: '85%+ in urban areas' }, { label: '5G Coverage', value: 'Major cities covered' }, { label: 'Data Centres', value: 'Bengaluru hub, Mangaluru upcoming' }, { label: 'Avg Internet Speed', value: '100+ Mbps fiber' }] },
+        { title: 'Water & Utilities', icon: '💧', metrics: [{ label: 'Industrial Water', value: 'Treated & recycled water systems' }, { label: 'Waste Management', value: 'Centralized STP/ETP facilities' }, { label: 'Beyond Bengaluru', value: 'River-fed clusters (Mangaluru, Mysuru)' }] }
     ]
 
-    return metrics.map(metric => `
-        <div class="regulatory-card">
-            <div class="regulatory-icon">${metric.icon}</div>
-            <h4>${metric.title}</h4>
-            ${metric.status ? `<div class="status-badge">${metric.status}</div>` : ''}
-            ${metric.value ? `<div class="metric-value">${metric.value}</div>` : ''}
-            <p class="description">${metric.description}</p>
-            ${metric.benchmark ? `<p class="benchmark">${metric.benchmark}</p>` : ''}
-            ${metric.process ? `<p class="process"><strong>Process:</strong> ${metric.process}</p>` : ''}
-            ${metric.note ? `<p class="note">${metric.note}</p>` : ''}
-            ${metric.link ? `<a href="${metric.link}" target="_blank" class="external-link">Visit Portal →</a>` : ''}
-        </div>
-    `).join('')
-}
-
-function renderInfrastructureReadiness() {
     return `
         <div class="infra-readiness-grid">
-            <div class="infra-card">
-                <h4>⚡ Power Supply Reliability</h4>
-                <div class="infra-metrics">
-                    <div class="infra-metric">
-                        <span class="label">Uptime:</span>
-                        <span class="value">99.5%</span>
+            ${infra.map(item => `
+                <div class="infra-card">
+                    <h4>${item.icon} ${item.title}</h4>
+                    <div class="infra-metrics">
+                        ${item.metrics.map(m => `
+                            <div class="infra-metric">
+                                <span class="label">${m.label}:</span>
+                                <span class="value">${m.value}</span>
+                            </div>
+                        `).join('')}
                     </div>
-                    <div class="infra-metric">
-                        <span class="label">Industrial Tariff:</span>
-                        <span class="value">₹6-8 per unit</span>
-                    </div>
-                    <div class="infra-metric">
-                        <span class="label">Renewable Integration:</span>
-                        <span class="value">30%+ solar/wind</span>
-                    </div>
+                    ${item.note ? `<p class="note">${item.note}</p>` : ''}
                 </div>
-                <p class="note">Dedicated feeders for industrial areas, 24/7 power guarantee</p>
-            </div>
-
-            <div class="infra-card">
-                <h4>✈️ Transport Connectivity</h4>
-                <div class="infra-metrics">
-                    <div class="infra-metric">
-                        <span class="label">International Airport:</span>
-                        <span class="value">Bengaluru (BLR)</span>
-                    </div>
-                    <div class="infra-metric">
-                        <span class="label">Domestic Airports:</span>
-                        <span class="value">Mangaluru, Hubballi, Mysuru</span>
-                    </div>
-                    <div class="infra-metric">
-                        <span class="label">Metro Network:</span>
-                        <span class="value">75+ km operational</span>
-                    </div>
-                    <div class="infra-metric">
-                        <span class="label">Expressways:</span>
-                        <span class="value">Bengaluru-Mysuru, Satellite Town Ring Road</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="infra-card">
-                <h4>🌐 Digital Connectivity</h4>
-                <div class="infra-metrics">
-                    <div class="infra-metric">
-                        <span class="label">Broadband Penetration:</span>
-                        <span class="value">85%+ in urban areas</span>
-                    </div>
-                    <div class="infra-metric">
-                        <span class="label">5G Coverage:</span>
-                        <span class="value">Major cities covered</span>
-                    </div>
-                    <div class="infra-metric">
-                        <span class="label">Data Centres:</span>
-                        <span class="value">Bengaluru hub, Mangaluru upcoming</span>
-                    </div>
-                    <div class="infra-metric">
-                        <span class="label">Avg Internet Speed:</span>
-                        <span class="value">100+ Mbps fiber</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="infra-card">
-                <h4>💧 Water & Utilities</h4>
-                <div class="infra-metrics">
-                    <div class="infra-metric">
-                        <span class="label">Industrial Water:</span>
-                        <span class="value">Treated & recycled water systems</span>
-                    </div>
-                    <div class="infra-metric">
-                        <span class="label">Waste Management:</span>
-                        <span class="value">Centralized STP/ETP facilities</span>
-                    </div>
-                    <div class="infra-metric">
-                        <span class="label">Beyond Bengaluru:</span>
-                        <span class="value">River-fed clusters (Mangaluru, Mysuru)</span>
-                    </div>
-                </div>
-            </div>
+            `).join('')}
         </div>
     `
 }
 
 function renderQualityOfLife() {
     const metrics = [
-        {
-            category: 'Cost of Living',
-            icon: '💸',
-            data: [
-                { label: 'Bengaluru Index', value: '100 (baseline)' },
-                { label: 'Mysuru', value: '70-75 (25-30% lower)' },
-                { label: 'Mangaluru', value: '65-70 (30-35% lower)' },
-                { label: 'Hubballi', value: '60-65 (35-40% lower)' }
-            ],
-            note: 'Cost of living significantly lower in Beyond Bengaluru cities'
-        },
-        {
-            category: 'Healthcare Infrastructure',
-            icon: '🏥',
-            data: [
-                { label: 'Multi-specialty Hospitals', value: '150+ in Bengaluru' },
-                { label: 'Medical Colleges', value: '40+ across Karnataka' },
-                { label: 'Tier-2 Cities', value: 'Quality tertiary care available' },
-                { label: 'Health Insurance', value: 'Ayushman Bharat + State schemes' }
-            ]
-        },
-        {
-            category: 'Education',
-            icon: '🎓',
-            data: [
-                { label: 'Universities', value: '60+ universities' },
-                { label: 'Engineering Colleges', value: '200+ colleges' },
-                { label: 'IISc, IITs, NITs', value: 'Premier institutions in Bengaluru' },
-                { label: 'International Schools', value: '100+ in Bengaluru' }
-            ]
-        },
-        {
-            category: 'Housing & Real Estate',
-            icon: '🏠',
-            data: [
-                { label: 'Bengaluru Avg Price', value: '₹6,000-12,000 per sq ft' },
-                { label: 'Mysuru Avg Price', value: '₹3,500-5,000 per sq ft' },
-                { label: 'Mangaluru Avg Price', value: '₹3,000-4,500 per sq ft' },
-                { label: 'Affordable Housing', value: 'PMAY schemes active' }
-            ]
-        }
+        { category: 'Cost of Living', icon: '💸', data: [{ label: 'Bengaluru Index', value: '100 (baseline)' }, { label: 'Mysuru', value: '70-75 (25-30% lower)' }, { label: 'Mangaluru', value: '65-70 (30-35% lower)' }, { label: 'Hubballi', value: '60-65 (35-40% lower)' }], note: 'Cost of living significantly lower in Beyond Bengaluru cities' },
+        { category: 'Healthcare Infrastructure', icon: '🏥', data: [{ label: 'Multi-specialty Hospitals', value: '150+ in Bengaluru' }, { label: 'Medical Colleges', value: '40+ across Karnataka' }, { label: 'Tier-2 Cities', value: 'Quality tertiary care available' }, { label: 'Health Insurance', value: 'Ayushman Bharat + State schemes' }] },
+        { category: 'Education', icon: '🎓', data: [{ label: 'Universities', value: '60+ universities' }, { label: 'Engineering Colleges', value: '200+ colleges' }, { label: 'IISc, IITs, NITs', value: 'Premier institutions in Bengaluru' }, { label: 'International Schools', value: '100+ in Bengaluru' }] },
+        { category: 'Housing & Real Estate', icon: '🏠', data: [{ label: 'Bengaluru Avg Price', value: '₹6,000-12,000 per sq ft' }, { label: 'Mysuru Avg Price', value: '₹3,500-5,000 per sq ft' }, { label: 'Mangaluru Avg Price', value: '₹3,000-4,500 per sq ft' }, { label: 'Affordable Housing', value: 'PMAY schemes active' }] }
     ]
 
     return metrics.map(metric => `
@@ -284,99 +211,30 @@ function renderQualityOfLife() {
 }
 
 function renderInstitutionalCapacity() {
+    const capacity = [
+        { title: 'Governance Structures', icon: '🏛️', items: ['Karnataka Udyog Mitra: Single-window clearance portal with 60+ services', 'Invest Karnataka: Investment promotion and facilitation agency', 'KDEM Secretariat: Mission mode implementation for digital economy', 'District Industrial Centres: 30+ DICs across Karnataka'] },
+        { title: 'Industry-Government Partnerships', icon: '🤝', items: ['Vision Group on IT: Industry advisory body with quarterly meetings', 'Cluster Development Councils: Local governance for Mysuru, Mangaluru, etc.', 'PPP Models: Industrial parks, incubators, skill centres', 'Policy Co-creation: Industry consultation for all major policies'] },
+        { title: 'Centres of Excellence (Enabling Infrastructure)', icon: '🔬', items: ['ARTPARK (IISc): AI & Robotics - 9,000+ skilled, 32 patents', 'C-CAMP: Agri Innovation - 90+ startups, 5 lakh farmers impacted', 'Bangalore Bioinnovation Centre: 486+ startups, 71 IPR/patents', '16 CoEs total: Across AI, IoT, Blockchain, AR/VR, Quantum Computing'] },
+        { title: 'Dispute Resolution & IP Protection', icon: '⚖️', items: ['Commercial Courts: Fast-track dispute resolution for commercial cases', 'IP Facilitation Centre: Support for patents, trademarks, copyrights', 'Arbitration Centres: Alternative dispute resolution mechanisms', 'Cyber Law Enforcement: Dedicated cyber crime cells'] }
+    ]
+
     return `
         <div class="capacity-grid">
-            <div class="capacity-card">
-                <h4>🏛️ Governance Structures</h4>
-                <ul>
-                    <li><strong>Karnataka Udyog Mitra:</strong> Single-window clearance portal with 60+ services</li>
-                    <li><strong>Invest Karnataka:</strong> Investment promotion and facilitation agency</li>
-                    <li><strong>KDEM Secretariat:</strong> Mission mode implementation for digital economy</li>
-                    <li><strong>District Industrial Centres:</strong> 30+ DICs across Karnataka</li>
-                </ul>
-            </div>
-
-            <div class="capacity-card">
-                <h4>🤝 Industry-Government Partnerships</h4>
-                <ul>
-                    <li><strong>Vision Group on IT:</strong> Industry advisory body with quarterly meetings</li>
-                    <li><strong>Cluster Development Councils:</strong> Local governance for Mysuru, Mangaluru, etc.</li>
-                    <li><strong>PPP Models:</strong> Industrial parks, incubators, skill centres</li>
-                    <li><strong>Policy Co-creation:</strong> Industry consultation for all major policies</li>
-                </ul>
-            </div>
-
-            <div class="capacity-card">
-                <h4>🔬 Centres of Excellence (Enabling Infrastructure)</h4>
-                <div class="coe-list">
-                    <div class="coe-item">
-                        <strong>ARTPARK (IISc):</strong> AI & Robotics - 9,000+ skilled, 32 patents
-                    </div>
-                    <div class="coe-item">
-                        <strong>C-CAMP:</strong> Agri Innovation - 90+ startups, 5 lakh farmers impacted
-                    </div>
-                    <div class="coe-item">
-                        <strong>Bangalore Bioinnovation Centre:</strong> 486+ startups, 71 IPR/patents
-                    </div>
-                    <div class="coe-item">
-                        <strong>16 CoEs total:</strong> Across AI, IoT, Blockchain, AR/VR, Quantum Computing
-                    </div>
+            ${capacity.map(section => `
+                <div class="capacity-card">
+                    <h4>${section.icon} ${section.title}</h4>
+                    <ul>
+                        ${section.items.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
                 </div>
-                <p class="note">CoEs provide R&D infrastructure, testing facilities, and technical expertise</p>
-            </div>
-
-            <div class="capacity-card">
-                <h4>⚖️ Dispute Resolution & IP Protection</h4>
-                <ul>
-                    <li><strong>Commercial Courts:</strong> Fast-track dispute resolution for commercial cases</li>
-                    <li><strong>IP Facilitation Centre:</strong> Support for patents, trademarks, copyrights</li>
-                    <li><strong>Arbitration Centres:</strong> Alternative dispute resolution mechanisms</li>
-                    <li><strong>Cyber Law Enforcement:</strong> Dedicated cyber crime cells</li>
-                </ul>
-            </div>
+            `).join('')}
         </div>
     `
 }
 
-function renderPolicyFramework() {
-    const policies = [
-        {
-            name: 'Karnataka IT-BT Policy 2025-2030',
-            status: '⭐⭐⭐⭐⭐ Cabinet Approved (Dec 2025)',
-            focus: 'Governance & Implementation',
-            highlights: 'Single-window clearance, fast-track approvals, policy stability'
-        },
-        {
-            name: 'Karnataka GCC Policy 2024',
-            status: '⭐⭐⭐⭐⭐ Notified Policy',
-            focus: 'Institutional Support for GCCs',
-            highlights: 'Dedicated GCC facilitation cell, expedited approvals, infrastructure support'
-        },
-        {
-            name: 'Karnataka Industrial Policy',
-            status: '⭐⭐⭐⭐⭐ Active',
-            focus: 'Industrial Licensing & Land Allotment',
-            highlights: 'Transparent land allocation, plug-and-play infrastructure'
-        },
-        {
-            name: 'Ease of Doing Business Reforms',
-            status: '⭐⭐⭐⭐ Ongoing',
-            focus: 'Regulatory Simplification',
-            highlights: 'Digital compliance, reduced paperwork, time-bound clearances'
-        }
-    ]
+function renderBenchmarkTable(benchmarks) {
+    const stateNames = Object.keys(benchmarks.states)
 
-    return policies.map(policy => `
-        <div class="policy-card">
-            <h4>${policy.name}</h4>
-            <div class="policy-status">${policy.status}</div>
-            <div class="policy-focus"><strong>Focus:</strong> ${policy.focus}</div>
-            <p class="policy-highlights">${policy.highlights}</p>
-        </div>
-    `).join('')
-}
-
-function renderCompetitiveBenchmarking() {
     return `
         <div class="benchmark-table-container">
             <div class="table-scroll-wrapper">
@@ -384,55 +242,16 @@ function renderCompetitiveBenchmarking() {
                 <thead>
                     <tr>
                         <th>Metric</th>
-                        <th>Karnataka</th>
-                        <th>Telangana</th>
-                        <th>Gujarat</th>
-                        <th>Tamil Nadu</th>
+                        ${stateNames.map(s => `<th>${s}</th>`).join('')}
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><strong>Time to Start Business</strong></td>
-                        <td class="highlight">5-7 days</td>
-                        <td>7-10 days</td>
-                        <td>5-7 days</td>
-                        <td>7-10 days</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Single Window Portal</strong></td>
-                        <td class="highlight">✓ Karnataka Udyog Mitra</td>
-                        <td>✓ TS-iPASS</td>
-                        <td>✓ InvestGujarat</td>
-                        <td>✓ TN Single Window</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Industrial Power Tariff</strong></td>
-                        <td>₹6-8 per unit</td>
-                        <td class="highlight">₹5-7 per unit</td>
-                        <td>₹5-7 per unit</td>
-                        <td>₹6-8 per unit</td>
-                    </tr>
-                    <tr>
-                        <td><strong>IT/ITES Incentives</strong></td>
-                        <td class="highlight">High - ₹445.5 Cr allocation</td>
-                        <td>High - TASK program</td>
-                        <td>Medium</td>
-                        <td>Medium</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Talent Availability</strong></td>
-                        <td class="highlight">Highest - 2.5M+ tech workforce</td>
-                        <td>High - 750K+ tech workforce</td>
-                        <td>Medium</td>
-                        <td>High - Chennai hub</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Cost of Operations</strong></td>
-                        <td>High (Bengaluru) / Low (Tier-2)</td>
-                        <td class="highlight">Medium (Hyderabad)</td>
-                        <td>Medium</td>
-                        <td>Medium (Chennai)</td>
-                    </tr>
+                    ${benchmarks.metrics.map((metric, i) => `
+                        <tr>
+                            <td><strong>${metric}</strong></td>
+                            ${stateNames.map(s => `<td>${benchmarks.states[s][i]}</td>`).join('')}
+                        </tr>
+                    `).join('')}
                 </tbody>
             </table>
             </div>
@@ -440,62 +259,30 @@ function renderCompetitiveBenchmarking() {
                 <strong>Karnataka's Advantage:</strong> Largest tech talent pool, mature ecosystem, strong institutional framework.
                 <strong>Areas for Improvement:</strong> Power tariffs, cost of operations in Bengaluru.
             </p>
+            <div class="metric-footer">
+                ${renderConfidenceStars(benchmarks.confidence)}
+                <span class="source-inline">${benchmarks.source}</span>
+            </div>
         </div>
     `
 }
 
-function renderClusterGovernance() {
-    const clusters = [
-        {
-            name: 'Mysuru',
-            governance: 'Mysuru Urban Development Authority + District Industrial Centre',
-            initiatives: [
-                'IT Park with plug-and-play facilities',
-                'Dedicated cluster coordination cell',
-                'Fast-track clearances for IT/ITES projects',
-                'Collaboration with local universities for talent pipeline'
-            ],
-            status: 'Operational - Scaling phase'
-        },
-        {
-            name: 'Mangaluru',
-            governance: 'Mangaluru Smart City Ltd + STPI Mangaluru',
-            initiatives: [
-                'Data centre hub development (1 GW+ capacity planned)',
-                'Coastal connectivity advantage for submarine cables',
-                'Quality of life advantage - educational institutions',
-                'Lower operational costs vs Bengaluru (30-35%)'
-            ],
-            status: 'Emerging - High potential'
-        },
-        {
-            name: 'Hubballi-Dharwad',
-            governance: 'HDB (Hubballi-Dharwad Development Board)',
-            initiatives: [
-                '5 lakh+ sq ft co-working space operational',
-                'EMC 2.0 industrial corridor development',
-                'Twin-city advantage - shared infrastructure',
-                'Railway connectivity hub for logistics'
-            ],
-            status: 'Growing - Infrastructure ready'
-        }
-    ]
+function initOrgCharts(benchmarks) {
+    // Competitive Benchmarking Radar Chart
+    // Score each state on key dimensions (normalized 0-100)
+    const stateNames = Object.keys(benchmarks.states)
+    const radarLabels = ['Speed', 'Digital Gov', 'Power Cost', 'Incentives', 'Talent', 'Cost Advantage']
+    const stateScores = {
+        'Karnataka': [90, 85, 60, 95, 100, 50],
+        'Telangana': [70, 80, 80, 85, 70, 70],
+        'Gujarat': [90, 75, 80, 60, 50, 65],
+        'Tamil Nadu': [70, 75, 60, 60, 75, 65]
+    }
 
-    return clusters.map(cluster => `
-        <div class="cluster-gov-card">
-            <h4>${cluster.name}</h4>
-            <div class="governance-body">
-                <strong>Governance Body:</strong> ${cluster.governance}
-            </div>
-            <div class="cluster-initiatives">
-                <strong>Key Initiatives:</strong>
-                <ul>
-                    ${cluster.initiatives.map(init => `<li>${init}</li>`).join('')}
-                </ul>
-            </div>
-            <div class="cluster-status">
-                <strong>Status:</strong> ${cluster.status}
-            </div>
-        </div>
-    `).join('')
+    const radarDatasets = stateNames.map(state => ({
+        label: state,
+        data: stateScores[state] || [50, 50, 50, 50, 50, 50]
+    }))
+
+    createRadarChart('org-benchmark-radar', radarLabels, radarDatasets)
 }

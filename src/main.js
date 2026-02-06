@@ -4,6 +4,7 @@
  */
 
 import { fetchVerticals, fetchGeographies, fetchFactors } from './services/dataService.js'
+import { initAnimatedCounters } from './utils/formatting.js'
 
 // Tab renderers are now loaded dynamically on-demand to reduce initial bundle size
 // This improves initial page load performance by code splitting
@@ -296,6 +297,15 @@ async function loadTab(tabId) {
 
         // Update content
         contentContainer.innerHTML = content
+
+        // Initialize animated counters
+        initAnimatedCounters(contentContainer)
+
+        // Initialize charts if the tab exports an init function
+        if (typeof window.__kdem_initCharts === 'function') {
+            window.__kdem_initCharts()
+            window.__kdem_initCharts = null
+        }
 
         // Setup event listeners for view details links (in overview tab)
         setupViewDetailsLinks()

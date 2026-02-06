@@ -1,13 +1,24 @@
 /**
  * Factors of Production Tab Renderer
  * Shows Land, Labour, Capital, and Organisation metrics
+ * All data from Supabase backend - no hardcoded values
  */
 
-import { fetchFactorSummary } from '../services/dataService.js'
+import { fetchFactorSummary, fetchConversionRatios } from '../services/dataService.js'
+import { formatNumber } from '../utils/formatting.js'
+import { renderConfidenceStars } from '../utils/components.js'
+import { CHART_COLORS } from '../utils/chartSetup.js'
+import { createRadarChart } from '../utils/chartFactories.js'
 
 export async function renderFactorsTab(appData) {
     try {
-        const factorSummary = await fetchFactorSummary()
+        const [factorSummary, conversionRatios] = await Promise.all([
+            fetchFactorSummary(),
+            fetchConversionRatios()
+        ])
+
+        // Store chart init function for main.js to call after DOM insertion
+        window.__kdem_initCharts = () => initFactorCharts(conversionRatios)
 
         return `
             <div class="factors-tab">
@@ -28,18 +39,34 @@ export async function renderFactorsTab(appData) {
                 </div>
 
                 <div class="dependencies-info">
-                    ${renderDependencies()}
+                    ${renderDependencies(conversionRatios)}
                 </div>
 
-                <!-- Conversion Ratios -->
+                <!-- Conversion Ratios from Database -->
                 <div class="section-header mt-4">
-                    <h3>Industry-Standard Conversion Ratios</h3>
-                    <p>How revenue translates to employment, land requirements, and capital needs</p>
+                    <h3>Conversion Ratios (from Database)</h3>
+                    <p>Industry-standard ratios used to cascade targets - loaded from Supabase</p>
                 </div>
 
                 <div class="conversion-info">
-                    ${renderConversionInfo()}
+                    ${renderConversionTable(conversionRatios)}
                 </div>
+
+                <!-- Conversion Ratio Comparison Chart -->
+                ${conversionRatios && conversionRatios.length > 0 ? `
+                    <div class="section-header mt-4">
+                        <h3>Employment Ratio Comparison</h3>
+                        <p>How revenue-to-employment ratios vary across verticals</p>
+                    </div>
+                    <div class="growth-charts-grid">
+                        <div class="growth-chart-card" style="grid-column: 1 / -1;">
+                            <div class="chart-container">
+                                <canvas id="conversion-ratio-chart"></canvas>
+                            </div>
+                            <div class="chart-source">Source: KDEM Conversion Ratios Database (Supabase)</div>
+                        </div>
+                    </div>
+                ` : ''}
             </div>
         `
     } catch (error) {
@@ -61,18 +88,11 @@ function renderFactorCard(factor, summary) {
         'organisation': '⚙️'
     }
 
-    const descriptions = {
-        'land': 'Physical infrastructure and real estate requirements for digital economy growth. Includes office space, data centers, and manufacturing facilities.',
-        'labour': 'Human resources and employment across all verticals. Includes software engineers, manufacturing workers, and support staff.',
-        'capital': 'Financial investment required for infrastructure, equipment, and operational expenses. Measured in INR Crores.',
-        'organisation': 'Institutional readiness and governance structures. Includes policy framework, regulatory environment, and administrative capacity.'
-    }
-
     return `
         <div class="factor-card">
             <div class="factor-icon">${icons[factor.id] || '📊'}</div>
             <h3>${factor.name}</h3>
-            <p class="factor-description">${descriptions[factor.id]}</p>
+            <p class="factor-description">${factor.description || ''}</p>
             <div class="factor-metrics">
                 <div class="factor-metric">
                     <span class="label">Primary Metrics:</span>
@@ -83,20 +103,44 @@ function renderFactorCard(factor, summary) {
     `
 }
 
-function renderDependencies() {
+function renderDependencies(conversionRatios) {
+    // Build dependency descriptions from actual conversion ratios data
+    const empRatios = conversionRatios.filter(r =>
+        (r.from_metric === 'revenue' || r.from_factor_id === 'revenue') &&
+        (r.to_metric === 'employment' || r.to_factor_id === 'labour')
+    )
+    const landRatios = conversionRatios.filter(r =>
+        (r.from_metric === 'employment' || r.from_factor_id === 'labour') &&
+        (r.to_metric === 'land' || r.to_factor_id === 'land')
+    )
+    const capitalRatios = conversionRatios.filter(r =>
+        (r.from_metric === 'land' || r.from_factor_id === 'land') &&
+        (r.to_metric === 'capital' || r.to_factor_id === 'capital')
+    )
+
+    const empRatioStr = empRatios.length > 0
+        ? empRatios.map(r => `${r.vertical_id || 'All'}: ${r.ratio || r.conversion_ratio} ${r.unit || ''}`).join(', ')
+        : 'See conversion ratios table'
+
+    const landRatioStr = landRatios.length > 0
+        ? landRatios.map(r => `${r.ratio || r.conversion_ratio} ${r.unit || ''}`).join(', ')
+        : 'See conversion ratios table'
+
     return `
         <div class="dependencies-grid">
             <div class="dependency-card">
                 <h4>Revenue → Labour</h4>
-                <p>Revenue targets drive employment requirements based on industry-specific ratios (e.g., 20 employees per $1M USD in IT Services).</p>
+                <p>Revenue targets drive employment requirements based on industry-specific ratios.</p>
+                <p class="detail"><strong>Ratios:</strong> ${empRatioStr}</p>
             </div>
             <div class="dependency-card">
                 <h4>Labour → Land</h4>
-                <p>Employment numbers determine infrastructure needs. Average 200 sq ft per employee including common areas and amenities.</p>
+                <p>Employment numbers determine infrastructure needs.</p>
+                <p class="detail"><strong>Ratios:</strong> ${landRatioStr}</p>
             </div>
             <div class="dependency-card">
                 <h4>Land → Capital</h4>
-                <p>Land acquisition and infrastructure development require capital investment. Costs vary by geography (Bengaluru 20% premium).</p>
+                <p>Land acquisition and infrastructure development require capital investment. Costs vary by geography.</p>
             </div>
             <div class="dependency-card">
                 <h4>Organisation → All Factors</h4>
@@ -106,68 +150,59 @@ function renderDependencies() {
     `
 }
 
-function renderConversionInfo() {
+function renderConversionTable(ratios) {
+    if (!ratios || ratios.length === 0) {
+        return `<div class="no-data-message"><p>No conversion ratios in database. Seed the conversion_ratios table.</p></div>`
+    }
+
     return `
-        <div class="conversion-table">
-            <div class="table-scroll-wrapper">
-                <table class="data-table">
-                <thead>
+        <div class="table-scroll-wrapper">
+            <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Vertical</th>
+                    <th>From Metric</th>
+                    <th>To Metric</th>
+                    <th>Ratio</th>
+                    <th>Unit</th>
+                    <th>Source</th>
+                    <th>Confidence</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${ratios.map(r => `
                     <tr>
-                        <th>Vertical</th>
-                        <th>From Metric</th>
-                        <th>To Metric</th>
-                        <th>Ratio</th>
-                        <th>Unit</th>
-                        <th>Source</th>
+                        <td><strong>${r.vertical_id || 'All'}</strong></td>
+                        <td>${r.from_metric || r.from_factor_id || ''}</td>
+                        <td>${r.to_metric || r.to_factor_id || ''}</td>
+                        <td>${r.ratio || r.conversion_ratio || ''}</td>
+                        <td>${r.unit || ''}</td>
+                        <td>${r.source || ''}</td>
+                        <td>${renderConfidenceStars(r.confidence_rating || 3)}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>IT Exports</td>
-                        <td>Revenue</td>
-                        <td>Employment</td>
-                        <td>20</td>
-                        <td>employees per $1M USD</td>
-                        <td>NASSCOM</td>
-                    </tr>
-                    <tr>
-                        <td>IT Domestic</td>
-                        <td>Revenue</td>
-                        <td>Employment</td>
-                        <td>25</td>
-                        <td>employees per $1M USD</td>
-                        <td>NASSCOM</td>
-                    </tr>
-                    <tr>
-                        <td>ESDM</td>
-                        <td>Revenue</td>
-                        <td>Employment</td>
-                        <td>100</td>
-                        <td>employees per $1M USD</td>
-                        <td>ICEA</td>
-                    </tr>
-                    <tr>
-                        <td>All Sectors</td>
-                        <td>Employment</td>
-                        <td>Land</td>
-                        <td>200</td>
-                        <td>sq ft per employee</td>
-                        <td>Industry Standard</td>
-                    </tr>
-                    <tr>
-                        <td>Bengaluru</td>
-                        <td>Land Cost</td>
-                        <td>Capital</td>
-                        <td>1.20x</td>
-                        <td>multiplier</td>
-                        <td>Real Estate Premium</td>
-                    </tr>
-                </tbody>
-            </table>
-            </div>
-            <p class="conversion-note">
-                <strong>Note:</strong> These conversion ratios are based on industry benchmarks and are used to auto-calculate factor targets when revenue targets are set in the admin interface.
-            </p>
+                `).join('')}
+            </tbody>
+        </table>
         </div>
+        <p class="conversion-note">
+            <strong>Note:</strong> These conversion ratios are loaded from the KDEM Supabase database and are used to auto-calculate factor targets when revenue targets are set.
+        </p>
     `
+}
+
+function initFactorCharts(conversionRatios) {
+    // Employment Ratio Comparison as Radar Chart
+    const empRatios = conversionRatios.filter(r =>
+        (r.from_metric === 'revenue' || r.from_factor_id === 'revenue') &&
+        (r.to_metric === 'employment' || r.to_factor_id === 'labour')
+    )
+
+    if (empRatios.length > 0) {
+        const labels = empRatios.map(r => r.vertical_id || 'All')
+        const data = empRatios.map(r => parseFloat(r.ratio || r.conversion_ratio || 0))
+
+        createRadarChart('conversion-ratio-chart', labels, [
+            { label: 'Employment per $1M Revenue', data }
+        ])
+    }
 }

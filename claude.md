@@ -22,6 +22,7 @@ A data-driven dashboard for tracking Karnataka's journey to a $400 billion digit
 ### Frontend
 - **Framework:** Vanilla JavaScript (ES6 modules)
 - **Build Tool:** Vite 5.4.21
+- **Charts:** Chart.js with chartjs-plugin-datalabels
 - **Styling:** Custom CSS with CSS Variables
 - **Font:** Inter (Google Fonts)
 
@@ -109,6 +110,28 @@ Targets (single source of truth)
 - `validate_geographic_sum(vertical_id, factor_id, year)` - Ensure totals match
 - `refresh_all_views()` - Refresh materialized views after data changes
 
+### Frontend Architecture Patterns
+
+**Chart Initialization (`window.__kdem_initCharts`):**
+All tabs that render charts expose a `window.__kdem_initCharts` function. After `main.js` inserts the tab's HTML into the DOM, it calls `window.__kdem_initCharts()` to initialize Chart.js instances. This replaced the previous fragile `setTimeout` approach and ensures charts are only created after their canvas elements exist in the DOM.
+
+**Data Layer (Two Sources):**
+- **Supabase (via `dataService.js`):** All structured data from the database (targets, verticals, geographies, factors, conversion ratios, apportionment rules).
+- **Reference Data (via `referenceData.js`):** Centralized store for informational/contextual data that is not yet stored in Supabase (e.g., scheme details, benchmark descriptions, institutional data). This avoids scattering hardcoded data across individual tab files.
+
+**Chart Types (No Bar Charts):**
+The dashboard uses only doughnut, radar, area, and gauge chart types via factory functions in `chartFactories.js`. All charts use centralized color palettes from `CHART_COLORS` in `chartSetup.js`. The `chartjs-plugin-datalabels` dependency provides in-chart labels.
+
+**Annotations & Confidence:**
+Every displayed metric includes confidence stars (rendered via `renderConfidenceStars` from `components.js`) and source attribution. The `citations.js` module provides `SCALE_BENCHMARKS` for contextual scale comparisons and a `CITATIONS` registry for linking metrics to their data sources. CSS classes for annotation styles include data-type badges, confidence stars, and metric footers.
+
+**Shared Utilities (`src/utils/`):**
+- `formatting.js` - Number/currency formatting and animated counter initialization
+- `citations.js` - Source attribution and scale benchmark context
+- `components.js` - Reusable annotated UI components (metric cards, progress bars, confidence indicators)
+- `chartSetup.js` - Chart.js plugin registration and shared color palettes
+- `chartFactories.js` - Factory functions for creating doughnut, radar, gauge, and area charts
+
 ---
 
 ## File Structure
@@ -124,17 +147,30 @@ KDEM/
 ├── claude.md              # This file
 │
 ├── src/
-│   ├── main.js                    # App initialization & routing
+│   ├── main.js                    # App initialization, routing & chart init
 │   ├── lib/
 │   │   └── supabaseClient.js      # Supabase connection & helpers
+│   ├── utils/
+│   │   ├── formatting.js          # Shared formatNumber, formatCurrency, initAnimatedCounters
+│   │   ├── citations.js           # SCALE_BENCHMARKS, getScaleContext, CITATIONS registry
+│   │   ├── components.js          # annotatedMetricCard, renderConfidenceStars, annotatedProgressBar
+│   │   ├── chartSetup.js          # Centralized Chart.js registration, CHART_COLORS, destroyChart
+│   │   └── chartFactories.js      # createDoughnutChart, createRadarChart, createGaugeChart, createAreaChart
 │   ├── services/
-│   │   └── dataService.js         # Data fetching & aggregation layer
+│   │   ├── dataService.js         # Data fetching & aggregation layer (Supabase)
+│   │   └── referenceData.js       # Centralized reference data (informational data not yet in Supabase)
 │   └── tabs/
-│       ├── overview.js            # Tab 1: Overview (5 pillars)
-│       ├── vertical.js            # Tabs 2-5: Vertical details
-│       ├── geography.js           # Tabs 6-7: Geography views
-│       ├── factors.js             # Tab 8: Factors of production
-│       └── roadmap.js             # Tab 9: Strategic roadmap
+│       ├── overview.js            # Overview (5 pillars summary)
+│       ├── vertical.js            # Vertical details (IT Exports, IT Domestic, ESDM)
+│       ├── startups.js            # Startups & Digitizing Sectors
+│       ├── geography.js           # Geography views (Bengaluru, Clusters)
+│       ├── capital.js             # Capital & Investment
+│       ├── land.js                # Land & Infrastructure
+│       ├── labor.js               # Labor & Skilling
+│       ├── organisation.js        # Organisation & Institutional Readiness
+│       ├── factors.js             # Factors of production (legacy/summary)
+│       ├── roadmap.js             # Strategic roadmap
+│       └── sources.js             # Data Sources & References
 │
 ├── supabase/
 │   ├── migrations/
@@ -274,8 +310,16 @@ export async function renderTab(appData) {
 
 1. **Create tab renderer** in `src/tabs/new-tab.js`:
 ```javascript
+import { createDoughnutChart } from '../utils/chartFactories.js'
+import { annotatedMetricCard, renderConfidenceStars } from '../utils/components.js'
+
 export async function renderNewTab(appData) {
-    return `<div class="new-tab"><h2>Content</h2></div>`
+    // Set up chart initialization (called by main.js after DOM insertion)
+    window.__kdem_initCharts = () => {
+        createDoughnutChart('myChartCanvas', chartData, chartOptions)
+    }
+
+    return `<div class="new-tab"><h2>Content</h2><canvas id="myChartCanvas"></canvas></div>`
 }
 ```
 
@@ -290,6 +334,7 @@ case 'new-tab':
     content = await renderNewTab(appData)
     break
 ```
+Note: `main.js` automatically calls `window.__kdem_initCharts()` after inserting the HTML into the DOM.
 
 4. **Add navigation button** in index.html:
 ```html
@@ -364,30 +409,60 @@ supabase db push
 
 ## Tab-Specific Guidelines
 
-### Overview Tab
+### Overview Tab (`overview.js`)
 - **Purpose:** High-level summary of entire digital economy
 - **Key Elements:** Total metrics, 5-pillar breakdown, geographic preview, progress bars
 - **Data Sources:** `getVerticalOverview()`, `getTotalMetrics()`
 
-### Vertical Tabs (IT Exports, IT Domestic, ESDM, Startups)
+### Vertical Tabs (`vertical.js` - IT Exports, IT Domestic, ESDM)
 - **Purpose:** Deep dive into specific vertical
 - **Key Elements:** Vertical metrics, geographic distribution, sub-sectors, apportionment rules
 - **Data Sources:** `getVerticalDetails(verticalId, year)`
 
-### Geography Tabs (Bengaluru, Clusters)
+### Startups & Digitizing Sectors Tab (`startups.js`)
+- **Purpose:** Combined view of Startups ecosystem and Newly Digitizing Sectors
+- **Key Elements:** Startup metrics, digitizing sector breakdown, funding data
+- **Data Sources:** `getVerticalDetails()`, `referenceData.js`
+
+### Geography Tabs (`geography.js` - Bengaluru, Clusters)
 - **Purpose:** Geographic analysis
 - **Key Elements:** Location metrics, vertical breakdown, tier classification
 - **Data Sources:** `getGeographyDetails(geographyId, year)`, `getGeographyOverview(year)`
 
-### Factors Tab
-- **Purpose:** Explain 4 factors of production
+### Capital & Investment Tab (`capital.js`)
+- **Purpose:** Capital factor deep dive - funding, investment, and financial flows
+- **Key Elements:** Investment breakdown, funding sources, capital allocation by vertical/geography
+- **Data Sources:** `dataService.js`, `referenceData.js`
+
+### Land & Infrastructure Tab (`land.js`)
+- **Purpose:** Land factor deep dive - real estate, infrastructure, and spatial planning
+- **Key Elements:** Land requirements by vertical, cluster infrastructure, cost analysis
+- **Data Sources:** `dataService.js`, `referenceData.js`
+
+### Labor & Skilling Tab (`labor.js`)
+- **Purpose:** Labour factor deep dive - workforce, skilling, and employment projections
+- **Key Elements:** Employment targets, skill gap analysis, training programs
+- **Data Sources:** `dataService.js`, `referenceData.js`
+
+### Organisation & Institutional Readiness Tab (`organisation.js`)
+- **Purpose:** Organisation factor deep dive - institutional frameworks, governance, policies
+- **Key Elements:** Institutional structure, policy initiatives, governance readiness
+- **Data Sources:** `dataService.js`, `referenceData.js`
+
+### Factors Tab (`factors.js`)
+- **Purpose:** Summary view of all 4 factors of production
 - **Key Elements:** Factor descriptions, dependencies, conversion ratios
 - **Data Sources:** `fetchFactors()`, `fetchConversionRatios()`
 
-### Roadmap Tab
+### Roadmap Tab (`roadmap.js`)
 - **Purpose:** Strategic timeline and planning
 - **Key Elements:** Timeline, milestones, interventions, investments, risks
 - **Data Sources:** Static content (for now)
+
+### Data Sources & References Tab (`sources.js`)
+- **Purpose:** Transparency and attribution for all data used in the dashboard
+- **Key Elements:** Citation list, data source descriptions, confidence methodology
+- **Data Sources:** `CITATIONS` registry from `citations.js`
 
 ---
 
@@ -458,7 +533,7 @@ export const rpc = {
 ### Manual Testing Checklist
 
 **Dashboard Load:**
-- [ ] All 9 tabs render without errors
+- [ ] All 13 tabs render without errors
 - [ ] Navigation switches between tabs correctly
 - [ ] Data loads from Supabase
 - [ ] Colors match KDEM brand (orange/amber/blue)
@@ -596,7 +671,7 @@ Set in Vercel dashboard:
 1. **Real-time Updates:** Use Supabase subscriptions for live data
 2. **Export Functionality:** Download reports as PDF/Excel
 3. **Comparison Views:** Year-over-year, target vs actual
-4. **Data Visualizations:** Charts using Chart.js or D3.js
+4. **Data Visualizations:** Extend Chart.js charts (doughnut, radar, area, gauge already implemented)
 5. **Search & Filter:** Advanced filtering across all dimensions
 
 ### Phase 5: AI Integration
@@ -628,6 +703,6 @@ Set in Vercel dashboard:
 
 ---
 
-**Last Updated:** February 5, 2026
+**Last Updated:** February 6, 2026
 **Dashboard Version:** v3.0
 **Database Schema Version:** 005 (seed data loaded)

@@ -31,7 +31,7 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           // Split Chart.js into separate vendor chunk
-          if (id.includes('node_modules/chart.js')) {
+          if (id.includes('node_modules/chart.js') || id.includes('node_modules/chartjs-plugin-datalabels')) {
             return 'vendor-chartjs'
           }
 
@@ -41,6 +41,11 @@ export default defineConfig({
           }
 
           // Split tab components into logical groups
+          // Shared utilities
+          if (id.includes('src/utils/')) {
+            return 'utils'
+          }
+
           if (id.includes('src/tabs/overview.js')) {
             return 'tab-overview'
           }

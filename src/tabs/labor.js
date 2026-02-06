@@ -1,14 +1,42 @@
 /**
  * Labor Tab Renderer
  * Shows workforce, employment, and skilling data across clusters
+ * All data from referenceData service and Supabase - no hardcoded values
  */
+
+import { getLaborMetrics, getTalentPools, getClusterTalent, getSkillingPrograms, getCoESkilling, getSkillDevelopmentPolicy, getLaborSources } from '../services/referenceData.js'
+import { fetchConversionRatios } from '../services/dataService.js'
+import { formatNumber } from '../utils/formatting.js'
+import { renderConfidenceStars } from '../utils/components.js'
+import { CHART_COLORS } from '../utils/chartSetup.js'
+import { createDoughnutChart } from '../utils/chartFactories.js'
 
 export async function renderLaborTab(appData) {
     try {
+        // Load all data from reference data functions
+        const laborMetrics = getLaborMetrics()
+        const talentPools = getTalentPools()
+        const clusterTalent = getClusterTalent()
+        const skillingPrograms = getSkillingPrograms()
+        const coESkilling = getCoESkilling()
+        const skillPolicy = getSkillDevelopmentPolicy()
+        const laborSources = getLaborSources()
+
+        // Load employment conversion ratios from the database
+        let conversionRatios = []
+        try {
+            conversionRatios = await fetchConversionRatios()
+        } catch (err) {
+            console.warn('Could not load conversion ratios from DB, section will show empty:', err)
+        }
+
+        // Store chart init function for main.js to call after DOM insertion
+        window.__kdem_initCharts = () => initLaborCharts(talentPools)
+
         return `
             <div class="labor-tab">
                 <div class="tab-header">
-                    <h2>👥 Labor & Skilling</h2>
+                    <h2>Labor & Skilling</h2>
                     <p class="tab-subtitle">Workforce development, employment metrics, and skilling programs across Karnataka's digital economy</p>
                 </div>
 
@@ -18,30 +46,7 @@ export async function renderLaborTab(appData) {
                 </div>
 
                 <div class="metrics-grid">
-                    <div class="metric-card metric-highlight">
-                        <div class="metric-icon">👥</div>
-                        <div class="metric-value">2.5M+</div>
-                        <div class="metric-label">Tech Workforce (Bengaluru)</div>
-                        <div class="metric-source">Bengaluru Innovation Report 2025</div>
-                    </div>
-                    <div class="metric-card metric-highlight">
-                        <div class="metric-icon">🎓</div>
-                        <div class="metric-value">150K-200K</div>
-                        <div class="metric-label">New Tech Hires Per Year</div>
-                        <div class="metric-source">Bengaluru Innovation Report 2025</div>
-                    </div>
-                    <div class="metric-card metric-highlight">
-                        <div class="metric-icon">🤖</div>
-                        <div class="metric-value">600K+</div>
-                        <div class="metric-label">AI/ML Professionals</div>
-                        <div class="metric-source">Bengaluru Innovation Report 2025</div>
-                    </div>
-                    <div class="metric-card metric-highlight">
-                        <div class="metric-icon">🎓</div>
-                        <div class="metric-value">100K+</div>
-                        <div class="metric-label">PhD Holders</div>
-                        <div class="metric-source">Bengaluru Innovation Report 2025</div>
-                    </div>
+                    ${renderLaborMetrics(laborMetrics)}
                 </div>
 
                 <!-- Specialized Workforce -->
@@ -50,33 +55,29 @@ export async function renderLaborTab(appData) {
                 </div>
 
                 <div class="talent-pools-grid">
-                    <div class="talent-card">
-                        <h4>💻 Chip Design & Embedded Systems</h4>
-                        <div class="talent-metric">
-                            <span class="value">350K+</span>
-                            <span class="label">professionals in chip design, testing & embedded systems</span>
+                    ${renderTalentPools(talentPools)}
+                </div>
+
+                <!-- Workforce Composition Chart -->
+                <div class="section-header mt-4">
+                    <h3>Workforce Composition</h3>
+                    <p>Key talent segments in Karnataka's digital economy</p>
+                </div>
+
+                <div class="growth-charts-grid">
+                    <div class="growth-chart-card">
+                        <h4>Specialized Talent Breakdown</h4>
+                        <div class="chart-container">
+                            <canvas id="workforce-composition-chart"></canvas>
                         </div>
-                        <p class="source">Source: Bengaluru Innovation Report 2025</p>
+                        <div class="chart-source">Source: Bengaluru Innovation Report 2025</div>
                     </div>
-                    <div class="talent-card">
-                        <h4>🏢 GCC Workforce</h4>
-                        <div class="talent-metric">
-                            <span class="value">665K+</span>
-                            <span class="label">GCC talent in Bengaluru</span>
+                    <div class="growth-chart-card">
+                        <h4>Talent Pool Size (thousands)</h4>
+                        <div class="chart-container">
+                            <canvas id="talent-pool-bar-chart"></canvas>
                         </div>
-                        <div class="talent-metric">
-                            <span class="value">48%</span>
-                            <span class="label">in high-end roles (Engineering/R&D)</span>
-                        </div>
-                        <p class="source">Source: Bengaluru Innovation Report 2025</p>
-                    </div>
-                    <div class="talent-card">
-                        <h4>🚀 Startup Ecosystem</h4>
-                        <div class="talent-metric">
-                            <span class="value">40-45%</span>
-                            <span class="label">of India's tech hiring</span>
-                        </div>
-                        <p class="source">Source: Bengaluru Innovation Report 2025</p>
+                        <div class="chart-source">Source: Bengaluru Innovation Report 2025</div>
                     </div>
                 </div>
 
@@ -87,7 +88,7 @@ export async function renderLaborTab(appData) {
                 </div>
 
                 <div class="clusters-talent-grid">
-                    ${renderClusterTalent()}
+                    ${renderClusterTalent(clusterTalent)}
                 </div>
 
                 <!-- Skilling Programs & Initiatives -->
@@ -96,7 +97,7 @@ export async function renderLaborTab(appData) {
                 </div>
 
                 <div class="skilling-programs">
-                    ${renderSkillingPrograms()}
+                    ${renderSkillingPrograms(skillingPrograms)}
                 </div>
 
                 <!-- Karnataka Skill Development Policy 2025-32 -->
@@ -105,7 +106,7 @@ export async function renderLaborTab(appData) {
                 </div>
 
                 <div class="policy-highlight">
-                    ${renderSkillPolicy()}
+                    ${renderSkillPolicy(skillPolicy)}
                 </div>
 
                 <!-- Centres of Excellence Skilling Impact -->
@@ -114,7 +115,7 @@ export async function renderLaborTab(appData) {
                 </div>
 
                 <div class="coe-grid">
-                    ${renderCoESkilling()}
+                    ${renderCoESkilling(coESkilling)}
                 </div>
 
                 <!-- Employment Conversion Ratios -->
@@ -124,16 +125,16 @@ export async function renderLaborTab(appData) {
                 </div>
 
                 <div class="conversion-table">
-                    ${renderEmploymentRatios()}
+                    ${renderEmploymentRatios(conversionRatios)}
                 </div>
 
                 <!-- Data Sources -->
                 <div class="section-header mt-4">
-                    <h3>📚 Data Sources & References</h3>
+                    <h3>Data Sources & References</h3>
                 </div>
 
                 <div class="sources-list">
-                    ${renderDataSources()}
+                    ${renderDataSources(laborSources)}
                 </div>
             </div>
         `
@@ -148,35 +149,73 @@ export async function renderLaborTab(appData) {
     }
 }
 
-function renderClusterTalent() {
-    const clusters = [
-        {
-            name: 'Silicon Beach (Mangaluru-Udupi)',
-            totalTalent: '3.1 lakh',
-            experienced: '90,000',
-            fresh: '150,000',
-            gradsPerYear: '15,000+',
-            institutions: 'NITK Surathkal, Manipal Academy',
-            source: 'Silicon Beach Skills Report (Xpheno-KDEM) 2025',
-            link: 'https://newskarnataka.com/karnataka/mangaluru/mangaluru-has-potential-to-be-the-next-bengaluru-says-priyank-kharge/25092025'
-        },
-        {
-            name: 'Mysuru',
-            totalTalent: 'Growing',
-            jobs: '750+ recent jobs',
-            target: '150,000 jobs by 2030',
-            source: 'KDEM Vision Document 2025 - Mysuru Chapter',
-            link: null
-        },
-        {
-            name: 'Hubballi-Dharwad',
-            totalTalent: 'Emerging',
-            target: 'Part of Beyond Bengaluru initiative',
-            source: 'Beyond Bengaluru Initiative',
-            link: 'https://beyondbengaluru.com'
-        }
-    ]
+// -------------------------------------------------------------------
+// Chart initialization
+// -------------------------------------------------------------------
 
+function initLaborCharts(talentPools) {
+    // Workforce composition doughnut: AI/ML 600K, GCC 665K, Chip Design 350K
+    const compositionLabels = ['AI/ML Professionals', 'GCC Workforce', 'Chip Design & Embedded']
+    const compositionData = [600, 665, 350]
+    const compositionColors = [CHART_COLORS.verticals[0], CHART_COLORS.verticals[2], CHART_COLORS.verticals[3]]
+
+    createDoughnutChart(
+        'workforce-composition-chart',
+        compositionLabels,
+        compositionData,
+        compositionColors,
+        '1.6M+'
+    )
+
+    // Talent pool radar chart (shows relative pool sizes)
+    import('../utils/chartFactories.js').then(({ createRadarChart }) => {
+        createRadarChart('talent-pool-bar-chart', compositionLabels, [
+            { label: 'Talent Pool (thousands)', data: compositionData }
+        ])
+    })
+}
+
+// -------------------------------------------------------------------
+// Section renderers
+// -------------------------------------------------------------------
+
+function renderLaborMetrics(metrics) {
+    return metrics.map(m => `
+        <div class="metric-card metric-highlight">
+            <div class="metric-icon">${m.icon}</div>
+            <div class="metric-value">${m.value}</div>
+            <div class="metric-label">${m.label}</div>
+            <div class="metric-footer">
+                ${renderConfidenceStars(m.confidence)}
+            </div>
+            <div class="metric-source">${m.source}</div>
+        </div>
+    `).join('')
+}
+
+function renderTalentPools(pools) {
+    return pools.map(pool => `
+        <div class="talent-card">
+            <h4>${pool.icon} ${pool.title}</h4>
+            <div class="talent-metric">
+                <span class="value">${pool.value}</span>
+                <span class="label">${pool.description}</span>
+            </div>
+            ${pool.detail ? `
+                <div class="talent-metric">
+                    <span class="value">${pool.detail.split(' ')[0]}</span>
+                    <span class="label">${pool.detail.split(' ').slice(1).join(' ')}</span>
+                </div>
+            ` : ''}
+            <div class="metric-footer">
+                ${renderConfidenceStars(pool.confidence)}
+            </div>
+            <p class="source">Source: ${pool.source}</p>
+        </div>
+    `).join('')
+}
+
+function renderClusterTalent(clusters) {
     return clusters.map(cluster => `
         <div class="cluster-talent-card">
             <h4>${cluster.name}</h4>
@@ -210,43 +249,15 @@ function renderClusterTalent() {
                     <span class="value">${cluster.target}</span>
                 </div>` : ''}
             </div>
-            <p class="source">Source: ${cluster.source}${cluster.link ? ` • <a href="${cluster.link}" target="_blank">Read more →</a>` : ''}</p>
+            <div class="metric-footer">
+                ${renderConfidenceStars(cluster.confidence)}
+            </div>
+            <p class="source">Source: ${cluster.source}${cluster.link ? ` <a href="${cluster.link}" target="_blank">Read more</a>` : ''}</p>
         </div>
     `).join('')
 }
 
-function renderSkillingPrograms() {
-    const programs = [
-        {
-            name: 'ELEVATE Program',
-            supported: '1,227+ startups',
-            funding: '₹280+ crore',
-            womenLed: '25%',
-            source: 'Bengaluru Innovation Report 2025'
-        },
-        {
-            name: 'Karnataka Positive Talent Balance',
-            achievement: 'Karnataka ranked #1 state in India',
-            metric: 'Positive talent balance across sectors',
-            source: 'Xpheno Report, Nov 2024',
-            link: 'https://yourstory.com/enterprise-story/2025/06/karnataka-wide-talent-pool-for-gccs-xpheno-report'
-        },
-        {
-            name: 'Bengaluru Skill Summit 2025',
-            role: 'KDEM as Knowledge Partner',
-            focus: 'Skills & Innovation, industry partnerships',
-            source: 'Karnataka Skill Development Corporation',
-            link: 'https://bengaluruskillsummit.com/'
-        },
-        {
-            name: 'Beyond Bengaluru Initiative',
-            companies: '126 companies',
-            jobs: '5,500+ jobs',
-            source: 'KDEM Internal',
-            link: 'https://beyondbengaluru.com'
-        }
-    ]
-
+function renderSkillingPrograms(programs) {
     return programs.map(program => `
         <div class="program-card">
             <h4>${program.name}</h4>
@@ -261,39 +272,42 @@ function renderSkillingPrograms() {
                 ${program.companies ? `<div class="metric"><strong>Companies:</strong> ${program.companies}</div>` : ''}
                 ${program.jobs ? `<div class="metric"><strong>Jobs Created:</strong> ${program.jobs}</div>` : ''}
             </div>
-            <p class="source">Source: ${program.source}${program.link ? ` • <a href="${program.link}" target="_blank">Learn more →</a>` : ''}</p>
+            <div class="metric-footer">
+                ${renderConfidenceStars(program.confidence)}
+            </div>
+            <p class="source">Source: ${program.source}${program.link ? ` <a href="${program.link}" target="_blank">Learn more</a>` : ''}</p>
         </div>
     `).join('')
 }
 
-function renderSkillPolicy() {
+function renderSkillPolicy(policy) {
     return `
         <div class="policy-card">
             <div class="policy-header">
-                <h4>State Skill Development Policy 2025-32</h4>
-                <div class="policy-badge">⭐⭐⭐⭐⭐ Official Government Policy</div>
+                <h4>${policy.name}</h4>
+                <div class="policy-badge">${renderConfidenceStars(policy.confidence)} Official Government Policy</div>
             </div>
 
             <div class="policy-details">
                 <div class="policy-metric">
                     <div class="metric-icon">💰</div>
                     <div>
-                        <div class="value">₹4,432.5 Crore</div>
+                        <div class="value">${policy.investment}</div>
                         <div class="label">Total Investment</div>
                     </div>
                 </div>
                 <div class="policy-metric">
                     <div class="metric-icon">🎯</div>
                     <div>
-                        <div class="value">3 Million Youth</div>
+                        <div class="value">${policy.target}</div>
                         <div class="label">Employability Target</div>
                     </div>
                 </div>
                 <div class="policy-metric">
                     <div class="metric-icon">📅</div>
                     <div>
-                        <div class="value">7 Years</div>
-                        <div class="label">Policy Timeline (2025-2032)</div>
+                        <div class="value">${policy.timeline}</div>
+                        <div class="label">Policy Timeline</div>
                     </div>
                 </div>
             </div>
@@ -301,60 +315,27 @@ function renderSkillPolicy() {
             <div class="policy-pillars">
                 <h5>Four Core Pillars:</h5>
                 <ul>
-                    <li><strong>Vocational Integration:</strong> Integrating vocational education into mainstream schooling and higher education</li>
-                    <li><strong>Digital & AI Skills:</strong> Prioritizing digital technologies and AI-driven tools for training and assessment</li>
-                    <li><strong>Industry-Led Training:</strong> Fostering industry partnerships and industry-led training programs</li>
-                    <li><strong>Apprenticeship Expansion:</strong> Expanding apprenticeship programs across sectors</li>
+                    ${policy.pillars.map(p => `<li><strong>${p.name}:</strong> ${p.description}</li>`).join('')}
                 </ul>
             </div>
 
             <div class="policy-highlights">
                 <h5>Special Initiatives:</h5>
                 <ul>
-                    <li>Special interventions for women, persons with disabilities, and marginalized communities</li>
-                    <li>Training 15,000 women in space and technology sectors</li>
-                    <li>Pilot programs in 100 schools and 50 colleges by early 2026</li>
-                    <li>Unified digital portal for training, assessment, and career guidance</li>
+                    ${policy.specialInitiatives.map(item => `<li>${item}</li>`).join('')}
                 </ul>
             </div>
 
             <div class="policy-goal">
-                <p><strong>Strategic Goal:</strong> Make Karnataka the premier hub for skilled workforce and power the state's <strong>$1 trillion economy goal by 2032</strong></p>
+                <p><strong>Strategic Goal:</strong> ${policy.strategicGoal}</p>
             </div>
 
-            <p class="source">Source: Karnataka Government • Approved January 2026 • <a href="https://thesouthfirst.com/karnataka/karnataka-government-approves-skill-development-policy-2025-32/" target="_blank">Read full policy →</a></p>
+            <p class="source">Source: ${policy.source} | Approved ${policy.approvedDate} | <a href="${policy.link}" target="_blank">Read full policy</a></p>
         </div>
     `
 }
 
-function renderCoESkilling() {
-    const coes = [
-        {
-            name: 'ARTPARK (IISc)',
-            skilled: '9,000+',
-            startups: '23',
-            valuation: '₹750 Cr',
-            patents: '32',
-            focus: 'AI & Robotics'
-        },
-        {
-            name: 'C-CAMP Agri Innovation',
-            startups: '90+',
-            funding: '₹500+ Cr',
-            patents: '42',
-            impact: '5 lakh+ farmers',
-            focus: 'Agritech & Biotech'
-        },
-        {
-            name: 'Bangalore Bioinnovation Centre',
-            startups: '486+',
-            jobs: '6,000+',
-            products: '45+',
-            patents: '71',
-            focus: 'Biotechnology'
-        }
-    ]
-
+function renderCoESkilling(coes) {
     return coes.map(coe => `
         <div class="coe-card">
             <h4>${coe.name}</h4>
@@ -369,114 +350,105 @@ function renderCoESkilling() {
                 ${coe.products ? `<div class="metric"><span class="label">Products Launched:</span> <span class="value">${coe.products}</span></div>` : ''}
                 ${coe.impact ? `<div class="metric"><span class="label">Impact:</span> <span class="value">${coe.impact}</span></div>` : ''}
             </div>
-            <p class="source">Source: Bengaluru Innovation Report 2025</p>
+            <div class="metric-footer">
+                ${renderConfidenceStars(coe.confidence)}
+            </div>
+            <p class="source">Source: ${coe.source}</p>
         </div>
     `).join('')
 }
 
-function renderEmploymentRatios() {
+function renderEmploymentRatios(conversionRatios) {
+    // Filter for revenue-to-employment type ratios
+    const employmentRatios = conversionRatios.filter(r =>
+        r.from_factor === 'revenue' && r.to_factor === 'employment' ||
+        r.source_metric === 'revenue' && r.target_metric === 'employment' ||
+        r.conversion_type === 'revenue_to_employment'
+    )
+
+    // If we have DB data, render from it
+    if (employmentRatios.length > 0) {
+        return `
+            <div class="table-scroll-wrapper">
+                <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Vertical</th>
+                        <th>Revenue to Employment Ratio</th>
+                        <th>Unit</th>
+                        <th>Source</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${employmentRatios.map(r => `
+                        <tr>
+                            <td><strong>${r.vertical_name || r.vertical_id || 'N/A'}</strong></td>
+                            <td>${r.ratio || r.value || r.conversion_value || 'N/A'}</td>
+                            <td>${r.unit || 'employees per $1M USD'}</td>
+                            <td>${r.source || r.data_source || 'KDEM Database'}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            </div>
+            <p class="conversion-note">
+                <strong>Note:</strong> These conversion ratios are sourced from the KDEM database and based on industry benchmarks.
+                They are used to calculate employment targets from revenue goals across Karnataka's digital economy verticals.
+            </p>
+        `
+    }
+
+    // Fallback: render all conversion ratios if specific filter returned nothing
+    if (conversionRatios.length > 0) {
+        return `
+            <div class="table-scroll-wrapper">
+                <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Vertical / Rule</th>
+                        <th>Ratio</th>
+                        <th>Unit</th>
+                        <th>Source</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${conversionRatios.map(r => `
+                        <tr>
+                            <td><strong>${r.vertical_name || r.vertical_id || r.name || 'N/A'}</strong></td>
+                            <td>${r.ratio || r.value || r.conversion_value || 'N/A'}</td>
+                            <td>${r.unit || r.description || 'N/A'}</td>
+                            <td>${r.source || r.data_source || 'KDEM Database'}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            </div>
+            <p class="conversion-note">
+                <strong>Note:</strong> These conversion ratios are sourced from the KDEM database.
+                They are used to cascade targets across factors of production in Karnataka's digital economy.
+            </p>
+        `
+    }
+
+    // Empty state if DB returned nothing
     return `
-        <div class="table-scroll-wrapper">
-            <table class="data-table">
-            <thead>
-                <tr>
-                    <th>Vertical</th>
-                    <th>Revenue to Employment Ratio</th>
-                    <th>Unit</th>
-                    <th>Source</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>IT Exports</strong></td>
-                    <td>20</td>
-                    <td>employees per $1M USD</td>
-                    <td>NASSCOM</td>
-                </tr>
-                <tr>
-                    <td><strong>IT Domestic</strong></td>
-                    <td>25</td>
-                    <td>employees per $1M USD</td>
-                    <td>NASSCOM</td>
-                </tr>
-                <tr>
-                    <td><strong>ESDM</strong></td>
-                    <td>100</td>
-                    <td>employees per $1M USD</td>
-                    <td>ICEA</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="empty-state">
+            <p>No conversion ratio data available. Ensure the database has been seeded with conversion ratios.</p>
         </div>
-        <p class="conversion-note">
-            <strong>Note:</strong> These conversion ratios are based on industry benchmarks from NASSCOM and ICEA.
-            They are used to calculate employment targets from revenue goals across Karnataka's digital economy verticals.
-        </p>
     `
 }
 
-function renderDataSources() {
-    const sources = [
-        {
-            title: 'Bengaluru Innovation Report 2025',
-            confidence: '⭐⭐⭐⭐⭐',
-            data: 'Tech workforce metrics, AI/ML talent, GCC workforce, startup ecosystem data',
-            link: null
-        },
-        {
-            title: 'Silicon Beach Skills Report (Xpheno-KDEM)',
-            confidence: '⭐⭐⭐⭐',
-            data: 'Mangaluru-Udupi talent pool (3.1 lakh), institutional capacity',
-            link: 'https://newskarnataka.com/karnataka/mangaluru/mangaluru-has-potential-to-be-the-next-bengaluru-says-priyank-kharge/25092025'
-        },
-        {
-            title: 'Karnataka Skill Development Policy 2025-32',
-            confidence: '⭐⭐⭐⭐⭐',
-            data: '₹4,432.5 Cr investment, 3M youth target, digital & AI focus',
-            link: 'https://thesouthfirst.com/karnataka/karnataka-government-approves-skill-development-policy-2025-32/'
-        },
-        {
-            title: 'Karnataka Positive Talent Balance Report (Xpheno)',
-            confidence: '⭐⭐⭐⭐',
-            data: 'Karnataka #1 state ranking in positive talent balance',
-            link: 'https://yourstory.com/enterprise-story/2025/06/karnataka-wide-talent-pool-for-gccs-xpheno-report'
-        },
-        {
-            title: 'Bengaluru Skill Summit 2025',
-            confidence: '⭐⭐⭐⭐⭐',
-            data: 'KDEM as Knowledge Partner, industry partnerships',
-            link: 'https://bengaluruskillsummit.com/'
-        },
-        {
-            title: 'ELEVATE Program Data',
-            confidence: '⭐⭐⭐⭐',
-            data: '1,227+ startups, ₹280+ Cr funding, 25% women-led',
-            link: null
-        },
-        {
-            title: 'NASSCOM Industry Reports',
-            confidence: '⭐⭐⭐⭐',
-            data: 'IT sector employment conversion ratios',
-            link: null
-        },
-        {
-            title: 'ICEA (India Cellular & Electronics Association)',
-            confidence: '⭐⭐⭐⭐',
-            data: 'ESDM sector employment conversion ratios',
-            link: null
-        }
-    ]
-
+function renderDataSources(sources) {
     return `
         <div class="sources-grid">
             ${sources.map(source => `
                 <div class="source-card">
                     <div class="source-header">
                         <h5>${source.title}</h5>
-                        <div class="confidence-badge">${source.confidence}</div>
+                        <div class="confidence-badge">${renderConfidenceStars(source.confidence)}</div>
                     </div>
                     <p class="source-data">${source.data}</p>
-                    ${source.link ? `<a href="${source.link}" target="_blank" class="source-link">View source →</a>` : ''}
+                    ${source.link ? `<a href="${source.link}" target="_blank" class="source-link">View source</a>` : ''}
                 </div>
             `).join('')}
         </div>

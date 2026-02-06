@@ -1,9 +1,14 @@
 /**
  * Geography Tab Renderer
  * Shows Bengaluru dashboard or Beyond Bengaluru clusters
+ * All data from Supabase backend - no hardcoded values
  */
 
 import { getGeographyDetails, getGeographyOverview } from '../services/dataService.js'
+import { formatNumber } from '../utils/formatting.js'
+import { annotatedMetricCard, renderConfidenceStars } from '../utils/components.js'
+import { CHART_COLORS } from '../utils/chartSetup.js'
+import { createDoughnutChart, createRadarChart } from '../utils/chartFactories.js'
 
 export async function renderGeographyTab(geographyId, appData) {
     if (geographyId === 'clusters') {
@@ -18,6 +23,9 @@ async function renderSingleGeography(geographyId, appData) {
         const details = await getGeographyDetails(geographyId, 2030)
         const geography = details.geography
 
+        // Store chart init function for main.js to call after DOM insertion
+        window.__kdem_initCharts = () => initSingleGeoCharts(details)
+
         return `
             <div class="geography-tab">
                 <div class="tab-header">
@@ -27,41 +35,49 @@ async function renderSingleGeography(geographyId, appData) {
 
                 <!-- Overview Metrics -->
                 <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="metric-icon">💰</div>
-                        <div class="metric-content">
-                            <div class="metric-label">Total Revenue</div>
-                            <div class="metric-value">${formatNumber(details.totals.revenue_usd_bn)}</div>
-                            <div class="metric-unit">USD Billion</div>
-                        </div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-icon">👥</div>
-                        <div class="metric-content">
-                            <div class="metric-label">Total Employment</div>
-                            <div class="metric-value">${formatNumber(details.totals.employment)}</div>
-                            <div class="metric-unit">Jobs</div>
-                        </div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-icon">🏗️</div>
-                        <div class="metric-content">
-                            <div class="metric-label">Land Required</div>
-                            <div class="metric-value">${formatNumber(details.totals.land_sqft)}</div>
-                            <div class="metric-unit">Sq Ft</div>
-                        </div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-icon">💼</div>
-                        <div class="metric-content">
-                            <div class="metric-label">Capital Investment</div>
-                            <div class="metric-value">${formatNumber(details.totals.capital_inr_cr)}</div>
-                            <div class="metric-unit">INR Crores</div>
-                        </div>
-                    </div>
+                    ${annotatedMetricCard({
+                        label: 'Total Revenue', value: details.totals.revenue_usd_bn, unit: 'USD Billion',
+                        icon: '💰', type: 'target', confidence: 4,
+                        source: 'KDEM Target Database (Supabase)',
+                        formula: 'Sum of vertical revenue targets for this geography'
+                    })}
+                    ${annotatedMetricCard({
+                        label: 'Total Employment', value: details.totals.employment, unit: 'Jobs',
+                        icon: '👥', type: 'computed', confidence: 3,
+                        source: 'Computed from conversion ratios',
+                        formula: 'Revenue × employment ratio per vertical'
+                    })}
+                    ${annotatedMetricCard({
+                        label: 'Land Required', value: details.totals.land_sqft, unit: 'Sq Ft',
+                        icon: '🏗️', type: 'computed', confidence: 3,
+                        source: 'Industry standard: 200 sq ft/employee',
+                        formula: 'Employment × 200 sq ft per employee'
+                    })}
+                    ${annotatedMetricCard({
+                        label: 'Capital Investment', value: details.totals.capital_inr_cr, unit: 'INR Crores',
+                        icon: '💼', type: 'computed', confidence: 2,
+                        source: 'Computed from land + geography premiums',
+                        formula: 'Land costs × geography multiplier'
+                    })}
                 </div>
 
-                <!-- Vertical Breakdown -->
+                <!-- Vertical Distribution Chart -->
+                ${details.verticalBreakdown.length > 0 ? `
+                    <div class="section-header mt-4">
+                        <h3>Revenue by Vertical</h3>
+                        <p>Which verticals dominate ${geography.name}'s digital economy</p>
+                    </div>
+                    <div class="growth-charts-grid">
+                        <div class="growth-chart-card" style="grid-column: 1 / -1; max-width: 600px; margin: 0 auto;">
+                            <div class="chart-container" style="height: 350px;">
+                                <canvas id="geo-vertical-doughnut"></canvas>
+                            </div>
+                            <div class="chart-source">Source: KDEM Target Database (Supabase)</div>
+                        </div>
+                    </div>
+                ` : ''}
+
+                <!-- Vertical Breakdown Table -->
                 <div class="section-header mt-4">
                     <h3>Distribution by Vertical</h3>
                     <p>How different digital economy verticals contribute to ${geography.name}</p>
@@ -91,6 +107,9 @@ async function renderClustersView(appData) {
         const tier2 = overview.filter(g => g.tier === 'tier2-invest-as-anchor')
         const tier3 = overview.filter(g => g.tier === 'tier3-invest-later')
 
+        // Store chart init function for main.js to call after DOM insertion
+        window.__kdem_initCharts = () => initClustersCharts(overview, tier1, tier2, tier3)
+
         return `
             <div class="clusters-tab">
                 <div class="tab-header">
@@ -98,8 +117,26 @@ async function renderClustersView(appData) {
                     <p class="tab-subtitle">8 geographic clusters to diversify Karnataka's digital economy</p>
                 </div>
 
+                <!-- Tier Revenue Distribution -->
+                <div class="growth-charts-grid">
+                    <div class="growth-chart-card" style="max-width: 500px; margin: 0 auto;">
+                        <h4>Revenue Share by Tier</h4>
+                        <div class="chart-container" style="height: 300px;">
+                            <canvas id="tier-doughnut-chart"></canvas>
+                        </div>
+                        <div class="chart-source">Source: KDEM Target Database (Supabase)</div>
+                    </div>
+                    <div class="growth-chart-card">
+                        <h4>Cluster Comparison</h4>
+                        <div class="chart-container" style="height: 300px;">
+                            <canvas id="cluster-radar-chart"></canvas>
+                        </div>
+                        <div class="chart-source">Source: KDEM Target Database (Supabase)</div>
+                    </div>
+                </div>
+
                 <!-- Tier 1 Clusters -->
-                <div class="section-header">
+                <div class="section-header mt-4">
                     <h3>Tier 1: Invest Aggressively</h3>
                     <p>High-priority clusters with immediate investment focus</p>
                 </div>
@@ -205,16 +242,51 @@ function renderVerticalBreakdown(breakdown) {
     `
 }
 
-function formatNumber(value) {
-    if (!value || value === 0) return '0'
+function initSingleGeoCharts(details) {
+    // Vertical distribution doughnut for single geography
+    if (details.verticalBreakdown.length > 0) {
+        const labels = details.verticalBreakdown.map(v => v.vertical.name)
+        const data = details.verticalBreakdown.map(v => v.revenue_usd_bn)
+        const totalRev = data.reduce((a, b) => a + b, 0)
+        const colors = details.verticalBreakdown.map(v =>
+            CHART_COLORS.verticalNames[v.vertical.id] || CHART_COLORS.verticals[0]
+        )
+        createDoughnutChart('geo-vertical-doughnut', labels, data, colors, `$${totalRev.toFixed(0)}B`)
+    }
+}
 
-    if (value >= 1000000000) {
-        return (value / 1000000000).toFixed(2) + 'B'
-    } else if (value >= 1000000) {
-        return (value / 1000000).toFixed(2) + 'M'
-    } else if (value >= 1000) {
-        return (value / 1000).toFixed(2) + 'K'
-    } else {
-        return value.toFixed(2)
+function initClustersCharts(overview, tier1, tier2, tier3) {
+    // Tier Revenue Distribution Doughnut
+    const tierLabels = ['Tier 1', 'Tier 2', 'Tier 3']
+    const tierRevenues = [
+        tier1.reduce((s, g) => s + g.revenue_usd_bn, 0),
+        tier2.reduce((s, g) => s + g.revenue_usd_bn, 0),
+        tier3.reduce((s, g) => s + g.revenue_usd_bn, 0)
+    ]
+    createDoughnutChart('tier-doughnut-chart', tierLabels, tierRevenues, CHART_COLORS.tiers)
+
+    // Cluster Comparison Radar
+    const clustersWithData = overview.filter(g =>
+        g.revenue_usd_bn > 0 || g.employment > 0
+    ).slice(0, 6)
+
+    if (clustersWithData.length > 0) {
+        const radarLabels = ['Revenue', 'Employment', 'Land', 'Capital']
+        const maxRevenue = Math.max(...clustersWithData.map(c => c.revenue_usd_bn)) || 1
+        const maxEmployment = Math.max(...clustersWithData.map(c => c.employment)) || 1
+        const maxLand = Math.max(...clustersWithData.map(c => c.land_sqft)) || 1
+        const maxCapital = Math.max(...clustersWithData.map(c => c.capital_inr_cr)) || 1
+
+        const radarDatasets = clustersWithData.map(cluster => ({
+            label: cluster.name,
+            data: [
+                (cluster.revenue_usd_bn / maxRevenue) * 100,
+                (cluster.employment / maxEmployment) * 100,
+                (cluster.land_sqft / maxLand) * 100,
+                (cluster.capital_inr_cr / maxCapital) * 100
+            ]
+        }))
+
+        createRadarChart('cluster-radar-chart', radarLabels, radarDatasets)
     }
 }

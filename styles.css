@@ -2842,3 +2842,219 @@ body {
         padding: 0.75rem 1.25rem;
     }
 }
+
+/* ========================================
+   ANNOTATION & CITATION STYLES
+   ======================================== */
+
+/* Data Type Badges */
+.data-type-badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.data-type-actual { background: rgba(16, 185, 129, 0.12); color: #059669; }
+.data-type-projected { background: rgba(245, 158, 11, 0.12); color: #d97706; }
+.data-type-estimated { background: rgba(239, 68, 68, 0.12); color: #dc2626; }
+.data-type-target { background: rgba(91, 185, 236, 0.12); color: #2563eb; }
+.data-type-computed { background: rgba(107, 114, 128, 0.12); color: #6b7280; }
+
+/* Scale Context Warning */
+.scale-context-badge {
+    display: inline-block;
+    margin-top: 0.4rem;
+    padding: 0.2rem 0.5rem;
+    background: rgba(245, 158, 11, 0.12);
+    color: #d97706;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+/* Confidence Stars */
+.confidence-stars {
+    color: #f59e0b;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+/* Inline Source Attribution */
+.source-inline {
+    font-size: 0.7rem;
+    color: var(--text-tertiary);
+    font-style: italic;
+    margin-top: 0.25rem;
+    border-bottom: 1px dotted var(--text-tertiary);
+    display: inline-block;
+    cursor: help;
+}
+
+/* Formula Tooltip */
+.formula-tooltip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: rgba(107, 114, 128, 0.1);
+    color: #6b7280;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    cursor: help;
+    font-style: italic;
+}
+
+/* Metric Footer (source + confidence + formula row) */
+.metric-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* Annotated Metric Card */
+.annotated-metric {
+    position: relative;
+}
+
+.annotated-metric .metric-content {
+    flex: 1;
+}
+
+/* Progress Overflow */
+.progress-overflow {
+    color: #d97706 !important;
+}
+
+.progress-bar-overflow .progress-fill {
+    background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
+}
+
+.progress-overflow-note {
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-radius: 6px;
+    font-size: 0.75rem;
+    color: #92400e;
+    line-height: 1.4;
+}
+
+/* Animated Counter Base */
+.animated-counter {
+    transition: none;
+}
+
+/* Chart CAGR Badge */
+.cagr-badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    background: rgba(233, 99, 55, 0.1);
+    color: var(--primary-color);
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+}
+
+/* Gauge Chart Container */
+.gauge-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.gauge-item {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.gauge-container {
+    position: relative;
+    height: 150px;
+    width: 100%;
+}
+
+.gauge-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+}
+
+/* Chart Source with CAGR */
+.chart-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.chart-footer .chart-source {
+    margin-top: 0;
+}
+
+/* Factor Cascade Visualization */
+.cascade-viz {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+}
+
+.cascade-step {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.cascade-step .step-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.cascade-step .step-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.cascade-arrow {
+    font-size: 1.25rem;
+    color: var(--text-tertiary);
+    flex-shrink: 0;
+}
+
+.cascade-formula {
+    font-size: 0.65rem;
+    color: var(--text-tertiary);
+    text-align: center;
+}
+
+/* Print Mode */
+@media print {
+    .header, .footer, .tab-nav-container, .hamburger-btn { display: none !important; }
+    body { background: white; }
+    .main-content { padding: 0; }
+    .content-wrapper { box-shadow: none; border: none; }
+    .metric-card, .pillar-card, .cluster-card { border: 1px solid #ccc; break-inside: avoid; }
+    .chart-container { break-inside: avoid; }
+    .data-table { font-size: 0.8rem; }
+}

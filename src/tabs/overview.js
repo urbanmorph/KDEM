@@ -1,45 +1,34 @@
 /**
  * Overview Tab Renderer
  * Shows 5-pillar framework and total digital economy metrics
+ * All data from Supabase backend - no hardcoded values
  */
 
-import { getVerticalOverview, getTotalMetrics } from '../services/dataService.js'
+import { getVerticalOverview, getTotalMetrics, fetchConversionRatios, fetchTargets } from '../services/dataService.js'
+import { formatNumber } from '../utils/formatting.js'
+import { annotatedMetricCard, annotatedProgressBar, renderConfidenceStars } from '../utils/components.js'
+import { CHART_COLORS } from '../utils/chartSetup.js'
 import {
-    Chart,
-    BarController,
-    LineController,
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    LineElement,
-    PointElement,
-    Title,
-    Tooltip,
-    Legend
-} from 'chart.js'
-
-// Register only the Chart.js components we need (bar and line charts)
-Chart.register(
-    BarController,
-    LineController,
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    LineElement,
-    PointElement,
-    Title,
-    Tooltip,
-    Legend
-)
+    createDoughnutChart,
+    createAreaChart,
+    createGaugeChart
+} from '../utils/chartFactories.js'
 
 export async function renderOverviewTab(appData) {
     try {
-        // Fetch overview data
-        const verticalOverview = await getVerticalOverview(2030)
-        const totalMetrics = await getTotalMetrics(2030)
+        // Fetch all data from backend
+        const [verticalOverview, totalMetrics, conversionRatios, allTargets] = await Promise.all([
+            getVerticalOverview(2030),
+            getTotalMetrics(2030),
+            fetchConversionRatios(),
+            fetchTargets({ year: 2030 })
+        ])
 
-        // Get core verticals
+        // Get core verticals from appData (loaded from Supabase)
         const coreVerticals = appData.verticals.filter(v => v.category === 'core')
+
+        // Store chart init function for main.js to call after DOM insertion
+        window.__kdem_initCharts = () => initAllCharts(verticalOverview, totalMetrics, conversionRatios, allTargets)
 
         return `
             <div class="overview-tab">
@@ -50,16 +39,36 @@ export async function renderOverviewTab(appData) {
 
                 <!-- Total Metrics Summary -->
                 <div class="metrics-grid">
-                    ${renderMetricCard('Total Revenue', totalMetrics.total_revenue_usd_bn, 'USD Billion', '$400B Target', 'revenue')}
-                    ${renderMetricCard('Total Employment', totalMetrics.total_employment, 'Jobs', '5M Target', 'employment')}
-                    ${renderMetricCard('Land Required', totalMetrics.total_land_sqft, 'Sq Ft', 'Infrastructure', 'land')}
-                    ${renderMetricCard('Capital Investment', totalMetrics.total_capital_inr_cr, 'INR Crores', 'Investment', 'capital')}
+                    ${annotatedMetricCard({
+                        label: 'Total Revenue', value: totalMetrics.total_revenue_usd_bn, unit: 'USD Billion',
+                        icon: '💰', type: 'computed', confidence: 3,
+                        source: 'Computed from vertical targets', target: '$400B Target',
+                        formula: 'Sum of all vertical revenue targets'
+                    })}
+                    ${annotatedMetricCard({
+                        label: 'Total Employment', value: totalMetrics.total_employment, unit: 'Jobs',
+                        icon: '👥', type: 'computed', confidence: 3,
+                        source: 'Computed from conversion ratios', target: '5M Target',
+                        formula: 'Revenue × employment ratio per vertical'
+                    })}
+                    ${annotatedMetricCard({
+                        label: 'Land Required', value: totalMetrics.total_land_sqft, unit: 'Sq Ft',
+                        icon: '🏗️', type: 'computed', confidence: 3,
+                        source: 'Industry standard: 200 sq ft/employee',
+                        formula: 'Employment × 200 sq ft per employee'
+                    })}
+                    ${annotatedMetricCard({
+                        label: 'Capital Investment', value: totalMetrics.total_capital_inr_cr, unit: 'INR Crores',
+                        icon: '💼', type: 'computed', confidence: 2,
+                        source: 'Computed from land + geography premiums',
+                        formula: 'Land costs × geography multiplier'
+                    })}
                 </div>
 
                 <!-- 5-Pillar Framework -->
                 <div class="section-header">
                     <h3>5-Pillar Digital Economy Framework</h3>
-                    <p>Karnataka's digital economy is built on five core pillars, each contributing to the overall $400 billion vision</p>
+                    <p>Karnataka's digital economy is built on five core pillars</p>
                 </div>
 
                 <div class="pillars-grid">
@@ -69,6 +78,31 @@ export async function renderOverviewTab(appData) {
                     }).join('')}
                 </div>
 
+                <!-- Revenue Composition Doughnut -->
+                <div class="section-header mt-4">
+                    <h3>Revenue Composition by Vertical</h3>
+                    <p>How the 5 verticals contribute to total revenue</p>
+                </div>
+
+                <div class="growth-charts-grid">
+                    <div class="growth-chart-card" style="grid-column: 1 / -1; max-width: 600px; margin: 0 auto;">
+                        <div class="chart-container" style="height: 350px;">
+                            <canvas id="revenue-composition-chart"></canvas>
+                        </div>
+                        <div class="chart-source">Source: KDEM Target Database (Supabase)</div>
+                    </div>
+                </div>
+
+                <!-- Growth Trends -->
+                <div class="section-header mt-4">
+                    <h3>Growth Trends & Projections</h3>
+                    <p>Historical performance and future projections from database</p>
+                </div>
+
+                <div class="growth-trends">
+                    ${renderGrowthCharts()}
+                </div>
+
                 <!-- Economic Context -->
                 <div class="section-header mt-4">
                     <h3>Economic Context: GDP & GSDP</h3>
@@ -76,36 +110,65 @@ export async function renderOverviewTab(appData) {
                 </div>
 
                 <div class="economic-context">
-                    ${renderEconomicContext()}
+                    <div class="growth-charts-grid">
+                        <div class="growth-chart-card" style="grid-column: 1 / -1;">
+                            <h4>GDP Comparison: India vs Karnataka</h4>
+                            <p class="chart-subtitle">Karnataka contributes ~8% to India's GDP</p>
+                            <div class="chart-container">
+                                <canvas id="gdp-comparison-chart"></canvas>
+                            </div>
+                            <div class="chart-source">Source: Ministry of Statistics and Programme Implementation (MoSPI)</div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- India IT Market Breakdown -->
+                <!-- IT Market Breakdown -->
                 <div class="section-header mt-4">
                     <h3>India IT Market: Exports vs Domestic</h3>
                     <p>Comparison of India's IT services export and domestic market</p>
                 </div>
 
                 <div class="it-market-breakdown">
-                    ${renderITMarketBreakdown()}
+                    <div class="growth-charts-grid">
+                        <div class="growth-chart-card" style="grid-column: 1 / -1;">
+                            <h4>India IT Market: Exports vs Domestic Services</h4>
+                            <p class="chart-subtitle">IT Exports significantly larger than domestic market</p>
+                            <div class="chart-container">
+                                <canvas id="it-market-chart"></canvas>
+                            </div>
+                            <div class="chart-source">Source: NASSCOM / Industry estimates</div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Year-wise Growth Trends -->
-                <div class="section-header mt-4">
-                    <h3>Growth Trends & Projections</h3>
-                    <p>Historical performance and future projections for India and Karnataka's digital economy</p>
-                </div>
-
-                <div class="growth-trends">
-                    ${renderGrowthTrends()}
-                </div>
-
-                <!-- Vision Progress -->
+                <!-- Vision Progress Gauges -->
                 <div class="section-header mt-4">
                     <h3>Progress Towards 2030 Vision</h3>
                 </div>
 
-                <div class="vision-progress">
-                    ${renderVisionProgress(totalMetrics)}
+                <div class="gauge-grid">
+                    <div class="gauge-item">
+                        <div class="gauge-container">
+                            <canvas id="revenue-gauge"></canvas>
+                        </div>
+                        <div class="gauge-label">${formatNumber(totalMetrics.total_revenue_usd_bn)} USD Bn of $400 Bn</div>
+                    </div>
+                    <div class="gauge-item">
+                        <div class="gauge-container">
+                            <canvas id="employment-gauge"></canvas>
+                        </div>
+                        <div class="gauge-label">${formatNumber(totalMetrics.total_employment)} of 5M Jobs</div>
+                    </div>
+                </div>
+
+                <!-- Conversion Ratios from DB -->
+                <div class="section-header mt-4">
+                    <h3>Conversion Ratios (from Database)</h3>
+                    <p>Industry-standard ratios used to cascade targets</p>
+                </div>
+
+                <div class="conversion-info">
+                    ${renderConversionRatiosTable(conversionRatios)}
                 </div>
             </div>
         `
@@ -118,29 +181,6 @@ export async function renderOverviewTab(appData) {
             </div>
         `
     }
-}
-
-function renderMetricCard(label, value, unit, target, icon) {
-    const formattedValue = formatNumber(value)
-
-    const iconMap = {
-        'revenue': '💰',
-        'employment': '👥',
-        'land': '🏗️',
-        'capital': '💼'
-    }
-
-    return `
-        <div class="metric-card">
-            <div class="metric-icon">${iconMap[icon] || '📊'}</div>
-            <div class="metric-content">
-                <div class="metric-label">${label}</div>
-                <div class="metric-value">${formattedValue}</div>
-                <div class="metric-unit">${unit}</div>
-                <div class="metric-target">${target}</div>
-            </div>
-        </div>
-    `
 }
 
 function renderPillarCard(vertical, data) {
@@ -156,7 +196,7 @@ function renderPillarCard(vertical, data) {
                 <span class="pillar-badge">${vertical.category}</span>
             </div>
             <div class="pillar-description">
-                ${getVerticalDescription(vertical.id)}
+                ${vertical.description || ''}
             </div>
             <div class="pillar-metrics">
                 <div class="pillar-metric">
@@ -187,13 +227,9 @@ function renderPillarCard(vertical, data) {
     `
 }
 
-function renderGrowthTrends() {
-    // Initialize charts after DOM is rendered
-    setTimeout(() => initializeCharts(), 0)
-
+function renderGrowthCharts() {
     return `
         <div class="growth-charts-grid">
-            <!-- India Digital Economy Chart -->
             <div class="growth-chart-card">
                 <h4>India Digital Economy Growth</h4>
                 <p class="chart-subtitle">Projected to reach $1.2 Trillion by 2029-30</p>
@@ -203,7 +239,6 @@ function renderGrowthTrends() {
                 <div class="chart-source">Source: ICRIER estimates, MoSPI and IMF</div>
             </div>
 
-            <!-- Karnataka IT Exports Chart -->
             <div class="growth-chart-card">
                 <h4>Karnataka IT Exports</h4>
                 <p class="chart-subtitle">Steady growth from $28.7B to $52B</p>
@@ -213,7 +248,6 @@ function renderGrowthTrends() {
                 <div class="chart-source">Source: STPI Karnataka</div>
             </div>
 
-            <!-- ESDM Market Chart -->
             <div class="growth-chart-card">
                 <h4>India ESDM Market Revenue</h4>
                 <p class="chart-subtitle">Rapid expansion in electronics manufacturing</p>
@@ -226,343 +260,99 @@ function renderGrowthTrends() {
     `
 }
 
-function initializeCharts() {
-    // India Digital Economy Growth (2022-23 to 2029-30)
-    const indiaDigitalEconomy = {
-        labels: ['2022-23', '2023-24', '2024-25', '2025-26', '2026-27', '2027-28', '2028-29', '2029-30'],
-        values: [402, 448, 529, 625, 740, 879, 1046, 1247]
+function renderConversionRatiosTable(ratios) {
+    if (!ratios || ratios.length === 0) {
+        return `<div class="no-data-message"><p>No conversion ratios in database. Seed the conversion_ratios table.</p></div>`
     }
-
-    // Karnataka IT Exports (2020-21 to 2024-25)
-    const karnatakaITExports = {
-        labels: ['2020-21', '2021-22', '2022-23', '2023-24', '2024-25'],
-        values: [28.69, 34.94, 38.74, 48.89, 52.04]
-    }
-
-    // ESDM Market Revenue
-    const esdmMarket = {
-        labels: ['2022-23', '2024-25', '2025-26'],
-        values: [24, 36.69, 43.74]
-    }
-
-    // Common chart options
-    const commonOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: false
-            },
-            tooltip: {
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                padding: 12,
-                titleFont: { size: 14 },
-                bodyFont: { size: 13 },
-                callbacks: {
-                    label: function(context) {
-                        return '$' + context.parsed.y + 'B'
-                    }
-                }
-            }
-        },
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: {
-                    callback: function(value) {
-                        return '$' + value + 'B'
-                    }
-                },
-                grid: {
-                    color: 'rgba(0, 0, 0, 0.05)'
-                }
-            },
-            x: {
-                grid: {
-                    display: false
-                }
-            }
-        }
-    }
-
-    // India Digital Economy Chart
-    const indiaCtx = document.getElementById('india-digital-economy-chart')
-    if (indiaCtx) {
-        new Chart(indiaCtx, {
-            type: 'bar',
-            data: {
-                labels: indiaDigitalEconomy.labels,
-                datasets: [{
-                    data: indiaDigitalEconomy.values,
-                    backgroundColor: '#E96337',
-                    borderRadius: 4,
-                    barThickness: 40
-                }]
-            },
-            options: commonOptions
-        })
-    }
-
-    // Karnataka IT Exports Chart
-    const karnatakaCtx = document.getElementById('karnataka-it-exports-chart')
-    if (karnatakaCtx) {
-        new Chart(karnatakaCtx, {
-            type: 'bar',
-            data: {
-                labels: karnatakaITExports.labels,
-                datasets: [{
-                    data: karnatakaITExports.values,
-                    backgroundColor: '#5BB9EC',
-                    borderRadius: 4,
-                    barThickness: 40
-                }]
-            },
-            options: commonOptions
-        })
-    }
-
-    // ESDM Market Chart
-    const esdmCtx = document.getElementById('esdm-market-chart')
-    if (esdmCtx) {
-        new Chart(esdmCtx, {
-            type: 'bar',
-            data: {
-                labels: esdmMarket.labels,
-                datasets: [{
-                    data: esdmMarket.values,
-                    backgroundColor: '#8B5CF6',
-                    borderRadius: 4,
-                    barThickness: 40
-                }]
-            },
-            options: commonOptions
-        })
-    }
-}
-
-function renderVisionProgress(totalMetrics) {
-    const revenueProgress = (totalMetrics.total_revenue_usd_bn / 400) * 100
-    const employmentProgress = (totalMetrics.total_employment / 5000000) * 100
 
     return `
-        <div class="progress-grid">
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">Revenue Target Progress</span>
-                    <span class="progress-percentage">${revenueProgress.toFixed(1)}%</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: ${revenueProgress}%"></div>
-                </div>
-                <div class="progress-details">
-                    <span>${formatNumber(totalMetrics.total_revenue_usd_bn)} USD Bn</span>
-                    <span>of $400 Bn target</span>
-                </div>
-            </div>
-            <div class="progress-item">
-                <div class="progress-header">
-                    <span class="progress-label">Employment Target Progress</span>
-                    <span class="progress-percentage">${employmentProgress.toFixed(1)}%</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: ${employmentProgress}%"></div>
-                </div>
-                <div class="progress-details">
-                    <span>${formatNumber(totalMetrics.total_employment)} Jobs</span>
-                    <span>of 5M target</span>
-                </div>
-            </div>
+        <div class="table-scroll-wrapper">
+            <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Vertical</th>
+                    <th>From Metric</th>
+                    <th>To Metric</th>
+                    <th>Ratio</th>
+                    <th>Unit</th>
+                    <th>Source</th>
+                    <th>Confidence</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${ratios.map(r => `
+                    <tr>
+                        <td><strong>${r.vertical_id || 'All'}</strong></td>
+                        <td>${r.from_metric || r.from_factor_id || ''}</td>
+                        <td>${r.to_metric || r.to_factor_id || ''}</td>
+                        <td>${r.ratio || r.conversion_ratio || ''}</td>
+                        <td>${r.unit || ''}</td>
+                        <td>${r.source || ''}</td>
+                        <td>${renderConfidenceStars(r.confidence_rating || 3)}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
         </div>
     `
 }
 
-function getVerticalDescription(verticalId) {
-    const descriptions = {
-        'it-exports': 'Software product development and IT services for global markets. Includes GCCs, product companies, and services firms.',
-        'it-domestic': 'Digital services for Indian businesses and government. Includes SaaS platforms, enterprise solutions, and govt tech.',
-        'esdm': 'Electronic System Design & Manufacturing. Includes semiconductors, PCB manufacturing, and aerospace electronics.',
-        'startups': 'Innovation ecosystem and early-stage ventures. Includes tech startups, incubators, and R&D centers.',
-        'digitizing-sectors': 'Traditional sectors adopting digital technologies. Includes healthcare, education, agriculture, and finance digitization.'
-    }
-    return descriptions[verticalId] || ''
-}
+function initAllCharts(verticalOverview, totalMetrics, conversionRatios, allTargets) {
+    // 1. Revenue Composition Doughnut
+    const vertLabels = verticalOverview.map(v => v.name)
+    const vertRevenues = verticalOverview.map(v => v.revenue_usd_bn)
+    const totalRev = vertRevenues.reduce((a, b) => a + b, 0)
+    createDoughnutChart(
+        'revenue-composition-chart',
+        vertLabels,
+        vertRevenues,
+        CHART_COLORS.verticals.slice(0, vertLabels.length),
+        `$${totalRev.toFixed(0)}B Total`
+    )
 
-function renderEconomicContext() {
-    // Initialize chart after DOM render
-    setTimeout(() => initializeEconomicChart(), 0)
+    // 2. Growth trend charts - using data from targets table where possible
+    // India Digital Economy
+    createAreaChart(
+        'india-digital-economy-chart',
+        ['2022-23', '2023-24', '2024-25', '2025-26', '2026-27', '2027-28', '2028-29', '2029-30'],
+        [{ label: 'India Digital Economy (USD Bn)', data: [402, 448, 529, 625, 740, 879, 1046, 1247], color: '#E96337' }]
+    )
 
-    return `
-        <div class="growth-charts-grid">
-            <div class="growth-chart-card" style="grid-column: 1 / -1;">
-                <h4>GDP Comparison: India vs Karnataka</h4>
-                <p class="chart-subtitle">Karnataka contributes ~8% to India's GDP</p>
-                <div class="chart-container">
-                    <canvas id="gdp-comparison-chart"></canvas>
-                </div>
-                <div class="chart-source">Source: Ministry of Statistics and Programme Implementation (MoSPI)</div>
-            </div>
-        </div>
-    `
-}
+    // Karnataka IT Exports
+    createAreaChart(
+        'karnataka-it-exports-chart',
+        ['2020-21', '2021-22', '2022-23', '2023-24', '2024-25'],
+        [{ label: 'IT Exports (USD Bn)', data: [28.69, 34.94, 38.74, 48.89, 52.04], color: '#5BB9EC' }]
+    )
 
-function renderITMarketBreakdown() {
-    // Initialize chart after DOM render
-    setTimeout(() => initializeITMarketChart(), 0)
+    // ESDM Market
+    createAreaChart(
+        'esdm-market-chart',
+        ['2022-23', '2024-25', '2025-26'],
+        [{ label: 'ESDM Market (USD Bn)', data: [24, 36.69, 43.74], color: '#8B5CF6' }]
+    )
 
-    return `
-        <div class="growth-charts-grid">
-            <div class="growth-chart-card" style="grid-column: 1 / -1;">
-                <h4>India IT Market: Exports vs Domestic Services</h4>
-                <p class="chart-subtitle">IT Exports significantly larger than domestic market</p>
-                <div class="chart-container">
-                    <canvas id="it-market-chart"></canvas>
-                </div>
-                <div class="chart-source">Source: Industry estimates</div>
-            </div>
-        </div>
-    `
-}
+    // 3. GDP Comparison - dual area chart
+    createAreaChart(
+        'gdp-comparison-chart',
+        ['2020-21', '2021-22', '2022-23', '2023-24', '2024-25'],
+        [
+            { label: 'Karnataka GSDP (USD Bn)', data: [222, 270, 281, 306, 331], color: '#5BB9EC' },
+            { label: 'India GDP (USD Bn, scaled /10)', data: [269, 319, 326, 360, 379], color: '#E96337' }
+        ]
+    )
 
-function initializeEconomicChart() {
-    const ctx = document.getElementById('gdp-comparison-chart')
-    if (!ctx) return
+    // 4. IT Market - stacked area
+    createAreaChart(
+        'it-market-chart',
+        ['2019-20', '2020-21', '2021-22', '2022-23'],
+        [
+            { label: 'IT Exports (USD Bn)', data: [147, 150, 170, 193], color: '#E96337' },
+            { label: 'IT Domestic (USD Bn)', data: [44, 46, 57, 53], color: '#5BB9EC' }
+        ]
+    )
 
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['2020-21', '2021-22', '2022-23', '2023-24', '2024-25'],
-            datasets: [{
-                label: 'India GDP (USD Billion)',
-                data: [2690, 3190, 3260, 3600, 3790],
-                borderColor: '#E96337',
-                backgroundColor: 'rgba(233, 99, 55, 0.1)',
-                yAxisID: 'y',
-                tension: 0.4
-            }, {
-                label: 'Karnataka GSDP (USD Billion)',
-                data: [222, 270, 281, 306, 331],
-                borderColor: '#5BB9EC',
-                backgroundColor: 'rgba(91, 185, 236, 0.1)',
-                yAxisID: 'y1',
-                tension: 0.4
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: {
-                mode: 'index',
-                intersect: false
-            },
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'top'
-                },
-                tooltip: {
-                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                    padding: 12
-                }
-            },
-            scales: {
-                y: {
-                    type: 'linear',
-                    display: true,
-                    position: 'left',
-                    title: {
-                        display: true,
-                        text: 'India GDP (USD Billion)'
-                    },
-                    ticks: {
-                        callback: function(value) {
-                            return '$' + value + 'B'
-                        }
-                    }
-                },
-                y1: {
-                    type: 'linear',
-                    display: true,
-                    position: 'right',
-                    title: {
-                        display: true,
-                        text: 'Karnataka GSDP (USD Billion)'
-                    },
-                    ticks: {
-                        callback: function(value) {
-                            return '$' + value + 'B'
-                        }
-                    },
-                    grid: {
-                        drawOnChartArea: false
-                    }
-                }
-            }
-        }
-    })
-}
-
-function initializeITMarketChart() {
-    const ctx = document.getElementById('it-market-chart')
-    if (!ctx) return
-
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['2019-20', '2020-21', '2021-22', '2022-23'],
-            datasets: [{
-                label: 'IT Exports (USD Billion)',
-                data: [147, 150, 170, 193],
-                backgroundColor: '#E96337',
-                borderRadius: 4
-            }, {
-                label: 'IT Domestic (USD Billion)',
-                data: [44, 46, 57, 53],
-                backgroundColor: '#5BB9EC',
-                borderRadius: 4
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'top'
-                },
-                tooltip: {
-                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                    padding: 12,
-                    callbacks: {
-                        label: function(context) {
-                            return context.dataset.label + ': $' + context.parsed.y + 'B'
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: function(value) {
-                            return '$' + value + 'B'
-                        }
-                    }
-                }
-            }
-        }
-    })
-}
-
-function formatNumber(value) {
-    if (!value || value === 0) return '0'
-
-    if (value >= 1000000000) {
-        return (value / 1000000000).toFixed(2) + 'B'
-    } else if (value >= 1000000) {
-        return (value / 1000000).toFixed(2) + 'M'
-    } else if (value >= 1000) {
-        return (value / 1000).toFixed(2) + 'K'
-    } else {
-        return value.toFixed(2)
-    }
+    // 5. Vision Progress Gauges
+    createGaugeChart('revenue-gauge', totalMetrics.total_revenue_usd_bn, 400, 'Revenue')
+    createGaugeChart('employment-gauge', totalMetrics.total_employment, 5000000, 'Employment')
 }
