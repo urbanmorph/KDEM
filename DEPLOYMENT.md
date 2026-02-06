@@ -296,6 +296,29 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
 ```
 
+## Database Status
+
+### Current State (Feb 2026)
+- **Total Records**: 211 targets (after cleanup)
+- **Time Series**: 2021-2030 (8 years)
+- **Geographies**: 13 locations (city-level only)
+- **Verticals**: 5 core verticals fully populated
+- **Data Quality**: Verified and corrected
+
+### Recent Fixes Applied (Migrations 008-009)
+1. **Migration 008**: Added capital data for Karnataka and Bengaluru
+2. **Migration 009**: Critical data corrections
+   - Fixed ESDM employment typo (10.5M → 1.05M)
+   - Removed geographic double-counting
+   - Total employment corrected: 18.22M → 8.87M
+
+### Verification
+After deploying, verify:
+- Total employment (2030): ~8.87M jobs
+- ESDM percentage: ~11.5% (not 58%)
+- Capital cards show data (not zero)
+- Overview progress bars: ~120% revenue, ~364% employment
+
 ## Security Best Practices
 
 1. **Never commit `.env` files** - Already in `.gitignore`
