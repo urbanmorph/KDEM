@@ -215,6 +215,138 @@ export function createAreaChart(canvasId, labels, datasets) {
 }
 
 /**
+ * Create an annotated area chart with target lines, today markers, and phase boxes
+ * Enhanced version of createAreaChart with chartjs-plugin-annotation
+ * @param {string} canvasId - Canvas element ID
+ * @param {Array} labels - X-axis labels
+ * @param {Array} datasets - [{label, data, color, dashed}]
+ * @param {object} annotations - {targetLine, todayLine, phases}
+ */
+export function createAnnotatedAreaChart(canvasId, labels, datasets, annotations = {}) {
+    const canvas = document.getElementById(canvasId)
+    if (!canvas) return null
+    destroyChart(canvasId)
+
+    const responsive = getResponsiveOptions()
+    const chartCtx = canvas.getContext('2d')
+
+    const annotationConfig = {}
+
+    // Target line (horizontal)
+    if (annotations.targetLine) {
+        annotationConfig.targetLine = {
+            type: 'line',
+            yMin: annotations.targetLine.value,
+            yMax: annotations.targetLine.value,
+            borderColor: annotations.targetLine.color || '#ef4444',
+            borderWidth: 2,
+            borderDash: [6, 4],
+            label: {
+                display: true,
+                content: annotations.targetLine.label || `Target: $${annotations.targetLine.value}B`,
+                position: 'end',
+                backgroundColor: annotations.targetLine.color || '#ef4444',
+                color: '#fff',
+                font: { size: 11, weight: '600' },
+                padding: { x: 6, y: 3 },
+                borderRadius: 4
+            }
+        }
+    }
+
+    // Today line (vertical)
+    if (annotations.todayLine) {
+        const todayIndex = annotations.todayLine.index
+        annotationConfig.todayLine = {
+            type: 'line',
+            xMin: todayIndex,
+            xMax: todayIndex,
+            borderColor: '#6b7280',
+            borderWidth: 1.5,
+            borderDash: [4, 3],
+            label: {
+                display: true,
+                content: annotations.todayLine.label || 'Today',
+                position: 'start',
+                backgroundColor: '#6b7280',
+                color: '#fff',
+                font: { size: 10, weight: '600' },
+                padding: { x: 5, y: 2 },
+                borderRadius: 3
+            }
+        }
+    }
+
+    // Phase boxes
+    if (annotations.phases) {
+        annotations.phases.forEach((phase, i) => {
+            annotationConfig[`phase${i}`] = {
+                type: 'box',
+                xMin: phase.xMin,
+                xMax: phase.xMax,
+                backgroundColor: phase.color || 'rgba(233, 99, 55, 0.05)',
+                borderWidth: 0,
+                label: {
+                    display: true,
+                    content: phase.label,
+                    position: { x: 'center', y: 'start' },
+                    color: phase.labelColor || '#5f6368',
+                    font: { size: 10, weight: '500' },
+                    padding: 4
+                }
+            }
+        })
+    }
+
+    return new Chart(canvas, {
+        type: 'line',
+        data: {
+            labels,
+            datasets: datasets.map((ds, i) => {
+                const color = ds.color || CHART_COLORS.verticals[i % CHART_COLORS.verticals.length]
+                return {
+                    label: ds.label,
+                    data: ds.data,
+                    borderColor: color,
+                    backgroundColor: createGradient(chartCtx, color),
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: ds.dashed ? 3 : 4,
+                    pointBackgroundColor: color,
+                    borderDash: ds.dashed ? [6, 4] : [],
+                    borderWidth: ds.dashed ? 2 : 2.5
+                }
+            })
+        },
+        options: {
+            ...responsive,
+            plugins: {
+                ...responsive.plugins,
+                annotation: {
+                    annotations: annotationConfig
+                },
+                datalabels: {
+                    display: window.innerWidth >= 768,
+                    color: '#202124',
+                    font: { size: 10, weight: '600' },
+                    anchor: 'end',
+                    align: 'top',
+                    formatter: (value) => value != null ? `$${value}B` : ''
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { callback: (v) => `$${v}B` },
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                },
+                x: { grid: { display: false } }
+            }
+        }
+    })
+}
+
+/**
  * Create a horizontal bar chart (for rankings/comparisons)
  */
 export function createHorizontalBarChart(canvasId, labels, data, colors) {

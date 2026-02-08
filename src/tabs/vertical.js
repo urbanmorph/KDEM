@@ -79,17 +79,6 @@ export async function renderVerticalTab(verticalId, appData) {
                     ${renderGeographicBreakdown(details.geographicBreakdown)}
                 </div>
 
-                <!-- Factor Cascade Visualization -->
-                ${details.totals.revenue_usd_bn > 0 ? `
-                    <div class="section-header mt-4">
-                        <h3>Factor Cascade</h3>
-                        <p>How revenue cascades to employment, land, and capital</p>
-                    </div>
-                    <div class="cascade-viz">
-                        ${renderFactorCascade(details.totals, conversionRatios)}
-                    </div>
-                ` : ''}
-
                 <!-- Sub-sectors (if applicable) -->
                 ${verticalId === 'esdm' ? renderESDMSubsectors(appData) : ''}
                 ${verticalId === 'digitizing-sectors' ? renderDigitizingSectors(appData) : ''}
@@ -226,47 +215,6 @@ function renderConversionTable(ratios) {
                 `).join('')}
             </tbody>
         </table>
-        </div>
-    `
-}
-
-function renderFactorCascade(totals, conversionRatios) {
-    const empRatio = conversionRatios.find(r =>
-        (r.from_metric === 'revenue' || r.from_factor_id === 'revenue') &&
-        (r.to_metric === 'employment' || r.to_factor_id === 'labour')
-    )
-    const landRatio = conversionRatios.find(r =>
-        (r.from_metric === 'employment' || r.from_factor_id === 'labour') &&
-        (r.to_metric === 'land' || r.to_factor_id === 'land')
-    )
-
-    return `
-        <div class="cascade-steps">
-            <div class="cascade-step">
-                <div class="cascade-value">${formatNumber(totals.revenue_usd_bn)} USD Bn</div>
-                <div class="cascade-label">Revenue</div>
-            </div>
-            <div class="cascade-arrow">
-                <span class="cascade-formula">${empRatio ? `× ${empRatio.ratio || empRatio.conversion_ratio} emp/$1M` : '→'}</span>
-            </div>
-            <div class="cascade-step">
-                <div class="cascade-value">${formatNumber(totals.employment)}</div>
-                <div class="cascade-label">Employment</div>
-            </div>
-            <div class="cascade-arrow">
-                <span class="cascade-formula">${landRatio ? `× ${landRatio.ratio || landRatio.conversion_ratio} sq ft/emp` : '→'}</span>
-            </div>
-            <div class="cascade-step">
-                <div class="cascade-value">${formatNumber(totals.land_sqft)} sq ft</div>
-                <div class="cascade-label">Land</div>
-            </div>
-            <div class="cascade-arrow">
-                <span class="cascade-formula">× geo premium</span>
-            </div>
-            <div class="cascade-step">
-                <div class="cascade-value">${formatNumber(totals.capital_inr_cr)} Cr</div>
-                <div class="cascade-label">Capital</div>
-            </div>
         </div>
     `
 }

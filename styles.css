@@ -2993,6 +2993,64 @@ body {
     margin-top: 0.5rem;
 }
 
+/* ECharts Gauge Grid */
+.gauge-grid-echarts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.gauge-item-echarts {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.echart-container {
+    width: 100%;
+}
+
+/* Pillar Card Progress Bar */
+.pillar-progress {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    margin-top: 0.5rem;
+}
+
+.progress-bar-mini {
+    flex: 1;
+    height: 8px;
+    background: var(--bg-tertiary);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill-mini {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    border-radius: 4px;
+    transition: width 1.2s ease-out;
+}
+
+.progress-text-mini {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.pillar-source {
+    font-size: 0.7rem;
+    color: var(--text-tertiary);
+    display: block;
+    margin: 0.25rem 0;
+}
+
 /* Chart Source with CAGR */
 .chart-footer {
     display: flex;

@@ -24,6 +24,7 @@ import {
 } from 'chart.js'
 
 import ChartDataLabels from 'chartjs-plugin-datalabels'
+import annotationPlugin from 'chartjs-plugin-annotation'
 
 // Register all components
 Chart.register(
@@ -43,7 +44,8 @@ Chart.register(
     Tooltip,
     Legend,
     Filler,
-    ChartDataLabels
+    ChartDataLabels,
+    annotationPlugin
 )
 
 // Set global defaults

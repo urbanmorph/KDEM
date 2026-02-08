@@ -298,6 +298,11 @@ async function loadTab(tabId) {
         // Update content
         contentContainer.innerHTML = content
 
+        // Show content BEFORE chart init — ECharts needs visible containers
+        hideLoading()
+        // Force browser layout reflow so containers have dimensions
+        void contentContainer.offsetHeight
+
         // Initialize animated counters
         initAnimatedCounters(contentContainer)
 
@@ -309,9 +314,6 @@ async function loadTab(tabId) {
 
         // Setup event listeners for view details links (in overview tab)
         setupViewDetailsLinks()
-
-        // Hide loading, show content
-        hideLoading()
 
         // Update current tab
         currentTab = tabId

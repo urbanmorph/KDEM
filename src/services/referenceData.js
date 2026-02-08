@@ -380,6 +380,221 @@ export function getAllSources() {
     }
 }
 
+// ============================================================
+// KARNATAKA BASELINE & ECONOMIC CONTEXT DATA
+// Source: MoSPI, RBI, STPI, NASSCOM, ICRIER, MEITY (various confidence levels)
+// ============================================================
+
+export function getKarnatakaBaseline() {
+    return {
+        // Current state (FY 2024-25 estimates)
+        currentGSDP_USD_Bn: 331,
+        currentITExports_USD_Bn: 52,
+        currentITDomestic_USD_Bn: 18,
+        currentESDM_USD_Bn: 8,
+        currentStartups_USD_Bn: 5,
+        currentDigitizing_USD_Bn: 3,
+        currentTotalDigital_USD_Bn: 86,
+        currentITEmployment: 2800000,
+        // 2030 Targets
+        targetRevenue_USD_Bn: 400,
+        targetEmployment: 5000000,
+        // National context
+        indiaGDP_FY25_USD_Tn: 3.9,
+        karnatakaShareOfGDP_Pct: 8.5,
+        karnatakaITShareOfIndia_Pct: 42,
+        source: 'STPI Karnataka, NASSCOM, MoSPI, RBI Handbook 2025',
+        confidence: 3
+    }
+}
+
+export function getVerticalBaselines() {
+    return [
+        {
+            id: 'it-exports', name: 'IT Exports',
+            current: 52, target: 229, unit: 'USD Bn',
+            currentEmployment: 1400000, targetEmployment: 2200000,
+            source: 'STPI Karnataka FY25', confidence: 5
+        },
+        {
+            id: 'it-domestic', name: 'IT Domestic',
+            current: 18, target: 48, unit: 'USD Bn',
+            currentEmployment: 600000, targetEmployment: 900000,
+            source: 'NASSCOM / Industry estimates', confidence: 3
+        },
+        {
+            id: 'esdm', name: 'ESDM',
+            current: 8, target: 105, unit: 'USD Bn',
+            currentEmployment: 300000, targetEmployment: 800000,
+            source: 'MEITY, IBEF, ICEA', confidence: 3
+        },
+        {
+            id: 'startups', name: 'Startups',
+            current: 5, target: 10, unit: 'USD Bn',
+            currentEmployment: 200000, targetEmployment: 500000,
+            source: 'Bengaluru Innovation Report 2025', confidence: 4
+        },
+        {
+            id: 'digitizing-sectors', name: 'Newly Digitizing',
+            current: 3, target: 8, unit: 'USD Bn',
+            currentEmployment: 300000, targetEmployment: 600000,
+            source: 'KDEM estimates', confidence: 2
+        }
+    ]
+}
+
+export function getIndiaDigitalEconomyTimeline() {
+    return {
+        labels: ['2022-23', '2023-24', '2024-25', '2025-26', '2026-27', '2027-28', '2028-29', '2029-30'],
+        actual: [402, 448, 529, null, null, null, null, null],
+        projected: [null, null, 529, 625, 740, 879, 1046, 1247],
+        target: 1247,
+        todayIndex: 2,
+        source: 'ICRIER estimates, MoSPI, IMF',
+        confidence: 3
+    }
+}
+
+export function getKarnatakaITExportsTimeline() {
+    return {
+        labels: ['2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26', '2026-27', '2028-29', '2029-30'],
+        actual: [28.69, 34.94, 38.74, 48.89, 52.04, null, null, null, null],
+        projected: [null, null, null, null, 52.04, 75, 110, 170, 229],
+        target: 229,
+        todayIndex: 4,
+        source: 'STPI Karnataka',
+        confidence: 4
+    }
+}
+
+export function getGDPComparisonTimeline() {
+    return {
+        labels: ['2020-21', '2021-22', '2022-23', '2023-24', '2024-25'],
+        karnatakaGSDP: [222, 270, 281, 306, 331],
+        indiaGDP_scaled: [269, 319, 326, 360, 379],
+        source: 'MoSPI, RBI Handbook 2025',
+        confidence: 5
+    }
+}
+
+export function getRevenueWaterfall() {
+    return [
+        { name: 'IT Exports', value: 229, color: '#E96337' },
+        { name: 'IT Domestic', value: 48, color: '#E68634' },
+        { name: 'ESDM', value: 105, color: '#5BB9EC' },
+        { name: 'Startups', value: 10, color: '#8B5CF6' },
+        { name: 'Digitizing', value: 8, color: '#10B981' },
+        { name: 'Total Target', value: 0, isTotal: true }
+    ]
+}
+
+export function getRevenueSankeyData() {
+    return {
+        nodes: [
+            { name: '$400B Target', id: 'total', color: '#202124' },
+            { name: 'IT Exports ($229B)', id: 'it-exports' },
+            { name: 'ESDM ($105B)', id: 'esdm' },
+            { name: 'IT Domestic ($48B)', id: 'it-domestic' },
+            { name: 'Startups ($10B)', id: 'startups' },
+            { name: 'Digitizing ($8B)', id: 'digitizing-sectors' },
+            { name: 'Bengaluru', id: 'bengaluru', color: '#374151' },
+            { name: 'Mysuru', id: 'mysuru', color: '#6b7280' },
+            { name: 'Mangaluru', id: 'mangaluru', color: '#6b7280' },
+            { name: 'Hubballi-Dharwad', id: 'hubballi', color: '#6b7280' },
+            { name: 'Other Clusters', id: 'others', color: '#9ca3af' }
+        ],
+        links: [
+            // Total to verticals
+            { source: '$400B Target', target: 'IT Exports ($229B)', value: 229 },
+            { source: '$400B Target', target: 'ESDM ($105B)', value: 105 },
+            { source: '$400B Target', target: 'IT Domestic ($48B)', value: 48 },
+            { source: '$400B Target', target: 'Startups ($10B)', value: 10 },
+            { source: '$400B Target', target: 'Digitizing ($8B)', value: 8 },
+            // IT Exports to geographies
+            { source: 'IT Exports ($229B)', target: 'Bengaluru', value: 221 },
+            { source: 'IT Exports ($229B)', target: 'Mysuru', value: 3 },
+            { source: 'IT Exports ($229B)', target: 'Mangaluru', value: 2 },
+            { source: 'IT Exports ($229B)', target: 'Other Clusters', value: 3 },
+            // ESDM to geographies
+            { source: 'ESDM ($105B)', target: 'Bengaluru', value: 63 },
+            { source: 'ESDM ($105B)', target: 'Mysuru', value: 12 },
+            { source: 'ESDM ($105B)', target: 'Hubballi-Dharwad', value: 10 },
+            { source: 'ESDM ($105B)', target: 'Mangaluru', value: 8 },
+            { source: 'ESDM ($105B)', target: 'Other Clusters', value: 12 },
+            // IT Domestic
+            { source: 'IT Domestic ($48B)', target: 'Bengaluru', value: 40 },
+            { source: 'IT Domestic ($48B)', target: 'Other Clusters', value: 8 },
+            // Startups
+            { source: 'Startups ($10B)', target: 'Bengaluru', value: 8 },
+            { source: 'Startups ($10B)', target: 'Other Clusters', value: 2 },
+            // Digitizing
+            { source: 'Digitizing ($8B)', target: 'Bengaluru', value: 4 },
+            { source: 'Digitizing ($8B)', target: 'Other Clusters', value: 4 }
+        ],
+        source: 'KDEM Target Database + Apportionment Rules',
+        confidence: 3
+    }
+}
+
+export function getRevenueTreemapData() {
+    return [
+        {
+            name: 'IT Exports',
+            value: 229,
+            color: '#E96337',
+            children: [
+                { name: 'IT Services', value: 130 },
+                { name: 'BPM', value: 45 },
+                { name: 'GCCs', value: 34 },
+                { name: 'ER&D', value: 20 }
+            ]
+        },
+        {
+            name: 'ESDM',
+            value: 105,
+            color: '#5BB9EC',
+            children: [
+                { name: 'Semiconductor Design', value: 42 },
+                { name: 'Consumer Electronics', value: 25 },
+                { name: 'Industrial Electronics', value: 20 },
+                { name: 'Components', value: 18 }
+            ]
+        },
+        {
+            name: 'IT Domestic',
+            value: 48,
+            color: '#E68634',
+            children: [
+                { name: 'Enterprise IT', value: 22 },
+                { name: 'Government IT', value: 14 },
+                { name: 'Digital Services', value: 12 }
+            ]
+        },
+        {
+            name: 'Startups',
+            value: 10,
+            color: '#8B5CF6',
+            children: [
+                { name: 'SaaS', value: 4 },
+                { name: 'DeepTech', value: 3 },
+                { name: 'Fintech', value: 2 },
+                { name: 'Other', value: 1 }
+            ]
+        },
+        {
+            name: 'Newly Digitizing',
+            value: 8,
+            color: '#10B981',
+            children: [
+                { name: 'Agritech', value: 3 },
+                { name: 'Healthtech', value: 2 },
+                { name: 'Edtech', value: 2 },
+                { name: 'Cleantech', value: 1 }
+            ]
+        }
+    ]
+}
+
 export function getDataGaps() {
     return [
         { gap: 'Company-level verification', current: 'Self-reported', action: 'Registry system + EPFO linkage', priority: 'HIGH' },
