@@ -5,11 +5,11 @@
  */
 
 import { getVerticalDetails, fetchConversionRatios } from '../services/dataService.js'
-import { getDigitizingSubSectors } from '../services/referenceData.js'
+import { getDigitizingSubSectors, getVerticalTimeline } from '../services/referenceData.js'
 import { formatNumber } from '../utils/formatting.js'
 import { annotatedMetricCard, renderConfidenceStars } from '../utils/components.js'
 import { CHART_COLORS } from '../utils/chartSetup.js'
-import { createDoughnutChart } from '../utils/chartFactories.js'
+import { createAnnotatedAreaChart } from '../utils/chartFactories.js'
 import { createTreemapChart } from '../utils/echartsFactories.js'
 
 export async function renderVerticalTab(verticalId, appData) {
@@ -58,19 +58,20 @@ export async function renderVerticalTab(verticalId, appData) {
                     })}
                 </div>
 
+                <!-- Growth Trajectory -->
+                ${renderGrowthTrajectorySection(verticalId, vertical.name)}
+
                 <!-- Geographic Distribution Chart -->
                 <div class="section-header mt-4">
-                    <h3>Geographic Distribution</h3>
-                    <p>Breakdown of ${vertical.name} across Karnataka's clusters</p>
+                    <h3>Geographic Distribution (2030 Projection)</h3>
+                    <p>Projected breakdown of ${vertical.name} revenue across Karnataka's clusters by FY 2029-30</p>
                 </div>
 
                 ${details.geographicBreakdown.length > 0 ? `
                     <div class="growth-charts-grid">
                         <div class="growth-chart-card" style="grid-column: 1 / -1;">
-                            <h4>Revenue by Geography</h4>
-                            <div class="chart-container" style="height: ${Math.max(250, details.geographicBreakdown.length * 40)}px;">
-                                <canvas id="vertical-geo-chart"></canvas>
-                            </div>
+                            <h4>Revenue by Geography &mdash; FY 2029-30 Target</h4>
+                            <div id="vertical-geo-treemap" class="echart-container" style="height: 350px;"></div>
                             <div class="chart-source">Source: KDEM Target Database (Supabase)</div>
                         </div>
                     </div>
@@ -312,6 +313,43 @@ function renderDigitizingSectors() {
             </div>
         </div>
 
+        <!-- Category Summary Table -->
+        <div class="section-header mt-4">
+            <h3>Category Breakdown</h3>
+            <p>All ${sortedCategories.length} McKinsey categories with FY25 and FY30 projections</p>
+        </div>
+        <div class="table-scroll-wrapper">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>McKinsey Category</th>
+                        <th>Sub-sectors</th>
+                        <th>KA FY24-25</th>
+                        <th>KA FY29-30</th>
+                        <th>Growth</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${sortedCategories.map(cat => `
+                        <tr>
+                            <td><strong>${cat.name}</strong></td>
+                            <td>${cat.sectors.length}</td>
+                            <td>$${cat.totalFY25.toFixed(2)}B</td>
+                            <td>$${cat.totalFY30.toFixed(2)}B</td>
+                            <td>${(cat.totalFY30 / cat.totalFY25).toFixed(1)}x</td>
+                        </tr>
+                    `).join('')}
+                    <tr style="font-weight: 700; border-top: 2px solid var(--border-color);">
+                        <td>Total</td>
+                        <td>${data.subSectorCount}</td>
+                        <td>$${data.totalKaFY25}B</td>
+                        <td>$${data.totalKaFY30}B</td>
+                        <td>${growthMultiple}x</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
         <!-- Category-Grouped Sub-sector Cards -->
         ${sortedCategories.map(cat => renderDigitizingCategoryGroup(cat)).join('')}
     `
@@ -373,21 +411,62 @@ function renderDigitizingSectorCard(sector) {
     `
 }
 
-function initVerticalCharts(details, conversionRatios, verticalId) {
-    // Geographic Distribution Doughnut Chart
-    if (details.geographicBreakdown.length > 0) {
-        const geoLabels = details.geographicBreakdown.map(g => g.geography.name)
-        const geoRevenues = details.geographicBreakdown.map(g => g.revenue_usd_bn)
-        const totalRev = geoRevenues.reduce((a, b) => a + b, 0)
-        const geoColors = details.geographicBreakdown.map(g => {
-            const tier = g.geography.tier || ''
-            if (tier.includes('tier1')) return CHART_COLORS.tiers[0]
-            if (tier.includes('tier2')) return CHART_COLORS.tiers[1]
-            if (tier.includes('tier3')) return CHART_COLORS.tiers[2]
-            return CHART_COLORS.verticals[0]
-        })
+function renderGrowthTrajectorySection(verticalId, verticalName) {
+    const timeline = getVerticalTimeline(verticalId)
+    if (!timeline) return ''
 
-        createDoughnutChart('vertical-geo-chart', geoLabels, geoRevenues, geoColors, `$${totalRev.toFixed(0)}B`)
+    return `
+        <div class="section-header mt-4">
+            <h3>${verticalName} Growth Trajectory</h3>
+            <p>FY 2021-22 to FY 2029-30 (USD Billion)</p>
+        </div>
+        <div class="growth-charts-grid">
+            <div class="growth-chart-card" style="grid-column: 1 / -1;">
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="vertical-growth-chart"></canvas>
+                </div>
+                <div class="chart-source">
+                    Source: ${timeline.source} ${renderConfidenceStars(timeline.confidence)}
+                </div>
+            </div>
+        </div>
+    `
+}
+
+function initVerticalCharts(details, conversionRatios, verticalId) {
+    // Growth Trajectory Chart
+    const timeline = getVerticalTimeline(verticalId)
+    if (timeline) {
+        createAnnotatedAreaChart('vertical-growth-chart', timeline.labels, [
+            { label: 'Actual (USD Bn)', data: timeline.actual, color: '#5BB9EC' },
+            { label: 'Projected (USD Bn)', data: timeline.projected, color: '#5BB9EC', dashed: true }
+        ], {
+            targetLine: { value: timeline.target, label: `Target: $${timeline.target}B`, color: '#ef4444' },
+            todayLine: { index: timeline.todayIndex, label: 'FY 2024-25' }
+        })
+    }
+
+    // Geographic Distribution Treemap
+    if (details.geographicBreakdown.length > 0) {
+        const tierColors = {
+            tier1: CHART_COLORS.tiers[0],
+            tier2: CHART_COLORS.tiers[1],
+            tier3: CHART_COLORS.tiers[2]
+        }
+        const treemapData = details.geographicBreakdown.map(g => {
+            const tier = g.geography.tier || ''
+            const color = tierColors[tier] || CHART_COLORS.verticals[0]
+            const actual = parseFloat(g.revenue_usd_bn.toFixed(2))
+            return {
+                name: g.geography.name,
+                value: Math.log(1 + actual),
+                _actual: actual,
+                itemStyle: { color }
+            }
+        })
+        createTreemapChart('vertical-geo-treemap', treemapData, {
+            formatter: (params) => `${params.name}\n$${params.value}B`
+        })
     }
 
     // Digitizing sectors treemap

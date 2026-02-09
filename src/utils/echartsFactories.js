@@ -217,10 +217,10 @@ export function createTreemapChart(containerId, data, opts = {}) {
         ...getBaseOptions(),
         tooltip: {
             formatter: (params) => {
-                const value = params.value
+                const display = params.data._actual != null ? params.data._actual : params.value
                 const treePathInfo = params.treePathInfo || []
                 const path = treePathInfo.map(n => n.name).filter(Boolean).join(' > ')
-                return `${path}<br/><strong>$${value}B</strong>`
+                return `${path}<br/><strong>$${display}B</strong>`
             }
         },
         series: [{
@@ -243,7 +243,10 @@ export function createTreemapChart(containerId, data, opts = {}) {
             },
             label: {
                 show: true,
-                formatter: (params) => `${params.name}\n$${params.value}B`,
+                formatter: (params) => {
+                    const display = params.data._actual != null ? params.data._actual : params.value
+                    return `${params.name}\n$${display}B`
+                },
                 fontSize: 12,
                 fontWeight: '600',
                 color: '#fff',
@@ -254,7 +257,10 @@ export function createTreemapChart(containerId, data, opts = {}) {
             upperLabel: {
                 show: true,
                 height: 26,
-                formatter: (params) => `${params.name}  ($${params.value}B)`,
+                formatter: (params) => {
+                    const display = params.data._actual != null ? params.data._actual : params.value
+                    return `${params.name}  ($${display}B)`
+                },
                 color: '#fff',
                 fontWeight: '600',
                 fontSize: 12,

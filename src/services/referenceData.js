@@ -517,6 +517,39 @@ export function getVerticalBaselines() {
     ]
 }
 
+export function getVerticalTimeline(verticalId) {
+    const idToKey = {
+        'it-exports': 'IT Exports',
+        'it-domestic': 'IT Domestic',
+        'esdm': 'ESDM',
+        'startups': 'Startups',
+        'digitizing-sectors': 'Digitizing'
+    }
+    const key = idToKey[verticalId]
+    if (!key) return null
+
+    const timeline = getKarnatakaDigitalEconomyTimeline()
+    const series = timeline.verticalBreakdown[key]
+    if (!series) return null
+
+    const baseline = getVerticalBaselines().find(v => v.id === verticalId)
+    const todayIndex = timeline.todayIndex
+
+    // Split into actual (0..todayIndex) and projected (todayIndex..end)
+    const actual = series.map((v, i) => i <= todayIndex ? v : null)
+    const projected = series.map((v, i) => i >= todayIndex ? v : null)
+
+    return {
+        labels: timeline.labels,
+        actual,
+        projected,
+        target: baseline ? baseline.target : series[series.length - 1],
+        todayIndex,
+        source: baseline ? baseline.source : timeline.source,
+        confidence: baseline ? baseline.confidence : timeline.confidence
+    }
+}
+
 export function getIndiaDigitalEconomyTimeline() {
     return {
         labels: ['2022-23', '2023-24', '2024-25', '2025-26', '2026-27', '2027-28', '2028-29', '2029-30'],

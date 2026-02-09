@@ -6,7 +6,8 @@
  * Format large numbers into human-readable format (B/M/K)
  */
 export function formatNumber(value) {
-    if (!value || value === 0) return '0'
+    if (value == null || value === 0) return '0'
+    if (typeof value === 'string') return value
 
     if (value >= 1000000000) {
         return (value / 1000000000).toFixed(2) + 'B'
