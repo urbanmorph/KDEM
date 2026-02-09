@@ -5,10 +5,12 @@
  */
 
 import { getVerticalDetails, fetchConversionRatios } from '../services/dataService.js'
+import { getDigitizingSubSectors } from '../services/referenceData.js'
 import { formatNumber } from '../utils/formatting.js'
 import { annotatedMetricCard, renderConfidenceStars } from '../utils/components.js'
 import { CHART_COLORS } from '../utils/chartSetup.js'
 import { createDoughnutChart } from '../utils/chartFactories.js'
+import { createTreemapChart } from '../utils/echartsFactories.js'
 
 export async function renderVerticalTab(verticalId, appData) {
     try {
@@ -19,7 +21,7 @@ export async function renderVerticalTab(verticalId, appData) {
         const vertical = details.vertical
 
         // Store chart init function for main.js to call after DOM insertion
-        window.__kdem_initCharts = () => initVerticalCharts(details, conversionRatios)
+        window.__kdem_initCharts = () => initVerticalCharts(details, conversionRatios, verticalId)
 
         return `
             <div class="vertical-tab">
@@ -81,7 +83,7 @@ export async function renderVerticalTab(verticalId, appData) {
 
                 <!-- Sub-sectors (if applicable) -->
                 ${verticalId === 'esdm' ? renderESDMSubsectors(appData) : ''}
-                ${verticalId === 'digitizing-sectors' ? renderDigitizingSectors(appData) : ''}
+                ${verticalId === 'digitizing-sectors' ? renderDigitizingSectors() : ''}
 
                 <!-- Apportionment Rules -->
                 <div class="section-header mt-4">
@@ -238,26 +240,140 @@ function renderESDMSubsectors(appData) {
     `
 }
 
-function renderDigitizingSectors(appData) {
-    const digitizing = appData.verticals.filter(v => v.category === 'digitizing')
+function renderDigitizingSectors() {
+    const data = getDigitizingSubSectors()
+    const sectors = data.sectors
+
+    // Group by McKinsey category
+    const categories = {}
+    sectors.forEach(s => {
+        const cat = s.mcKinseyCategory
+        if (!categories[cat]) categories[cat] = []
+        categories[cat].push(s)
+    })
+
+    // Sort categories by total KA FY30 value (descending)
+    const sortedCategories = Object.entries(categories)
+        .map(([name, subs]) => ({
+            name,
+            sectors: subs.sort((a, b) => b.kaFY30 - a.kaFY30),
+            totalFY30: subs.reduce((sum, s) => sum + s.kaFY30, 0),
+            totalFY25: subs.reduce((sum, s) => sum + s.kaFY25, 0)
+        }))
+        .sort((a, b) => b.totalFY30 - a.totalFY30)
+
+    const growthMultiple = (data.totalKaFY30 / data.totalKaFY25).toFixed(1)
 
     return `
         <div class="section-header mt-4">
-            <h3>Newly Digitizing Sectors</h3>
-            <p>Traditional sectors undergoing digital transformation</p>
+            <h3>Newly Digitizing Sectors &mdash; 17 Sub-sector Breakdown</h3>
+            <p>Traditional sectors undergoing digital transformation (McKinsey framework)</p>
         </div>
-        <div class="subsectors-grid">
-            ${digitizing.map(sector => `
-                <div class="subsector-card">
-                    <h4>${sector.name}</h4>
-                    <p>${sector.description || ''}</p>
-                </div>
-            `).join('')}
+
+        <!-- Data Provenance Warning -->
+        <div class="data-quality-warning">
+            <strong>Data Quality Note (Confidence: ${renderConfidenceStars(2)})</strong>
+            <p>${data.methodologyNote}</p>
+        </div>
+
+        <!-- Summary Metrics -->
+        <div class="metrics-grid" style="margin-top: 1.5rem;">
+            ${annotatedMetricCard({
+                label: 'KA FY24-25 (Bottom-up)', value: data.totalKaFY25, unit: 'USD Billion',
+                icon: '📊', type: 'projected', confidence: 2,
+                source: 'KDEM Excel — sum of 17 sub-sector projections',
+                formula: 'Sum of per-sub-sector CAGR projections from FY21-22 base'
+            })}
+            ${annotatedMetricCard({
+                label: 'KA FY29-30 Target', value: data.totalKaFY30, unit: 'USD Billion',
+                icon: '🎯', type: 'target', confidence: 2,
+                source: 'KDEM Excel — 15% post-FY25 CAGR uniformly',
+                formula: 'FY25 sub-sector values × 15% CAGR for 5 years'
+            })}
+            ${annotatedMetricCard({
+                label: 'Growth Multiple', value: growthMultiple + 'x', unit: 'FY25 to FY30',
+                icon: '📈', type: 'computed', confidence: 2,
+                source: 'Computed from KDEM Excel projections'
+            })}
+            ${annotatedMetricCard({
+                label: 'Sub-sectors', value: data.subSectorCount, unit: 'McKinsey use cases',
+                icon: '🔢', type: 'actual', confidence: 3,
+                source: 'McKinsey "Digital India" (2019), Exhibit 17'
+            })}
+        </div>
+
+        <!-- Treemap Chart -->
+        <div class="growth-charts-grid" style="margin-top: 1.5rem;">
+            <div class="growth-chart-card" style="grid-column: 1 / -1;">
+                <h4>FY29-30 Target Breakdown by Category</h4>
+                <p class="chart-subtitle">$${data.totalKaFY30}B across ${data.subSectorCount} sub-sectors, grouped by McKinsey category</p>
+                <div id="digitizing-treemap" class="echart-container" style="height: 400px;"></div>
+                <div class="chart-source">Source: KDEM Excel + McKinsey "Digital India" (2019)</div>
+            </div>
+        </div>
+
+        <!-- Category-Grouped Sub-sector Cards -->
+        ${sortedCategories.map(cat => renderDigitizingCategoryGroup(cat)).join('')}
+    `
+}
+
+function renderDigitizingCategoryGroup(category) {
+    return `
+        <div class="digitizing-category-group">
+            <div class="digitizing-category-title">
+                <h4>${category.name}</h4>
+                <span class="category-total">KA FY30: $${category.totalFY30.toFixed(2)}B</span>
+            </div>
+            <div class="digitizing-sectors-grid">
+                ${category.sectors.map(s => renderDigitizingSectorCard(s)).join('')}
+            </div>
         </div>
     `
 }
 
-function initVerticalCharts(details, conversionRatios) {
+function renderDigitizingSectorCard(sector) {
+    const growthMultiple = (sector.kaFY30 / sector.kaFY25).toFixed(1)
+    const cagrNum = parseFloat(sector.cagrKaTill25)
+    const isExtremeCagr = cagrNum > 100
+
+    return `
+        <div class="digitizing-sector-card">
+            <h5>${sector.name}</h5>
+            <div class="sector-metrics-compact">
+                <div class="sector-metric-item">
+                    <span class="metric-key">India Base FY22</span>
+                    <span class="metric-val">$${sector.indiaBaseFY22}B</span>
+                </div>
+                <div class="sector-metric-item">
+                    <span class="metric-key">KA Share</span>
+                    <span class="metric-val">${sector.kaSharePct}%</span>
+                </div>
+                <div class="sector-metric-item">
+                    <span class="metric-key">KA FY25</span>
+                    <span class="metric-val">$${sector.kaFY25.toFixed(2)}B</span>
+                </div>
+                <div class="sector-metric-item">
+                    <span class="metric-key">KA FY30</span>
+                    <span class="metric-val highlight">$${sector.kaFY30.toFixed(2)}B</span>
+                </div>
+                <div class="sector-metric-item">
+                    <span class="metric-key">Growth</span>
+                    <span class="metric-val">${growthMultiple}x</span>
+                </div>
+                <div class="sector-metric-item">
+                    <span class="metric-key">Pre-FY25 CAGR</span>
+                    <span class="metric-val ${isExtremeCagr ? 'cagr-extreme' : ''}">${sector.cagrKaTill25}</span>
+                </div>
+            </div>
+            <div class="metric-footer">
+                ${renderConfidenceStars(sector.confidence)}
+                <span class="source-inline" title="${sector.source}">${sector.source}</span>
+            </div>
+        </div>
+    `
+}
+
+function initVerticalCharts(details, conversionRatios, verticalId) {
     // Geographic Distribution Doughnut Chart
     if (details.geographicBreakdown.length > 0) {
         const geoLabels = details.geographicBreakdown.map(g => g.geography.name)
@@ -273,4 +389,41 @@ function initVerticalCharts(details, conversionRatios) {
 
         createDoughnutChart('vertical-geo-chart', geoLabels, geoRevenues, geoColors, `$${totalRev.toFixed(0)}B`)
     }
+
+    // Digitizing sectors treemap
+    if (verticalId === 'digitizing-sectors') {
+        initDigitizingCharts()
+    }
+}
+
+function initDigitizingCharts() {
+    const data = getDigitizingSubSectors()
+    const sectors = data.sectors
+
+    // Group by McKinsey category for treemap
+    const categories = {}
+    sectors.forEach(s => {
+        const cat = s.mcKinseyCategory
+        if (!categories[cat]) categories[cat] = []
+        categories[cat].push(s)
+    })
+
+    const treemapData = Object.entries(categories).map(([name, subs]) => ({
+        name,
+        value: parseFloat(subs.reduce((sum, s) => sum + s.kaFY30, 0).toFixed(2)),
+        children: subs.map(s => ({
+            name: s.name.length > 30 ? s.name.substring(0, 28) + '...' : s.name,
+            value: s.kaFY30
+        }))
+    }))
+
+    createTreemapChart('digitizing-treemap', treemapData, {
+        title: '',
+        formatter: (params) => {
+            if (params.data.children) {
+                return `${params.name}\n$${params.value}B`
+            }
+            return `${params.name}\n$${params.value.toFixed(2)}B`
+        }
+    })
 }

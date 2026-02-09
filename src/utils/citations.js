@@ -7,10 +7,10 @@
  * Scale benchmarks for context
  */
 export const SCALE_BENCHMARKS = {
-    karnataka_gsdp: { value: 331, unit: 'USD Billion', year: '2024-25', source: 'MoSPI' },
-    india_gdp: { value: 3790, unit: 'USD Billion', year: '2024-25', source: 'MoSPI/IMF' },
-    india_it_revenue: { value: 254, unit: 'USD Billion', year: '2023-24', source: 'NASSCOM' },
-    karnataka_it_exports: { value: 52.04, unit: 'USD Billion', year: '2024-25', source: 'STPI Karnataka' }
+    karnataka_gsdp: { value: 345, unit: 'USD Billion', year: '2024-25', source: 'PRS India Budget Analysis 2025-26 (Rs 28.7L Cr @ Rs 83/$)' },
+    india_gdp: { value: 3900, unit: 'USD Billion', year: '2024-25', source: 'MoSPI' },
+    india_it_revenue: { value: 283, unit: 'USD Billion', year: '2024-25', source: 'NASSCOM Strategic Review 2025' },
+    karnataka_it_exports: { value: 85.12, unit: 'USD Billion', year: '2024-25', source: 'NASSCOM × 38% KA share' }
 }
 
 /**
@@ -40,7 +40,7 @@ export const CITATIONS = {
         value: 400, unit: 'USD Billion', source: 'KDEM Mission', confidence: 5,
         type: 'target', year: '2030',
         formula: 'Sum of 5 vertical targets',
-        note: 'Exceeds Karnataka GSDP ($331B) - aspirational stretch target'
+        note: 'Exceeds Karnataka GSDP ($345B) - aspirational stretch target'
     },
     'kdem_employment_target': {
         value: 5000000, unit: 'Jobs', source: 'KDEM Mission', confidence: 5,
@@ -87,8 +87,8 @@ export const CITATIONS = {
     },
 
     // Economic Context
-    'india_gdp_2024': { value: 3790, unit: 'USD Billion', source: 'MoSPI/IMF', confidence: 5, type: 'actual', year: '2024-25' },
-    'karnataka_gsdp_2024': { value: 331, unit: 'USD Billion', source: 'MoSPI', confidence: 5, type: 'actual', year: '2024-25' },
+    'india_gdp_2024': { value: 3900, unit: 'USD Billion', source: 'MoSPI', confidence: 5, type: 'actual', year: '2024-25' },
+    'karnataka_gsdp_2024': { value: 345, unit: 'USD Billion', source: 'PRS India Budget Analysis 2025-26 (Rs 28.7L Cr @ Rs 83/$)', confidence: 5, type: 'estimated', year: '2024-25' },
 
     // India Digital Economy
     'india_digital_economy_2023': { value: 402, unit: 'USD Billion', source: 'ICRIER/MoSPI', confidence: 4, type: 'actual', year: '2022-23' },

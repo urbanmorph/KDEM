@@ -5,6 +5,7 @@
 
 import { fetchVerticals, fetchGeographies, fetchFactors } from './services/dataService.js'
 import { initAnimatedCounters } from './utils/formatting.js'
+import { getKarnatakaBaseline } from './services/referenceData.js'
 
 // Tab renderers are now loaded dynamically on-demand to reduce initial bundle size
 // This improves initial page load performance by code splitting
@@ -38,6 +39,13 @@ async function initApp() {
 
         // Update last updated date
         document.getElementById('last-updated-date').textContent = appData.lastUpdated
+
+        // Update brand subtitle with dynamic baseline numbers
+        const baseline = getKarnatakaBaseline()
+        const brandSubtitle = document.getElementById('brand-subtitle')
+        if (brandSubtitle) {
+            brandSubtitle.textContent = `From $${baseline.currentTotalDigital_USD_Bn}B Today to $${baseline.targetRevenue_USD_Bn}B by 2030 — The Journey Ahead`
+        }
 
         // Setup event listeners
         setupEventListeners()
@@ -237,6 +245,12 @@ async function loadTab(tabId) {
                 break
             }
 
+            case 'digitizing-sectors': {
+                const { renderVerticalTab } = await import('./tabs/vertical.js')
+                content = await renderVerticalTab('digitizing-sectors', appData)
+                break
+            }
+
             case 'bengaluru': {
                 const { renderGeographyTab } = await import('./tabs/geography.js')
                 content = await renderGeographyTab('bengaluru', appData)
@@ -392,6 +406,12 @@ function setupViewDetailsLinks() {
             e.preventDefault()
             const verticalId = link.dataset.vertical
             if (verticalId) {
+                // Switch to the correct category before loading the tab
+                if (['it-exports', 'it-domestic', 'esdm', 'digitizing-sectors'].includes(verticalId)) {
+                    switchCategory('verticals')
+                } else if (verticalId === 'startups') {
+                    switchCategory('strategy')
+                }
                 loadTab(verticalId)
             }
         })

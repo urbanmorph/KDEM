@@ -7,7 +7,7 @@
 import { getVerticalOverview, getTotalMetrics, fetchConversionRatios, fetchTargets } from '../services/dataService.js'
 import {
     getKarnatakaBaseline, getVerticalBaselines, getIndiaDigitalEconomyTimeline,
-    getKarnatakaITExportsTimeline, getGDPComparisonTimeline,
+    getKarnatakaDigitalEconomyTimeline, getGDPComparisonTimeline,
     getRevenueWaterfall, getRevenueSankeyData, getRevenueTreemapData
 } from '../services/referenceData.js'
 import { formatNumber } from '../utils/formatting.js'
@@ -35,69 +35,39 @@ export async function renderOverviewTab(appData) {
             <div class="overview-tab">
                 <div class="tab-header">
                     <h2>Karnataka Digital Economy Overview</h2>
-                    <p class="tab-subtitle">From $86B Today to $400B by 2030 — The Journey Ahead</p>
-                </div>
-
-                <!-- SECTION 1: WHERE WE ARE TODAY -->
-                <div class="section-header">
-                    <h3>Where Karnataka Stands Today</h3>
-                    <p>Current digital economy baseline (FY 2024-25 estimates)</p>
                 </div>
 
                 <div class="metrics-grid">
                     ${annotatedMetricCard({
                         label: 'Current Digital Economy', value: baseline.currentTotalDigital_USD_Bn, unit: 'USD Billion',
                         icon: '📊', type: 'benchmark', confidence: 3,
-                        source: baseline.source, target: '$400B by 2030',
+                        source: baseline.source, target: `$${baseline.targetRevenue_USD_Bn}B by 2030`,
                         formula: 'Sum of IT Exports + IT Domestic + ESDM + Startups + Digitizing'
                     })}
                     ${annotatedMetricCard({
                         label: 'Karnataka GSDP', value: baseline.currentGSDP_USD_Bn, unit: 'USD Billion',
                         icon: '🏛️', type: 'benchmark', confidence: 5,
-                        source: 'MoSPI / RBI Handbook 2025',
-                        formula: 'Digital economy = 26% of GSDP today → target 120%+'
+                        source: 'PRS India Budget Analysis 2025-26 (Rs 28.7L Cr @ Rs 83/$)',
+                        formula: `Digital economy = ${Math.round(baseline.currentTotalDigital_USD_Bn / baseline.currentGSDP_USD_Bn * 100)}% of GSDP today`
                     })}
                     ${annotatedMetricCard({
-                        label: 'IT Employment', value: baseline.currentITEmployment, unit: 'Jobs',
+                        label: 'Digital Economy Employment', value: baseline.currentDigitalEmployment, unit: 'Jobs',
                         icon: '👥', type: 'benchmark', confidence: 4,
-                        source: 'NASSCOM / STPI Karnataka', target: '5M by 2030',
-                        formula: 'Current IT/ITES workforce in Karnataka'
+                        source: baseline.source, target: `${(baseline.targetEmployment / 1000000).toFixed(1)}M by 2030`,
+                        formula: 'Total digital economy workforce across all 5 verticals'
                     })}
                     ${annotatedMetricCard({
-                        label: 'Share of India IT', value: baseline.karnatakaITShareOfIndia_Pct, unit: '%',
-                        icon: '🎯', type: 'benchmark', confidence: 5,
-                        source: 'STPI Karnataka FY25',
-                        formula: 'Karnataka IT exports / India total IT exports'
+                        label: "Share of India's Digital Economy", value: baseline.karnatakaDigitalShareOfIndia_Pct, unit: '%',
+                        icon: '🎯', type: 'benchmark', confidence: 3,
+                        source: baseline.source,
+                        formula: 'Karnataka digital economy / India digital economy'
                     })}
                 </div>
 
-                <!-- SECTION 2: PROGRESS GAUGES — Today vs Target -->
+                <!-- SECTION 2: VERTICAL BASELINES — The 5 Pillars -->
                 <div class="section-header mt-4">
-                    <h3>Progress Towards 2030 Vision</h3>
-                    <p>How far we've come and how far we need to go</p>
-                </div>
-
-                <div class="gauge-grid-echarts">
-                    <div class="gauge-item-echarts">
-                        <div id="revenue-speedometer" class="echart-container" style="height: 260px;"></div>
-                        <div class="gauge-label">
-                            <strong>$${baseline.currentTotalDigital_USD_Bn}B</strong> of $400B Revenue Target
-                            <br/>${renderConfidenceStars(3)}
-                        </div>
-                    </div>
-                    <div class="gauge-item-echarts">
-                        <div id="employment-speedometer" class="echart-container" style="height: 260px;"></div>
-                        <div class="gauge-label">
-                            <strong>${formatNumber(baseline.currentITEmployment)}</strong> of 5M Employment Target
-                            <br/>${renderConfidenceStars(4)}
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SECTION 3: VERTICAL BASELINES — Current vs 2030 Target per pillar -->
-                <div class="section-header mt-4">
-                    <h3>The 5 Pillars: Current vs 2030 Target</h3>
-                    <p>Each vertical's journey from today to the $400B goal</p>
+                    <h3>Mission of KDEM: The 5 Pillars</h3>
+                    <p>Each vertical's journey from today to the $${baseline.targetRevenue_USD_Bn}B goal</p>
                 </div>
 
                 <div class="pillars-grid">
@@ -108,9 +78,32 @@ export async function renderOverviewTab(appData) {
                     }).join('')}
                 </div>
 
+                <!-- SECTION 3: PROGRESS GAUGES — Today vs Target -->
+                <div class="section-header mt-4">
+                    <h3>Progress Towards 2030 Vision</h3>
+                    <p>How far we've come and how far we need to go</p>
+                </div>
+
+                <div class="gauge-grid-echarts">
+                    <div class="gauge-item-echarts">
+                        <div id="revenue-speedometer" class="echart-container" style="height: 260px;"></div>
+                        <div class="gauge-label">
+                            <strong>$${baseline.currentTotalDigital_USD_Bn}B</strong> of $${baseline.targetRevenue_USD_Bn}B Revenue Target
+                            <br/>${renderConfidenceStars(3)}
+                        </div>
+                    </div>
+                    <div class="gauge-item-echarts">
+                        <div id="employment-speedometer" class="echart-container" style="height: 260px;"></div>
+                        <div class="gauge-label">
+                            <strong>${formatNumber(baseline.currentDigitalEmployment)}</strong> of ${(baseline.targetEmployment / 1000000).toFixed(1)}M Employment Target
+                            <br/>${renderConfidenceStars(4)}
+                        </div>
+                    </div>
+                </div>
+
                 <!-- SECTION 4: WATERFALL — How the 5 verticals add up to $400B -->
                 <div class="section-header mt-4">
-                    <h3>Building to $400B: Revenue by Vertical</h3>
+                    <h3>Building to $479B: Revenue by Vertical</h3>
                     <p>How the five pillars combine to reach the target</p>
                 </div>
 
@@ -124,7 +117,7 @@ export async function renderOverviewTab(appData) {
                 <!-- SECTION 5: TREEMAP — Hierarchical composition -->
                 <div class="section-header mt-4">
                     <h3>Revenue Composition: Verticals & Sub-sectors</h3>
-                    <p>Relative size of each vertical and its sub-sectors in the $400B target</p>
+                    <p>Relative size of each vertical and its sub-sectors in the $479B target</p>
                 </div>
 
                 <div class="growth-charts-grid">
@@ -137,7 +130,7 @@ export async function renderOverviewTab(appData) {
                 <!-- SECTION 6: SANKEY — Flow from target to verticals to geographies -->
                 <div class="section-header mt-4">
                     <h3>Revenue Flow: Target → Verticals → Geographies</h3>
-                    <p>How the $400B target distributes across verticals and geographic clusters</p>
+                    <p>How the $479B target distributes across verticals and geographic clusters</p>
                 </div>
 
                 <div class="growth-charts-grid">
@@ -179,7 +172,7 @@ export async function renderOverviewTab(appData) {
                 <!-- SECTION 9: Revenue Composition Doughnut -->
                 <div class="section-header mt-4">
                     <h3>2030 Target: Revenue Composition</h3>
-                    <p>How the 5 verticals contribute to the $400B target</p>
+                    <p>How the 5 verticals contribute to the $479B target</p>
                 </div>
 
                 <div class="growth-charts-grid">
@@ -279,12 +272,12 @@ function renderGrowthCharts() {
             </div>
 
             <div class="growth-chart-card">
-                <h4>Karnataka IT Exports Trajectory</h4>
-                <p class="chart-subtitle">From $52B today to $229B target by 2030</p>
+                <h4>Karnataka's Digital Economy Trajectory</h4>
+                <p class="chart-subtitle">All 5 verticals: from $110B (FY22) → $163B today (FY25) → $479B target (FY30)</p>
                 <div class="chart-container">
-                    <canvas id="karnataka-it-exports-chart"></canvas>
+                    <canvas id="karnataka-digital-economy-chart"></canvas>
                 </div>
-                <div class="chart-source">Source: STPI Karnataka ${renderConfidenceStars(4)}</div>
+                <div class="chart-source">Source: NASSCOM Strategic Review 2025, MeitY, KDEM Excel ${renderConfidenceStars(4)}</div>
             </div>
         </div>
     `
@@ -334,8 +327,8 @@ function initAllCharts(verticalOverview, totalMetrics, baseline, verticalBaselin
         unit: `$${baseline.currentTotalDigital_USD_Bn}B / $${baseline.targetRevenue_USD_Bn}B`
     })
 
-    createSpeedometerGauge('employment-speedometer', baseline.currentITEmployment, baseline.targetEmployment, 'Employment Progress', {
-        unit: `${(baseline.currentITEmployment / 1000000).toFixed(1)}M / ${(baseline.targetEmployment / 1000000).toFixed(0)}M`
+    createSpeedometerGauge('employment-speedometer', baseline.currentDigitalEmployment, baseline.targetEmployment, 'Employment Progress', {
+        unit: `${(baseline.currentDigitalEmployment / 1000000).toFixed(1)}M / ${(baseline.targetEmployment / 1000000).toFixed(1)}M`
     })
 
     // 2. WATERFALL — How verticals add up
@@ -365,17 +358,17 @@ function initAllCharts(verticalOverview, totalMetrics, baseline, verticalBaselin
         }
     )
 
-    const itTimeline = getKarnatakaITExportsTimeline()
+    const kaTimeline = getKarnatakaDigitalEconomyTimeline()
     createAnnotatedAreaChart(
-        'karnataka-it-exports-chart',
-        itTimeline.labels,
+        'karnataka-digital-economy-chart',
+        kaTimeline.labels,
         [
-            { label: 'Actual (USD Bn)', data: itTimeline.actual, color: '#5BB9EC' },
-            { label: 'Projected (USD Bn)', data: itTimeline.projected, color: '#5BB9EC', dashed: true }
+            { label: 'Actual (USD Bn)', data: kaTimeline.actual, color: '#5BB9EC' },
+            { label: 'Projected (USD Bn)', data: kaTimeline.projected, color: '#5BB9EC', dashed: true }
         ],
         {
-            targetLine: { value: itTimeline.target, label: `Target: $${itTimeline.target}B`, color: '#ef4444' },
-            todayLine: { index: itTimeline.todayIndex, label: 'FY 2024-25' }
+            targetLine: { value: kaTimeline.target, label: `Target: $${kaTimeline.target}B`, color: '#ef4444' },
+            todayLine: { index: kaTimeline.todayIndex, label: 'FY 2024-25' }
         }
     )
 

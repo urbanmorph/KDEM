@@ -3191,6 +3191,152 @@ body {
     text-align: center;
 }
 
+/* ========================================
+   DIGITIZING SECTORS TAB
+   ======================================== */
+
+/* Data Quality Warning Banner */
+.data-quality-warning {
+    padding: 1rem 1.25rem;
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-left: 4px solid #f59e0b;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+.data-quality-warning strong {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: #92400e;
+    font-size: 0.9rem;
+}
+
+.data-quality-warning p {
+    font-size: 0.85rem;
+    color: #78350f;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Category Group */
+.digitizing-category-group {
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.digitizing-category-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.digitizing-category-title h4 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.category-total {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    background: rgba(233, 99, 55, 0.08);
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+}
+
+/* Sectors Grid */
+.digitizing-sectors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+/* Sector Card */
+.digitizing-sector-card {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.25rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.digitizing-sector-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.digitizing-sector-card h5 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.75rem 0;
+    line-height: 1.3;
+}
+
+/* Compact Metrics Grid */
+.sector-metrics-compact {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.sector-metric-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.25rem 0;
+}
+
+.metric-key {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    font-weight: 500;
+}
+
+.metric-val {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.metric-val.highlight {
+    color: var(--primary-color);
+}
+
+/* Extreme CAGR Highlight */
+.cagr-extreme {
+    color: #d97706 !important;
+    background: rgba(245, 158, 11, 0.1);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.75rem !important;
+}
+
+@media (max-width: 768px) {
+    .digitizing-sectors-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .digitizing-category-title {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .sector-metrics-compact {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* Print Mode */
 @media print {
     .header, .footer, .tab-nav-container, .hamburger-btn { display: none !important; }
