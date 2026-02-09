@@ -337,6 +337,14 @@ async function loadTab(tabId) {
 
     } catch (error) {
         console.error(`Error loading tab ${tabId}:`, error)
+
+        // Stale chunk after deploy — reload page to get fresh assets
+        if (error.message && error.message.includes('dynamically imported module')) {
+            console.warn('Stale deployment detected, reloading...')
+            window.location.reload()
+            return
+        }
+
         showError(`Failed to load ${tabId} tab. ${error.message}`)
     }
 }
