@@ -103,12 +103,16 @@ async function renderClustersView(appData) {
     try {
         const overview = await getGeographyOverview(2030)
 
-        const tier1 = overview.filter(g => g.tier === 'tier1-invest-aggressively')
-        const tier2 = overview.filter(g => g.tier === 'tier2-invest-as-anchor')
-        const tier3 = overview.filter(g => g.tier === 'tier3-invest-later')
+        // Exclude sub-geographies (parks, SEZs) that have a parent_id - they are child projects, not clusters
+        const clusters = overview.filter(g => !g.parent_id)
+
+        // Match tier values from database (migration 001_dimension_tables.sql)
+        const tier1 = clusters.filter(g => g.tier === 'tier1-invest-aggressively')
+        const tier2 = clusters.filter(g => g.tier === 'tier2-nurture-build')
+        const tier3 = clusters.filter(g => g.tier === 'tier3-study-strategize')
 
         // Store chart init function for main.js to call after DOM insertion
-        window.__kdem_initCharts = () => initClustersCharts(overview, tier1, tier2, tier3)
+        window.__kdem_initCharts = () => initClustersCharts(clusters, tier1, tier2, tier3)
 
         return `
             <div class="clusters-tab">
@@ -145,22 +149,26 @@ async function renderClustersView(appData) {
                 </div>
 
                 <!-- Tier 2 Clusters -->
-                <div class="section-header mt-4">
-                    <h3>Tier 2: Invest as Anchor</h3>
-                    <p>Medium-priority clusters with anchor tenant strategy</p>
-                </div>
-                <div class="clusters-grid">
-                    ${tier2.map(cluster => renderClusterCard(cluster)).join('')}
-                </div>
+                ${tier2.length > 0 ? `
+                    <div class="section-header mt-4">
+                        <h3>Tier 2: Nurture & Build</h3>
+                        <p>Medium-priority clusters with anchor tenant strategy</p>
+                    </div>
+                    <div class="clusters-grid">
+                        ${tier2.map(cluster => renderClusterCard(cluster)).join('')}
+                    </div>
+                ` : ''}
 
                 <!-- Tier 3 Clusters -->
-                <div class="section-header mt-4">
-                    <h3>Tier 3: Invest Later</h3>
-                    <p>Future growth clusters with deferred investment</p>
-                </div>
-                <div class="clusters-grid">
-                    ${tier3.map(cluster => renderClusterCard(cluster)).join('')}
-                </div>
+                ${tier3.length > 0 ? `
+                    <div class="section-header mt-4">
+                        <h3>Tier 3: Study & Strategize</h3>
+                        <p>Future growth clusters with long-term potential</p>
+                    </div>
+                    <div class="clusters-grid">
+                        ${tier3.map(cluster => renderClusterCard(cluster)).join('')}
+                    </div>
+                ` : ''}
             </div>
         `
     } catch (error) {
@@ -175,32 +183,75 @@ async function renderClustersView(appData) {
 }
 
 function renderClusterCard(cluster) {
+    const meta = cluster.metadata || {}
+    const currentStatus = meta.currentStatus || {}
+    const vision = meta.vision || {}
+    const keyCompanies = currentStatus.keyCompanies || []
+    const hasMetadata = Object.keys(currentStatus).length > 0
+
     return `
         <div class="cluster-card">
             <div class="cluster-header">
                 <h4>${cluster.name}</h4>
-                <span class="tier-badge ${cluster.tier}">${cluster.tier || 'N/A'}</span>
+                <span class="tier-badge ${cluster.tier}">${formatTierLabel(cluster.tier)}</span>
             </div>
-            <div class="cluster-metrics">
-                <div class="cluster-metric">
-                    <span class="metric-label">Revenue</span>
-                    <span class="metric-value">${formatNumber(cluster.revenue_usd_bn)} USD Bn</span>
+
+            ${hasMetadata ? `
+                <div class="cluster-current-status">
+                    <h5>Current Status</h5>
+                    ${currentStatus.companies ? `<p>${currentStatus.companies}</p>` : ''}
+                    ${currentStatus.itEmployment ? `<p>IT Employment: ${currentStatus.itEmployment}</p>` : ''}
+                    ${currentStatus.highlight ? `<div class="cluster-highlight">${currentStatus.highlight}</div>` : ''}
+                    ${keyCompanies.length > 0 ? `
+                        <div class="cluster-companies">
+                            ${keyCompanies.map(c => `<span class="cluster-company-pill">${c}</span>`).join('')}
+                        </div>
+                    ` : ''}
                 </div>
-                <div class="cluster-metric">
-                    <span class="metric-label">Employment</span>
-                    <span class="metric-value">${formatNumber(cluster.employment)}</span>
-                </div>
-                <div class="cluster-metric">
-                    <span class="metric-label">Land</span>
-                    <span class="metric-value">${formatNumber(cluster.land_sqft)} Sq Ft</span>
-                </div>
-                <div class="cluster-metric">
-                    <span class="metric-label">Capital</span>
-                    <span class="metric-value">${formatNumber(cluster.capital_inr_cr)} Cr</span>
+            ` : ''}
+
+            <div class="cluster-targets-section">
+                <h5>2030 Targets</h5>
+                <div class="cluster-metrics">
+                    <div class="cluster-metric">
+                        <span class="metric-label">Revenue</span>
+                        <span class="metric-value">$${formatNumber(cluster.revenue_usd_bn)}B</span>
+                    </div>
+                    <div class="cluster-metric">
+                        <span class="metric-label">Employment</span>
+                        <span class="metric-value">${formatNumber(cluster.employment)}</span>
+                    </div>
+                    <div class="cluster-metric">
+                        <span class="metric-label">Land</span>
+                        <span class="metric-value">${formatNumber(cluster.land_sqft)} M Sq Ft</span>
+                    </div>
+                    <div class="cluster-metric">
+                        <span class="metric-label">Capital</span>
+                        <span class="metric-value">${formatNumber(cluster.capital_inr_cr)} Cr</span>
+                    </div>
                 </div>
             </div>
+
+            ${cluster.data_source || cluster.confidence_rating ? `
+                <div class="cluster-source">
+                    <span class="cluster-source-text">${cluster.data_source || 'KDEM Target Database'}</span>
+                    ${cluster.confidence_rating ? renderConfidenceStars(cluster.confidence_rating) : ''}
+                </div>
+            ` : ''}
         </div>
     `
+}
+
+function formatTierLabel(tier) {
+    if (!tier) return 'N/A'
+    const labels = {
+        'tier1-invest-aggressively': 'Tier 1',
+        'tier2-nurture-build': 'Tier 2',
+        'tier3-study-strategize': 'Tier 3',
+        'existing-hub': 'Hub',
+        'emerging': 'Emerging'
+    }
+    return labels[tier] || tier
 }
 
 function renderVerticalBreakdown(breakdown) {

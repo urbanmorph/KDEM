@@ -262,10 +262,11 @@ export async function getVerticalOverview(year = 2030) {
 
 /**
  * Aggregate targets by geography for cluster view
+ * Returns metadata, data_source, and confidence_rating alongside metrics
  */
 export async function getGeographyOverview(year = 2030) {
   try {
-    // Fetch all geographies
+    // Fetch all geographies (includes metadata JSONB)
     const geographies = await fetchGeographies()
 
     // Fetch all targets for the year
@@ -292,16 +293,28 @@ export async function getGeographyOverview(year = 2030) {
         .filter(t => t.metric === 'capital_required' || t.metric === 'capital' || t.metric === 'funding_amount')
         .reduce((sum, t) => sum + Number(t.value), 0)
 
+      // Extract primary data source and average confidence from revenue targets
+      const revenueTargets = geoTargets.filter(t => t.metric === 'revenue')
+      const dataSources = [...new Set(revenueTargets.map(t => t.data_source).filter(Boolean))]
+      const confidenceRatings = revenueTargets.map(t => t.confidence_rating).filter(Boolean)
+      const avgConfidence = confidenceRatings.length > 0
+        ? Math.round(confidenceRatings.reduce((a, b) => a + b, 0) / confidenceRatings.length)
+        : null
+
       return {
         id: geography.id,
         name: geography.name,
         tier: geography.tier,
         region: geography.region,
+        parent_id: geography.parent_id || null,
+        metadata: geography.metadata || {},
         revenue_usd_bn: revenue,
         employment: employment,
         land_sqft: land,
         capital_inr_cr: capital,
-        target_count: geoTargets.length
+        target_count: geoTargets.length,
+        data_source: dataSources.join('; '),
+        confidence_rating: avgConfidence
       }
     })
 
