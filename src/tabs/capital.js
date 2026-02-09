@@ -10,7 +10,8 @@ import {
     getSectorFunding,
     getFundingDistribution,
     getInvestmentTrends,
-    getPolicies
+    getPolicies,
+    getNationalOpportunities
 } from '../services/referenceData.js'
 import { renderConfidenceStars } from '../utils/components.js'
 import { CHART_COLORS } from '../utils/chartSetup.js'
@@ -67,6 +68,7 @@ export async function renderCapitalTab(appData) {
         const policies = getPolicies()
         const unicornData = getUnicornData()
         const womenFunding = getWomenFundingData()
+        const nationalOpportunities = getNationalOpportunities()
 
         // Filter policies that have allocation/funding info for Government Funding section
         const govFundingPrograms = policies.filter(p =>
@@ -137,6 +139,25 @@ export async function renderCapitalTab(appData) {
 
                 <div class="govt-funding">
                     ${renderGovernmentFunding(govFundingPrograms)}
+                </div>
+
+                <!-- National Scheme Pipeline -->
+                <div class="section-header mt-4">
+                    <h3>National Scheme Pipeline</h3>
+                    <p>Major central government funding schemes Karnataka can capture for digital economy growth</p>
+                </div>
+
+                <div class="interventions-grid">
+                    ${nationalOpportunities.map(opp => `
+                        <div class="intervention-card">
+                            <h4>${opp.icon} ${opp.title}</h4>
+                            <ul>
+                                ${opp.opportunities.map(o => `<li>${o}</li>`).join('')}
+                            </ul>
+                            <div class="highlight" style="margin-top: 0.5rem;"><strong>Karnataka Action:</strong> ${opp.karnatakaAction}</div>
+                            <p class="source" style="margin-top: 0.5rem;">Timeline: ${opp.timeline} | Source: ${opp.source}</p>
+                        </div>
+                    `).join('')}
                 </div>
 
                 <!-- Women-Led Startup Funding -->

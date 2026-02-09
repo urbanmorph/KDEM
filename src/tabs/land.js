@@ -112,6 +112,45 @@ export async function renderLandTab(appData) {
                     ${renderClusterInfrastructure(clusterInfra)}
                 </div>
 
+                <!-- Strategic Infrastructure Projects -->
+                <div class="section-header mt-4">
+                    <h3>Strategic Infrastructure Projects</h3>
+                    <p>Major infrastructure initiatives for the 2025-2032 roadmap</p>
+                </div>
+
+                <div class="interventions-grid">
+                    <div class="intervention-card">
+                        <h4>💎 KWIN City Semiconductor Park</h4>
+                        <ul>
+                            <li>1,000-acre dedicated semiconductor park</li>
+                            <li>OSAT (Outsourced Semiconductor Assembly & Test) facilities</li>
+                            <li>Chip design cluster co-located with 350K+ existing talent</li>
+                            <li>ISM 2.0 ECMS designation targeted for capex subsidies</li>
+                        </ul>
+                        <p class="source">Source: KWIN City Master Plan, ISM 2.0 Guidelines</p>
+                    </div>
+                    <div class="intervention-card">
+                        <h4>🖥️ Mangaluru Data Centre Hub</h4>
+                        <ul>
+                            <li>1 GW+ data centre capacity planned</li>
+                            <li>Submarine cable landing advantage for low-latency connectivity</li>
+                            <li>IndiaAI Mission: capture share of 38,000 GPU allocation</li>
+                            <li>Data centre infrastructure status = tax holiday eligibility</li>
+                        </ul>
+                        <p class="source">Source: Draft Mangaluru Cluster Vision Document 2025, IndiaAI Mission</p>
+                    </div>
+                    <div class="intervention-card">
+                        <h4>🏗️ Beyond Bengaluru Cluster Expansion</h4>
+                        <ul>
+                            <li>Mysuru: IT Park expansion for $10B target, 150K jobs by 2030</li>
+                            <li>Hubballi-Dharwad: EMC 2.0 corridor, 5 lakh+ sq ft operational</li>
+                            <li>Target: 15%+ of digital economy revenue from Tier 2/3 by 2032</li>
+                            <li>₹75 Cr Beyond Bengaluru seed fund for infrastructure</li>
+                        </ul>
+                        <p class="source">Source: KDEM Cluster Vision Documents 2025, Beyond Bengaluru Initiative</p>
+                    </div>
+                </div>
+
                 <!-- Cluster Infrastructure Comparison Chart -->
                 <div class="section-header mt-4">
                     <h3>Cluster Infrastructure Comparison</h3>

@@ -280,7 +280,7 @@ function renderContactInfo() {
             Government of Karnataka</p>
             <ul>
                 <li>Website: <a href="https://karnatakadigital.in" target="_blank">karnatakadigital.in</a></li>
-                <li>Dashboard: KDEM Strategic Dashboard v3.0</li>
+                <li>Dashboard: KDEM Strategic Dashboard v1.0</li>
             </ul>
             <div class="transparency-commitment">
                 <h5>Data Transparency Commitment</h5>

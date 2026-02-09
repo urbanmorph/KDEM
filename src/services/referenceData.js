@@ -248,42 +248,334 @@ export function getLaborSources() {
 
 export function getRoadmapPhases() {
     return [
-        { year: '2025', title: 'Foundation Phase', milestones: ['Launch KDEM Dashboard v3.0', 'Establish governance structure', 'Begin Tier 1 cluster development', 'Policy framework finalization'], confidence: 5 },
-        { year: '2026', title: 'Acceleration Phase', milestones: ['Scale Tier 1 investments', 'Launch Tier 2 anchor projects', 'IT Exports reach $100B', 'ESDM manufacturing ramp-up'], confidence: 4 },
-        { year: '2027', title: 'Expansion Phase', milestones: ['Geographic diversification across all clusters', 'Startup ecosystem maturity', 'Advanced digitization in traditional sectors', '2M employment milestone'], confidence: 4 },
-        { year: '2028', title: 'Integration Phase', milestones: ['Cross-cluster synergies activated', 'Infrastructure projects operational', 'IT Domestic scales to $50B', '3M employment milestone'], confidence: 3 },
-        { year: '2029-2030', title: 'Acceleration Phase', milestones: ['IT Exports crosses $137B', 'ESDM crosses $72B', 'All clusters operational', '4M employment milestone'], confidence: 3 },
-        { year: '2031-2032', title: 'Maturity Phase', milestones: ['All verticals at target levels', 'Sustainable growth trajectory established', '$329B digital economy achieved', '5M employment target'], confidence: 3 }
+        {
+            yearRange: '2025-2026', title: 'Foundation', theme: 'Build data infrastructure, prepare for AI displacement, defend GCC leadership',
+            revenueRange: '$159B → $185B', employmentFocus: 'Baseline measurement, early warning systems for displacement',
+            milestones: [
+                'Launch comprehensive digital economy measurement system',
+                'Front-load NIPUNA skilling for AI-vulnerable roles (450K workers identified)',
+                'Defend GCC share: 40% of India target, counter Telangana/Gujarat poaching',
+                'KWIN City master plan approval + first OSAT partner MoU',
+                'Capture ISM 2.0 ECMS designation for 2+ projects',
+                'Activate Mysuru & Mangaluru clusters with anchor tenants'
+            ],
+            confidence: 4,
+            source: 'KDEM Strategic Plan 2025-32'
+        },
+        {
+            yearRange: '2027-2028', title: 'Navigate', theme: 'Peak AI displacement, accelerate diversification, capture national schemes',
+            revenueRange: '$185B → $230B', employmentFocus: 'Managing net job loss in traditional IT, creating AI-native roles',
+            milestones: [
+                'Peak AI displacement impact: 200-300K traditional IT roles automated',
+                'AI reskilling pipeline producing 50K AI specialists/year',
+                'GCC value shift: track revenue-per-employee, not headcount',
+                'IndiaAI GPU allocation: secure 30%+ of 38K GPUs for Karnataka',
+                'ESDM: first OSAT facility operational at KWIN City',
+                'Tier 2 clusters contributing 5%+ of digital economy revenue'
+            ],
+            confidence: 3,
+            source: 'KDEM Strategic Plan 2025-32'
+        },
+        {
+            yearRange: '2029-2030', title: 'Accelerate', theme: 'New verticals at scale, AI talent matures, Tier 2 clusters active',
+            revenueRange: '$230B → $290B', employmentFocus: 'Net positive employment from new verticals offsetting AI displacement',
+            milestones: [
+                'AI services & products hub: $10B+ revenue from Karnataka-built AI',
+                'Chip design cluster: 50+ design houses, positioned for India fab ecosystem',
+                'Climate tech vertical: $5B+ enabled by DPI-as-a-Service platform',
+                'EU AI Act compliance services: $2B+ exported to European clients',
+                'All 8 geographic clusters operational with measurable KPIs',
+                'Revenue per employee stabilizes at new equilibrium ($75-100K)'
+            ],
+            confidence: 3,
+            source: 'KDEM Strategic Plan 2025-32'
+        },
+        {
+            yearRange: '2031-2032', title: 'Achieve', theme: 'Full ecosystem maturity, quality over quantity, $329B target',
+            revenueRange: '$290B → $329B', employmentFocus: 'Hybrid human-AI workforce model, higher-value employment',
+            milestones: [
+                '$329B digital economy target achieved (revised from original $400B)',
+                'Employment: 3.3-6.6M range depending on AI productivity scenario',
+                'Karnataka share of India digital economy maintained at 38%+',
+                'Diversified revenue: no single vertical >50% of total',
+                'Beyond Bengaluru: 15%+ of revenue from Tier 2/3 clusters',
+                'Self-sustaining innovation ecosystem with positive talent balance'
+            ],
+            confidence: 2,
+            source: 'KDEM Strategic Plan 2025-32'
+        }
     ]
 }
 
 export function getInterventions() {
     return [
-        { category: 'Infrastructure', actions: ['Develop industrial parks in Tier 1 clusters', 'Expand connectivity (roads, airports, fiber)', 'Build shared facilities (data centers, testing labs)', 'Create innovation districts in key cities'] },
-        { category: 'Policy & Regulation', actions: ['Simplify land acquisition processes', 'Offer tax incentives for cluster investments', 'Streamline environmental clearances', 'Create single-window clearance system'] },
-        { category: 'Talent Development', actions: ['Expand engineering college capacity', 'Launch skill development programs', 'Attract global talent to Karnataka', 'Industry-academia partnerships'] },
-        { category: 'Investment Promotion', actions: ['Anchor tenant recruitment for Tier 2/3', 'Startup ecosystem support', 'FDI promotion campaigns', 'Public-private partnerships'] }
+        {
+            category: 'AI Workforce Transition',
+            icon: '\u{1F916}',
+            actions: [
+                'Front-load NIPUNA skilling: 100K AI/ML certifications by 2027',
+                'Reskilling pipelines for 450K vulnerable IT workers (testing, L1 support, basic coding)',
+                'Transition income support: 6-month stipend for workers in certified reskilling',
+                'AI apprenticeship program with GCCs: 25K placements/year',
+                'Bengaluru Skill Summit → annual AI Workforce Transition Summit'
+            ],
+            source: 'Karnataka Skill Development Policy 2025-32, NASSCOM AI Skills Framework'
+        },
+        {
+            category: 'GCC Strategy',
+            icon: '\u{1F3E2}',
+            actions: [
+                'Defend leadership: counter-offer package for GCCs considering Hyderabad/Pune',
+                'Shift KPIs from headcount to value creation (revenue/employee, patents, IP)',
+                'Beyond Bengaluru GCC push: incentivize Mysuru/Mangaluru expansion',
+                'Mid-market GCC focus: 500+ new GCCs by 2029 (Karnataka GCC Policy)',
+                'GCC innovation labs: mandate 10% R&D spend for incentive eligibility'
+            ],
+            source: 'Karnataka GCC Policy 2024, Zinnov-NASSCOM Reports'
+        },
+        {
+            category: 'Semiconductor & ESDM',
+            icon: '\u{1F4BB}',
+            actions: [
+                'KWIN City: 1,000-acre semiconductor park with OSAT/packaging facilities',
+                'Chip design cluster: attract 50+ design houses leveraging 350K+ existing talent',
+                'Partner with ISM 2.0 for ECMS designation (\u20B940,000 Cr national scheme)',
+                'OSAT positioning: target 2-3 global OSAT players for Karnataka operations',
+                'Testing & packaging focus (realistic), not fab manufacturing'
+            ],
+            source: 'India Semiconductor Mission 2.0, KWIN City Master Plan'
+        },
+        {
+            category: 'National Scheme Capture',
+            icon: '\u{1F1EE}\u{1F1F3}',
+            actions: [
+                'ISM 2.0: secure ECMS designation for semiconductor projects (\u20B940K Cr scheme)',
+                'IndiaAI Mission: capture 30%+ of 38,000 GPU allocation for Karnataka AI infra',
+                'PLI/ECMS: ensure Karnataka projects in electronics manufacturing pipeline',
+                'Data centre tax holiday: position Mangaluru as submarine cable hub',
+                'Budget 2026-27: access \u20B920,000 Cr deeptech fund, \u20B91 Lakh Cr R&D corpus'
+            ],
+            source: 'Union Budget 2025-26, ISM 2.0 Guidelines, IndiaAI Mission'
+        },
+        {
+            category: 'Digital Economy Diversification',
+            icon: '\u{1F310}',
+            actions: [
+                'AI products hub: incubate 500+ AI startups building for global markets',
+                'DPI-as-a-Service: export India Stack (UPI, ONDC, DigiLocker) expertise globally',
+                'EU AI Act compliance: build compliance-as-a-service for European clients',
+                'Climate tech: leverage Karnataka renewable energy leadership',
+                'ONDC integration: digital commerce for Tier 2/3 cluster activation'
+            ],
+            source: 'KDEM Strategic Plan, DPI Global Initiative'
+        },
+        {
+            category: 'Cluster Development',
+            icon: '\u{1F3D7}\u{FE0F}',
+            actions: [
+                'Mysuru: $10B target by 2030, anchor tenants + 2,800 startups',
+                'Mangaluru: Silicon Beach vision, data centre hub (1 GW+ capacity)',
+                'Hubballi-Dharwad: EMC 2.0 corridor, 5 lakh+ sq ft co-working operational',
+                'Tier 3 activation: ONDC-powered digital commerce in smaller cities',
+                'Infrastructure: dedicate \u20B975 Cr Beyond Bengaluru seed fund across clusters'
+            ],
+            source: 'KDEM Cluster Vision Documents 2025, Beyond Bengaluru Initiative'
+        }
     ]
 }
 
 export function getInvestmentSchedule() {
     return [
-        { year: '2025-2026', public: 5000, private: 15000, total: 20000, focus: 'Tier 1 infrastructure, policy setup' },
-        { year: '2026-2027', public: 8000, private: 25000, total: 33000, focus: 'Tier 2 anchors, ESDM facilities' },
-        { year: '2027-2028', public: 10000, private: 35000, total: 45000, focus: 'Geographic expansion, digitization' },
-        { year: '2028-2029', public: 12000, private: 45000, total: 57000, focus: 'Infrastructure projects, scale-up' },
-        { year: '2029-2030', public: 15000, private: 60000, total: 75000, focus: 'Final push to targets, sustainability' }
+        { year: '2025-2026', public: 5000, private: 15000, total: 20000, focus: 'Data infrastructure, NIPUNA front-loading, KWIN City master plan' },
+        { year: '2026-2027', public: 8000, private: 25000, total: 33000, focus: 'ISM 2.0 capture, GCC defense, AI skilling scale-up' },
+        { year: '2027-2028', public: 12000, private: 40000, total: 52000, focus: 'Peak displacement support, OSAT operations, cluster activation' },
+        { year: '2028-2029', public: 14000, private: 50000, total: 64000, focus: 'New vertical scaling, AI products hub, Tier 2 infrastructure' },
+        { year: '2029-2030', public: 16000, private: 65000, total: 81000, focus: 'Full cluster operations, diversification revenue, climate tech' },
+        { year: '2030-2031', public: 15000, private: 70000, total: 85000, focus: 'Ecosystem maturity, quality employment push, innovation IP' },
+        { year: '2031-2032', public: 14000, private: 75000, total: 89000, focus: 'Target achievement, sustainable growth model, Beyond Bengaluru 15%' }
     ]
 }
 
 export function getRisks() {
     return [
-        { risk: 'Talent Shortage', impact: 'High', likelihood: 'Medium', mitigation: 'Expand education capacity, skill development programs, global talent attraction' },
-        { risk: 'Infrastructure Delays', impact: 'High', likelihood: 'Medium', mitigation: 'PPP models, streamlined approvals, concurrent development' },
-        { risk: 'Market Downturn', impact: 'High', likelihood: 'Low', mitigation: 'Diversification across verticals, resilient policy framework' },
-        { risk: 'Competition from Other States', impact: 'Medium', likelihood: 'High', mitigation: 'Competitive incentives, first-mover advantage in Tier 2/3' },
-        { risk: 'Technology Disruption', impact: 'Medium', likelihood: 'Medium', mitigation: 'Innovation focus, adaptable targets, continuous monitoring' }
+        { risk: 'AI Job Displacement Peak (2027-28)', impact: 'Critical', likelihood: 'High', mitigation: 'Front-load NIPUNA reskilling (100K AI certs by 2027), transition income support, AI apprenticeships with GCCs', source: 'NASSCOM AI Impact Assessment, World Economic Forum Future of Jobs 2025' },
+        { risk: 'Revenue Per Employee Divergence', impact: 'High', likelihood: 'High', mitigation: 'Shift metrics to value creation, track revenue/employee alongside headcount, adjust employment targets by scenario', source: 'Zinnov GCC Analysis 2025' },
+        { risk: 'Telangana & Gujarat GCC Competition', impact: 'High', likelihood: 'High', mitigation: 'Counter-offer packages, Beyond Bengaluru diversification, mid-market GCC focus (500+ by 2029)', source: 'Gujarat GCC Policy 2025-30, Telangana ICT Policy' },
+        { risk: 'Semiconductor Manufacturing Miss', impact: 'High', likelihood: 'Medium', mitigation: 'Focus on chip design (350K+ talent) and OSAT/packaging rather than fab; KWIN City as design + packaging hub', source: 'ISM 2.0 Analysis, ICEA Reports' },
+        { risk: 'Skilling Pipeline Mismatch', impact: 'High', likelihood: 'Medium', mitigation: 'Industry-led curriculum (not academic), 6-month certification cycles, Karnataka Skill Policy \u20B94,432 Cr deployment', source: 'Karnataka Skill Development Policy 2025-32' },
+        { risk: 'EU AI Act Compliance Burden', impact: 'Medium', likelihood: 'Medium', mitigation: 'Turn compliance into revenue opportunity: compliance-as-a-service exports, early-mover advantage in AI governance', source: 'EU AI Act 2024, NASSCOM AI Governance Framework' },
+        { risk: 'Bengaluru Infrastructure Strain', impact: 'Medium', likelihood: 'High', mitigation: 'Accelerate Beyond Bengaluru (15% revenue target from Tier 2/3), transit infrastructure, satellite offices', source: 'Bengaluru Urban Development Analysis' },
+        { risk: 'Startup Funding Tightening', impact: 'Medium', likelihood: 'Medium', mitigation: 'State fund-of-funds (\u20B9300 Cr), deeptech fund (\u20B9100 Cr), Budget 2026-27 \u20B920K Cr deeptech corpus access', source: 'Karnataka Startup Policy 2025-2030, Union Budget 2025-26' }
     ]
+}
+
+export function getAIWorkforceImpact() {
+    return {
+        keyStats: {
+            totalITWorkforce: 1500000,
+            vulnerableWorkers: { low: 450000, high: 600000 },
+            currentAISpecialists: 100000,
+            neededAISpecialists: 300000,
+            annualGradsNeeded: 50000,
+            source: 'NASSCOM Strategic Review 2025, Bengaluru Innovation Report 2025, WEF Future of Jobs 2025',
+            confidence: 3
+        },
+        vulnerableRoles: [
+            { role: 'Manual Testing & QA', workers: '120-150K', riskLevel: 'Critical', timeline: '2025-2027', aiReplacement: 'AI test generation, autonomous testing agents', mitigation: 'SDET reskilling, AI-assisted QA certification' },
+            { role: 'L1/L2 IT Support', workers: '80-100K', riskLevel: 'Critical', timeline: '2025-2027', aiReplacement: 'AI chatbots, self-healing systems, automated ticketing', mitigation: 'Cloud/DevOps upskilling, SRE transition' },
+            { role: 'Basic Coding & Maintenance', workers: '100-130K', riskLevel: 'High', timeline: '2026-2028', aiReplacement: 'AI code generation (Copilot, Cursor), automated refactoring', mitigation: 'Architecture/design skills, AI-augmented development' },
+            { role: 'Data Entry & Processing', workers: '60-80K', riskLevel: 'Critical', timeline: '2025-2026', aiReplacement: 'Document AI, intelligent OCR, automated data pipelines', mitigation: 'Data analytics, ML ops training' },
+            { role: 'BPO Voice/Chat Support', workers: '50-70K', riskLevel: 'High', timeline: '2026-2028', aiReplacement: 'Conversational AI, multimodal agents', mitigation: 'Complex case handling, AI trainer roles' },
+            { role: 'Junior Financial Analysis', workers: '30-40K', riskLevel: 'Medium', timeline: '2027-2029', aiReplacement: 'AI-powered analytics, automated reporting', mitigation: 'Strategic advisory, AI interpretation skills' },
+            { role: 'Content Writing & Translation', workers: '20-30K', riskLevel: 'High', timeline: '2025-2027', aiReplacement: 'LLMs, automated localization', mitigation: 'AI content strategy, prompt engineering, editorial oversight' }
+        ],
+        displacementTimeline: [
+            { phase: 'FY 2024-25', event: 'Early adoption', impact: 'AI tools deployed in 40% of IT companies, productivity gains begin', netEffect: 'Hiring slowdown (-10-15% new hires vs trend)' },
+            { phase: 'FY 2025-26', event: 'Acceleration', impact: 'Data entry, basic testing, L1 support roles actively reduced', netEffect: 'First net job losses in traditional IT (-50K to -80K)' },
+            { phase: 'FY 2026-27', event: 'Peak disruption begins', impact: 'AI coding assistants mature, BPO automation scales', netEffect: 'Peak displacement wave (-100K to -150K traditional roles)' },
+            { phase: 'FY 2027-28', event: 'Peak displacement', impact: 'Cumulative 200-300K traditional roles automated', netEffect: 'New AI-native roles begin offsetting (-50K net if reskilling works)' },
+            { phase: 'Post-2028', event: 'New equilibrium', impact: 'AI-augmented workforce model established', netEffect: 'Net positive if diversification succeeds; net negative if concentrated in IT services' }
+        ],
+        employmentScenarios: [
+            { scenario: 'Low AI Impact', revenueTarget: 329, employment: 5000000,
+              breakdown: 'IT Exports: 3.30M (20 emp/$1M) + IT Domestic: 748K (22 emp/$1M) + ESDM: 950K (10 emp/$1M)',
+              note: 'Current productivity sustained. Matches KDEM public 5M target. Unlikely given AI adoption trends.' },
+            { scenario: 'Medium AI Impact (Central Estimate)', revenueTarget: 329, employment: 4100000,
+              breakdown: 'IT Exports: 2.64M (16 emp/$1M) + IT Domestic: 612K (18 emp/$1M) + ESDM: 855K (9 emp/$1M)',
+              note: 'AI augments workers, ~25% IT productivity gain by 2032. Central estimate for planning.' },
+            { scenario: 'High AI Impact', revenueTarget: 329, employment: 3200000,
+              breakdown: 'IT Exports: 1.98M (12 emp/$1M) + IT Domestic: 476K (14 emp/$1M) + ESDM: 760K (8 emp/$1M)',
+              note: 'Aggressive AI adoption. Revenue grows but employment lags significantly.' }
+        ],
+        scenarioNote: 'All scenarios exclude startup employment (double-counts with IT-BPM) and digitizing sectors (not yet modeled). Per-vertical ratios replace previous blended revenue-per-employee approach.',
+        source: 'Per-vertical AI-adjusted conversion ratios. Bessemer Oct 2025 (India IT headcount 7.5-8M→6M by 2031), NASSCOM AI-era projections, WEF Future of Jobs 2025',
+        confidence: 3
+    }
+}
+
+export function getNationalOpportunities() {
+    return [
+        {
+            title: 'India Semiconductor Mission 2.0',
+            icon: '\u{1F48E}',
+            opportunities: [
+                'ECMS (Electronics Components & Manufacturing Scheme): \u20B940,000 Cr',
+                'Semiconductor equipment manufacturing support',
+                'OSAT/packaging facility subsidies (50% capex support)',
+                'Chip design incentive: 50% of capex up to \u20B915 Cr per unit'
+            ],
+            karnatakaAction: 'KWIN City ECMS designation + attract 2-3 OSAT players + leverage 350K chip design talent',
+            timeline: '2025-2030',
+            source: 'ISM 2.0 Guidelines, Union Budget 2025-26'
+        },
+        {
+            title: 'IndiaAI Mission',
+            icon: '\u{1F9E0}',
+            opportunities: [
+                '38,000 GPUs for national AI compute infrastructure',
+                'Data centre tax holiday (Infrastructure status)',
+                'AI innovation centres and research grants',
+                'AI safety and governance framework'
+            ],
+            karnatakaAction: 'Secure 30%+ GPU allocation, position Mangaluru as AI data centre hub (submarine cable advantage)',
+            timeline: '2025-2028',
+            source: 'IndiaAI Mission, MeitY AI Strategy'
+        },
+        {
+            title: 'GCC Growth Framework',
+            icon: '\u{1F3E2}',
+            opportunities: [
+                '2,400 GCCs in India by 2026 (from 1,800 in 2024)',
+                '$110B GCC revenue by 2030',
+                'Union Budget GCC guidance framework',
+                'Mid-market GCC expansion (companies with $1-10B revenue)'
+            ],
+            karnatakaAction: 'Maintain 40% share (960+ GCCs), shift to high-value innovation centres, mid-market focus',
+            timeline: '2025-2030',
+            source: 'Zinnov-NASSCOM GCC Reports 2025, Union Budget 2025-26'
+        },
+        {
+            title: 'Digital Public Infrastructure 2.0',
+            icon: '\u{1F517}',
+            opportunities: [
+                'ONDC scaling: open digital commerce for all sectors',
+                'BharatTradeNet: trade documentation digitization',
+                'DigiLocker, Account Aggregator expansion',
+                'DPI export: 12+ countries adopting India Stack'
+            ],
+            karnatakaAction: 'Build DPI-as-a-Service capability, ONDC integration for cluster commerce, export expertise globally',
+            timeline: '2025-2030',
+            source: 'MeitY DPI Strategy, ONDC Annual Report'
+        },
+        {
+            title: 'PLI & Manufacturing Schemes',
+            icon: '\u{1F3ED}',
+            opportunities: [
+                'PLI for IT hardware, telecom, white goods',
+                '\u20B92 Lakh Cr total PLI investment catalyzed',
+                'ECMS projects for electronic components',
+                'Production-linked incentive for semiconductor packaging'
+            ],
+            karnatakaAction: 'Ensure 20%+ of PLI electronics projects in Karnataka, KWIN City as manufacturing anchor',
+            timeline: '2025-2030',
+            source: 'DPIIT PLI Dashboard, MeitY ECMS Guidelines'
+        },
+        {
+            title: 'Budget 2026-27 Opportunities',
+            icon: '\u{1F4CA}',
+            opportunities: [
+                '\u20B920,000 Cr Deeptech Fund for AI, quantum, space, semiconductors',
+                '\u20B91 Lakh Cr R&D corpus for private sector innovation',
+                'Tax incentives for R&D expenditure',
+                'Export promotion for IT and ESDM sectors'
+            ],
+            karnatakaAction: 'Access deeptech fund via 2,443 funded startups + 861 deeptech companies, R&D hub positioning',
+            timeline: '2026-2032',
+            source: 'Union Budget 2025-26, Finance Ministry Announcements'
+        }
+    ]
+}
+
+export function getKeyUncertainties() {
+    return [
+        { uncertainty: 'AI impact on employment multiplier', impact: 'Could reduce employment from 6.6M to 3.3M at same revenue', currentState: 'Revenue/employee rising from $50K toward $75-100K', mitigation: 'Track 3 scenarios; adjust workforce programs dynamically' },
+        { uncertainty: 'Karnataka share of India digital economy', impact: '\u00B15% share = \u00B1$15-20B revenue impact', currentState: '38% IT share, 20% ESDM, varying by vertical', mitigation: 'Defend GCC share aggressively; diversify beyond Bengaluru' },
+        { uncertainty: 'Semiconductor manufacturing realization', impact: 'ESDM target depends on OSAT/packaging success', currentState: 'KWIN City in planning; no OSAT commitments yet', mitigation: 'Focus on chip design (proven strength) + OSAT positioning' },
+        { uncertainty: 'Competing state GCC policies', impact: 'Gujarat, Telangana, Odisha actively recruiting GCCs', currentState: 'Karnataka leads but margin narrowing', mitigation: 'Counter-offer packages, innovation quality over cost competition' },
+        { uncertainty: 'Global AI regulation impact', impact: 'EU AI Act could increase compliance costs 10-15% for EU-serving IT', currentState: 'EU AI Act enforcing from 2025; India framework emerging', mitigation: 'Build compliance-as-a-service capability, turn cost into revenue' },
+        { uncertainty: 'Startup funding cycle recovery', impact: 'VC funding at $3.6B/year vs $10B+ peak in 2021', currentState: 'Seed stage healthy (+26% YoY), growth stage constrained', mitigation: 'State fund-of-funds, deeptech fund, national \u20B920K Cr deeptech corpus' },
+        { uncertainty: 'Digitizing sectors CAGR validity', impact: 'McKinsey 2019 framework may overestimate by $6-10B', currentState: '17 sub-sectors using 200%+ CAGRs in some cases', mitigation: 'Conservative 8% post-FY25 CAGR applied; need independent validation' },
+        { uncertainty: 'Bengaluru infrastructure capacity', impact: 'Traffic, housing, water stress limit growth ceiling', currentState: 'Grade A office: 200M+ sq ft, but commute times increasing', mitigation: 'Beyond Bengaluru 15% revenue target, satellite offices, remote work' }
+    ]
+}
+
+export function getEcosystemDiversification() {
+    return [
+        { title: 'AI Services & Products', description: 'Move from AI adoption to AI creation \u2014 build AI products, platforms, and services for global markets', targetRevenue: '$10-15B by 2030', rationale: '58% of India AI funding in Bengaluru, 600K+ AI/ML professionals, #5 global AI city', source: 'Bengaluru Innovation Report 2025' },
+        { title: 'GCC Innovation Centres', description: 'Shift GCCs from cost arbitrage to innovation hubs \u2014 patents, IP creation, product development', targetRevenue: '$25-30B by 2030 (high-value segment)', rationale: '48% GCC workforce in engineering/R&D roles; Karnataka has nearly half of India mid-market GCCs', source: 'Zinnov-NASSCOM GCC Reports 2025' },
+        { title: 'Chip Design & OSAT', description: 'Leverage existing semiconductor design talent for OSAT packaging and testing hub', targetRevenue: '$8-12B by 2030', rationale: '350K+ chip design professionals, KWIN City planned, ISM 2.0 incentives available', source: 'ISM 2.0, Bengaluru Innovation Report 2025' },
+        { title: 'Climate Tech & Green Digital', description: 'Build climate technology solutions leveraging Karnataka renewable energy and digital infrastructure', targetRevenue: '$5-8B by 2030', rationale: 'Karnataka #1 in renewable energy capacity; sustainability mandates creating demand', source: 'Karnataka Energy Department, Industry Estimates' },
+        { title: 'DPI-as-a-Service', description: 'Export Digital Public Infrastructure expertise (UPI, ONDC, DigiLocker) to global markets', targetRevenue: '$3-5B by 2030', rationale: '12+ countries adopting India Stack; Karnataka companies built much of DPI layer', source: 'MeitY DPI Global, Industry Analysis' },
+        { title: 'EU AI Act Compliance Services', description: 'First-mover advantage in AI governance compliance for European market clients', targetRevenue: '$2-4B by 2030', rationale: 'EU AI Act enforcing 2025; $50B+ European IT services market needs compliance support', source: 'EU AI Act 2024, NASSCOM Analysis' }
+    ]
+}
+
+export function getRoadmapRevenueTrajectory() {
+    return {
+        labels: ['FY24-25', 'FY25-26', 'FY26-27', 'FY27-28', 'FY28-29', 'FY29-30', 'FY30-31', 'FY31-32'],
+        actual: [159, null, null, null, null, null, null, null],
+        projected: [159, 177, 196, 217, 241, 267, 297, 329],
+        target: 329,
+        todayIndex: 0,
+        phases: [
+            { label: 'Foundation', xMin: 0, xMax: 1.5, color: 'rgba(233, 99, 55, 0.06)' },
+            { label: 'Navigate', xMin: 1.5, xMax: 3.5, color: 'rgba(230, 134, 52, 0.06)' },
+            { label: 'Accelerate', xMin: 3.5, xMax: 5.5, color: 'rgba(91, 185, 236, 0.06)' },
+            { label: 'Achieve', xMin: 5.5, xMax: 7, color: 'rgba(16, 185, 129, 0.06)' }
+        ],
+        source: 'KDEM Revised Conservative Projections (IT 10%, ESDM 14.5%, Digitizing 8% CAGRs)',
+        confidence: 3
+    }
 }
 
 // ============================================================
@@ -427,8 +719,12 @@ export function getKarnatakaBaseline() {
         currentStartups_USD_Bn: 8.79,      // KDEM Excel projection (no NASSCOM alt)
         currentDigitizing_USD_Bn: 20.23,   // KDEM Excel bottom-up sum of 17 sub-sectors (not smooth CAGR)
         currentTotalDigital_USD_Bn: 159,   // 85.12 + 17.46 + 36.69 + 20.23 = 159.50 (Startups excluded — double-counts with IT Exports/Domestic)
-        currentDigitalEmployment: 3400000, // NASSCOM 5.8M India × 38% = 2.2M IT + 284K ESDM + 920K Startups
-        currentITEmployment: 3400000,
+        // Employment: IT Exports 1.83M + IT Domestic 370K + ESDM 284K = 2.48M
+        // Startup employment (920K) EXCLUDED to avoid double-counting — NASSCOM 5.8M India IT-BPM already includes startup company employees
+        currentDigitalEmployment: 2484000,
+        currentITEmployment: 2200000,  // NASSCOM 5.8M India × 38% KA share (IT Exports + IT Domestic only)
+        currentStartupEmployment: 920000, // KDEM Excel projection — ecosystem metric, NOT added to total (overlaps with NASSCOM IT-BPM headcount)
+        employmentNote: 'Startup employment excluded from digital economy total to avoid double-counting. NASSCOM 5.8M India IT-BPM headcount includes employees at startup companies doing IT/BPO work. 920K tracked separately as ecosystem health metric.',
         // FY 2021-22 actuals (for reference)
         baseActuals: {
             year: '2021-22',
@@ -442,11 +738,18 @@ export function getKarnatakaBaseline() {
         },
         // 2032 Targets (FY 2031-32 — revised conservative projection, startups excluded)
         targetRevenue_USD_Bn: 329,
-        targetEmployment: 8160000,
+        targetEmployment: 4100000, // Medium AI scenario (central estimate) — IT 2.64M + ITD 612K + ESDM 855K (excl startups & digitizing)
+        targetEmploymentScenarios: {
+            lowAI: { value: 5000000, label: 'Low AI Impact', ratios: 'IT: 20, ITD: 22, ESDM: 10 emp/$1M', note: 'Current productivity sustained. Matches KDEM public 5M target. Unlikely given AI adoption trends.' },
+            mediumAI: { value: 4100000, label: 'Medium AI Impact', ratios: 'IT: 16, ITD: 18, ESDM: 9 emp/$1M', note: 'AI augments workers, ~25% IT productivity gain by 2032. Central estimate for planning.' },
+            highAI: { value: 3200000, label: 'High AI Impact', ratios: 'IT: 12, ITD: 14, ESDM: 8 emp/$1M', note: 'Aggressive AI adoption. Revenue grows but employment lags significantly.' },
+            source: 'Per-vertical AI-adjusted conversion ratios. AI impact based on Bessemer Oct 2025 (India IT headcount 7.5-8M→6M by 2031), NASSCOM AI-era projections (6-7% growth FY27), WEF Future of Jobs 2025.'
+        },
         targetYear: '2031-32',
         publicTargetRevenue_USD_Bn: 329,
-        publicTargetEmployment: 5000000,
+        publicTargetEmployment: 5000000, // KDEM stated target — achievable only under low-AI scenario
         errorBand: { low: 140, high: 175, note: 'IT Exports KA share could be 42% not 38% (+$9-13B); ESDM may include design services inflating share (-$10B); Digitizing sectors CAGRs may be overstated (-$6-10B).' },
+        employmentErrorBand: { low: 3200000, central: 4100000, high: 5000000, note: 'Range driven by AI impact on revenue-per-employee. All scenarios exclude startup employment (double-counts with IT) and digitizing sectors (not modeled).' },
         startupNote: 'Startup revenue excluded from total to avoid double-counting with IT Exports/Domestic (NASSCOM figures include startup company revenues). Startups tracked as ecosystem health metrics.',
         // National context (FY 2024-25)
         indiaGDP_FY25_USD_Tn: 3.9,
@@ -486,7 +789,9 @@ export function getVerticalBaselines() {
         {
             id: 'it-exports', name: 'IT Exports',
             current: 85.12, target: 165.0, unit: 'USD Bn',
-            currentEmployment: 1830000, targetEmployment: 3370000,
+            currentEmployment: 1830000, targetEmployment: 2640000, // AI-adjusted (medium): $165B × 16 emp/$1M
+            targetEmploymentPreAI: 3370000, // Pre-AI ratio: $165B × 20 emp/$1M
+            employmentRatio: { current: 21.5, aiAdjusted: 16, unit: 'emp per $1M USD', source: 'NASSCOM avg; AI adjustment per Bessemer Oct 2025' },
             baseYear: '2021-22', baseActual: 67.64, baseEmployment: 1334000,
             indiaFY25: 224, karnatakaSharePct: 38,
             actualGrowthCAGR: '~8% (FY22-25)', targetCAGR: '10% (FY25-32)',
@@ -498,7 +803,9 @@ export function getVerticalBaselines() {
         {
             id: 'it-domestic', name: 'IT Domestic',
             current: 17.46, target: 34.0, unit: 'USD Bn',
-            currentEmployment: 370000, targetEmployment: 890000,
+            currentEmployment: 370000, targetEmployment: 612000, // AI-adjusted (medium): $34B × 18 emp/$1M
+            targetEmploymentPreAI: 890000, // Pre-AI ratio: $34B × 25 emp/$1M
+            employmentRatio: { current: 21.2, aiAdjusted: 18, unit: 'emp per $1M USD', source: 'NASSCOM avg; domestic less affected by AI' },
             baseYear: '2021-22', baseActual: 14.7, baseEmployment: 290000,
             indiaFY25: 58.2, karnatakaSharePct: 30,
             actualGrowthCAGR: '~6% (FY22-25)', targetCAGR: '10% (FY25-32)',
@@ -510,7 +817,9 @@ export function getVerticalBaselines() {
         {
             id: 'esdm', name: 'ESDM',
             current: 36.69, target: 95.0, unit: 'USD Bn',
-            currentEmployment: 284000, targetEmployment: 910000,
+            currentEmployment: 284000, targetEmployment: 855000, // AI-adjusted (medium): $95B × 9 emp/$1M (manufacturing less affected by AI)
+            targetEmploymentPreAI: 910000, // Pre-AI ratio: $95B × 10 emp/$1M
+            employmentRatio: { current: 7.7, aiAdjusted: 9, unit: 'emp per $1M USD', source: 'MeitY actual; ESDM is design-heavy in KA, not labor-intensive assembly' },
             baseYear: '2021-22', baseActual: 17.98, baseEmployment: 140000,
             indiaFY25: null, karnatakaSharePct: 20,
             actualGrowthCAGR: '~27% (FY22-25)', targetCAGR: '14.5% (FY25-32)',
@@ -522,7 +831,9 @@ export function getVerticalBaselines() {
         {
             id: 'startups', name: 'Startups',
             current: 8.79, target: 22.0, unit: 'USD Bn',
-            currentEmployment: 920000, targetEmployment: 2980000,
+            currentEmployment: 920000, targetEmployment: 2980000, // Ecosystem metric only — NOT added to digital economy employment total
+            employmentExcluded: true, // Double-counts with NASSCOM IT-BPM (startup company employees counted in IT figures)
+            employmentRatio: { current: 104.7, note: 'High ratio reflects labor-intensive nature; KDEM Excel projection, no independent verification' },
             baseYear: '2021-22', baseActual: 4.0, baseEmployment: 424000,
             indiaFY25: null, karnatakaSharePct: 40,
             actualGrowthCAGR: '~30% projected (FY22-25)', targetCAGR: '14% (FY25-32)',

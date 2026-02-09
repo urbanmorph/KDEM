@@ -4,7 +4,7 @@
  * All data from referenceData service and Supabase - no hardcoded values
  */
 
-import { getLaborMetrics, getTalentPools, getClusterTalent, getSkillingPrograms, getCoESkilling, getSkillDevelopmentPolicy, getLaborSources } from '../services/referenceData.js'
+import { getLaborMetrics, getTalentPools, getClusterTalent, getSkillingPrograms, getCoESkilling, getSkillDevelopmentPolicy, getLaborSources, getAIWorkforceImpact } from '../services/referenceData.js'
 import { fetchConversionRatios } from '../services/dataService.js'
 import { formatNumber } from '../utils/formatting.js'
 import { renderConfidenceStars } from '../utils/components.js'
@@ -21,6 +21,7 @@ export async function renderLaborTab(appData) {
         const coESkilling = getCoESkilling()
         const skillPolicy = getSkillDevelopmentPolicy()
         const laborSources = getLaborSources()
+        const aiImpact = getAIWorkforceImpact()
 
         // Load employment conversion ratios from the database
         let conversionRatios = []
@@ -48,6 +49,65 @@ export async function renderLaborTab(appData) {
                 <div class="metrics-grid">
                     ${renderLaborMetrics(laborMetrics)}
                 </div>
+
+                <!-- AI Workforce Transition -->
+                <div class="section-header mt-4">
+                    <h3>AI Workforce Transition</h3>
+                    <p>An estimated ${(aiImpact.keyStats.vulnerableWorkers.low / 1000).toFixed(0)}-${(aiImpact.keyStats.vulnerableWorkers.high / 1000).toFixed(0)}K workers in Karnataka IT are in roles vulnerable to AI automation by 2028</p>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric-card metric-highlight">
+                        <div class="metric-icon">👥</div>
+                        <div class="metric-value">${(aiImpact.keyStats.totalITWorkforce / 1000000).toFixed(1)}M</div>
+                        <div class="metric-label">Karnataka IT Workforce</div>
+                        <div class="metric-footer">${renderConfidenceStars(aiImpact.keyStats.confidence)}</div>
+                    </div>
+                    <div class="metric-card metric-highlight">
+                        <div class="metric-icon">⚠️</div>
+                        <div class="metric-value">${(aiImpact.keyStats.vulnerableWorkers.low / 1000).toFixed(0)}-${(aiImpact.keyStats.vulnerableWorkers.high / 1000).toFixed(0)}K</div>
+                        <div class="metric-label">AI-Vulnerable Workers</div>
+                        <div class="metric-footer">${renderConfidenceStars(aiImpact.keyStats.confidence)}</div>
+                    </div>
+                    <div class="metric-card metric-highlight">
+                        <div class="metric-icon">🤖</div>
+                        <div class="metric-value">${(aiImpact.keyStats.currentAISpecialists / 1000).toFixed(0)}K</div>
+                        <div class="metric-label">Current AI Specialists</div>
+                        <div class="metric-footer">${renderConfidenceStars(aiImpact.keyStats.confidence)}</div>
+                    </div>
+                    <div class="metric-card metric-highlight">
+                        <div class="metric-icon">🎯</div>
+                        <div class="metric-value">${(aiImpact.keyStats.neededAISpecialists / 1000).toFixed(0)}K+</div>
+                        <div class="metric-label">AI Specialists Needed by 2030</div>
+                        <div class="metric-footer">${renderConfidenceStars(aiImpact.keyStats.confidence)}</div>
+                    </div>
+                </div>
+
+                <div class="table-scroll-wrapper" style="margin-top: 1rem;">
+                    <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Vulnerable Role</th>
+                            <th>Est. Workers</th>
+                            <th>Risk Level</th>
+                            <th>Timeline</th>
+                            <th>Mitigation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${aiImpact.vulnerableRoles.map(r => `
+                            <tr>
+                                <td><strong>${r.role}</strong></td>
+                                <td>${r.workers}</td>
+                                <td><span class="impact-badge ${r.riskLevel.toLowerCase()}">${r.riskLevel}</span></td>
+                                <td>${r.timeline}</td>
+                                <td>${r.mitigation}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+                </div>
+                <p class="source" style="margin-top: 0.5rem;">Source: ${aiImpact.source} | ${renderConfidenceStars(aiImpact.confidence)}</p>
 
                 <!-- Specialized Workforce -->
                 <div class="section-header mt-4">

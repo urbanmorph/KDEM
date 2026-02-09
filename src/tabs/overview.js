@@ -55,9 +55,9 @@ export async function renderOverviewTab(appData) {
                     })}
                     ${annotatedMetricCard({
                         label: 'Digital Economy Employment', value: baseline.currentDigitalEmployment, unit: 'Jobs',
-                        icon: '👥', type: 'benchmark', confidence: 4,
-                        source: baseline.source, target: `${(baseline.targetEmployment / 1000000).toFixed(1)}M by 2032`,
-                        formula: 'Total digital economy workforce across all 5 verticals'
+                        icon: '👥', type: 'benchmark', confidence: 3,
+                        source: baseline.source, target: `${((totalMetrics.total_employment || baseline.targetEmployment) / 1000000).toFixed(1)}M by 2032 (DB)`,
+                        formula: 'IT Exports + IT Domestic + ESDM (startup employment excluded — overlaps with NASSCOM IT-BPM figures)'
                     })}
                     ${annotatedMetricCard({
                         label: "Share of India's Digital Economy", value: baseline.karnatakaDigitalShareOfIndia_Pct, unit: '%',
@@ -103,8 +103,9 @@ export async function renderOverviewTab(appData) {
                     <div class="gauge-item-echarts">
                         <div id="employment-speedometer" class="echart-container" style="height: 260px;"></div>
                         <div class="gauge-label">
-                            <strong>${formatNumber(baseline.currentDigitalEmployment)}</strong> of ${(baseline.targetEmployment / 1000000).toFixed(1)}M Employment Target
-                            <br/>${renderConfidenceStars(4)}
+                            <strong>${formatNumber(baseline.currentDigitalEmployment)}</strong> of ${((totalMetrics.total_employment || baseline.targetEmployment) / 1000000).toFixed(1)}M Employment Target
+                            <br/><span style="font-size: 0.75rem; color: #6b7280;">AI-adjusted (medium scenario) — Source: DB targets</span>
+                            <br/>${renderConfidenceStars(3)}
                         </div>
                     </div>
                 </div>
@@ -356,8 +357,9 @@ function initAllCharts(verticalOverview, totalMetrics, baseline, verticalBaselin
         unit: `$${baseline.currentTotalDigital_USD_Bn}B / $${baseline.targetRevenue_USD_Bn}B`
     })
 
-    createSpeedometerGauge('employment-speedometer', baseline.currentDigitalEmployment, baseline.targetEmployment, 'Employment Progress', {
-        unit: `${(baseline.currentDigitalEmployment / 1000000).toFixed(1)}M / ${(baseline.targetEmployment / 1000000).toFixed(1)}M`
+    const dbTargetEmployment = totalMetrics.total_employment || baseline.targetEmployment
+    createSpeedometerGauge('employment-speedometer', baseline.currentDigitalEmployment, dbTargetEmployment, 'Employment Progress', {
+        unit: `${(baseline.currentDigitalEmployment / 1000000).toFixed(1)}M / ${(dbTargetEmployment / 1000000).toFixed(1)}M`
     })
 
     // 2. WATERFALL — How verticals add up
