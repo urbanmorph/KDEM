@@ -471,6 +471,7 @@ export function getGDPComparisonTimeline() {
     return {
         labels: ['2020-21', '2021-22', '2022-23', '2023-24', '2024-25'],
         karnatakaGSDP: [222, 270, 281, 306, 331],
+        indiaGDP_actual: [2690, 3190, 3260, 3600, 3790],
         indiaGDP_scaled: [269, 319, 326, 360, 379],
         source: 'MoSPI, RBI Handbook 2025',
         confidence: 5

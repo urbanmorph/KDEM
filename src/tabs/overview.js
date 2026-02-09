@@ -12,7 +12,7 @@ import {
 } from '../services/referenceData.js'
 import { formatNumber } from '../utils/formatting.js'
 import { annotatedMetricCard, renderConfidenceStars } from '../utils/components.js'
-import { CHART_COLORS } from '../utils/chartSetup.js'
+import { Chart, CHART_COLORS, destroyChart, createGradient, getResponsiveOptions } from '../utils/chartSetup.js'
 import { createDoughnutChart, createAnnotatedAreaChart, createAreaChart } from '../utils/chartFactories.js'
 import { createSpeedometerGauge, createSankeyChart, createTreemapChart, createWaterfallChart } from '../utils/echartsFactories.js'
 
@@ -379,16 +379,78 @@ function initAllCharts(verticalOverview, totalMetrics, baseline, verticalBaselin
         }
     )
 
-    // 6. GDP COMPARISON — plain area chart
+    // 6. GDP COMPARISON — custom chart: plots India GDP scaled /10 but shows actual values
     const gdpTimeline = getGDPComparisonTimeline()
-    createAreaChart(
-        'gdp-comparison-chart',
-        gdpTimeline.labels,
-        [
-            { label: 'Karnataka GSDP (USD Bn)', data: gdpTimeline.karnatakaGSDP, color: '#5BB9EC' },
-            { label: 'India GDP (USD Bn, scaled /10)', data: gdpTimeline.indiaGDP_scaled, color: '#E96337' }
-        ]
-    )
+    const gdpCanvas = document.getElementById('gdp-comparison-chart')
+    if (gdpCanvas) {
+        destroyChart('gdp-comparison-chart')
+        const gdpCtx = gdpCanvas.getContext('2d')
+        const gdpResponsive = getResponsiveOptions()
+        const indiaActual = gdpTimeline.indiaGDP_actual
+
+        new Chart(gdpCanvas, {
+            type: 'line',
+            data: {
+                labels: gdpTimeline.labels,
+                datasets: [
+                    {
+                        label: 'Karnataka GSDP (USD Bn)',
+                        data: gdpTimeline.karnatakaGSDP,
+                        borderColor: '#5BB9EC',
+                        backgroundColor: createGradient(gdpCtx, '#5BB9EC'),
+                        fill: true, tension: 0.4, pointRadius: 4, pointBackgroundColor: '#5BB9EC'
+                    },
+                    {
+                        label: 'India GDP (USD Bn, scaled /10)',
+                        data: gdpTimeline.indiaGDP_scaled,
+                        borderColor: '#E96337',
+                        backgroundColor: createGradient(gdpCtx, '#E96337'),
+                        fill: true, tension: 0.4, pointRadius: 4, pointBackgroundColor: '#E96337',
+                        actualValues: indiaActual
+                    }
+                ]
+            },
+            options: {
+                ...gdpResponsive,
+                plugins: {
+                    ...gdpResponsive.plugins,
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const ds = context.dataset
+                                if (ds.actualValues) {
+                                    return `${ds.label.replace(' (USD Bn, scaled /10)', '')}: $${ds.actualValues[context.dataIndex].toLocaleString()}B`
+                                }
+                                return `${ds.label}: $${context.parsed.y}B`
+                            }
+                        }
+                    },
+                    datalabels: {
+                        display: window.innerWidth >= 768,
+                        color: '#202124',
+                        font: { size: 10, weight: '600' },
+                        anchor: 'end',
+                        align: 'top',
+                        formatter: (value, context) => {
+                            const ds = context.dataset
+                            if (ds.actualValues) {
+                                return `$${ds.actualValues[context.dataIndex].toLocaleString()}B`
+                            }
+                            return `$${value}B`
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { callback: (v) => `$${v}B` },
+                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        })
+    }
 
     // 7. DOUGHNUT — Revenue composition
     const vertLabels = verticalOverview.map(v => v.name)
