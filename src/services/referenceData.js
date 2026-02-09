@@ -252,7 +252,8 @@ export function getRoadmapPhases() {
         { year: '2026', title: 'Acceleration Phase', milestones: ['Scale Tier 1 investments', 'Launch Tier 2 anchor projects', 'IT Exports reach $100B', 'ESDM manufacturing ramp-up'], confidence: 4 },
         { year: '2027', title: 'Expansion Phase', milestones: ['Geographic diversification across all clusters', 'Startup ecosystem maturity', 'Advanced digitization in traditional sectors', '2M employment milestone'], confidence: 4 },
         { year: '2028', title: 'Integration Phase', milestones: ['Cross-cluster synergies activated', 'Infrastructure projects operational', 'IT Domestic scales to $50B', '3M employment milestone'], confidence: 3 },
-        { year: '2029-2030', title: 'Maturity Phase', milestones: ['All verticals at target levels', 'Sustainable growth trajectory established', '$400B digital economy achieved', '5M employment target'], confidence: 3 }
+        { year: '2029-2030', title: 'Acceleration Phase', milestones: ['IT Exports crosses $137B', 'ESDM crosses $72B', 'All clusters operational', '4M employment milestone'], confidence: 3 },
+        { year: '2031-2032', title: 'Maturity Phase', milestones: ['All verticals at target levels', 'Sustainable growth trajectory established', '$329B digital economy achieved', '5M employment target'], confidence: 3 }
     ]
 }
 
@@ -340,9 +341,11 @@ export function getAllSources() {
             { id: 9, name: 'Karnataka Aerospace & Defence Policy 2022-27', data: '60-65% of India\'s aerospace', confidence: 5, notes: 'Official policy' }
         ],
         regional: [
-            { id: 10, name: 'STPI Karnataka', link: 'https://bengaluru.stpi.in', data: 'IT/ITES exports (45% share)', confidence: 5, notes: 'Official quarterly data' },
-            { id: 11, name: 'DPIIT', data: 'Karnataka #1 state, 16,000+ startups', confidence: 5, notes: 'Government of India' },
-            { id: 12, name: 'Karnataka Economic Survey', data: 'Digital economy ~$110B estimate', confidence: 4, notes: 'State economic data' }
+            { id: 10, name: 'STPI Karnataka', link: 'https://bengaluru.stpi.in', data: 'IT/ITES exports (42-45% national share)', confidence: 5, notes: 'Official quarterly data' },
+            { id: 11, name: 'DPIIT Prabhaav Dashboard', link: 'https://www.prabhaav.in', data: 'Karnataka: 21,163 DPIIT-recognized startups (#1 state)', confidence: 5, notes: 'Jan 2025' },
+            { id: 12, name: 'Karnataka Economic Survey', data: 'Digital economy ~$110B estimate (FY21-22 base)', confidence: 4, notes: 'State economic data' },
+            { id: 'R1', name: 'MeitY Annual Report FY24-25', link: 'https://www.meity.gov.in', data: 'India ESDM production, Karnataka ESDM contribution $36.69B', confidence: 5, notes: 'Official data' },
+            { id: 'R2', name: 'MoSPI / RBI Handbook of Statistics', link: 'https://www.rbi.org.in/scripts/AnnualPublications.aspx', data: 'India GDP, Karnataka GSDP, GDP deflator', confidence: 5, notes: '2025' }
         ],
         gcc: [
             { id: 13, name: 'Zinnov "5 Shifts Defining India\'s GCC Story in 2025"', data: '1,800+ GCCs, 2M workforce, Karnataka 880+ centers', confidence: 4, date: 'Nov 2025' },
@@ -351,9 +354,22 @@ export function getAllSources() {
             { id: 16, name: 'Zinnov Mega GCC Report 2025', data: '5% of GCCs = 50% workforce', confidence: 4, date: '2025' }
         ],
         startup: [
-            { id: 20, name: 'Startup Genome - Bengaluru Karnataka', data: 'Ecosystem health metrics', confidence: 4, date: '2025' },
-            { id: 21, name: 'Tracxn', data: 'Startup funding, unicorn tracking', confidence: 3, notes: 'Subscription data' },
-            { id: 22, name: 'Inc42', data: 'Startup news, BTS coverage', confidence: 3, notes: 'News source' }
+            { id: 20, name: 'Startup Genome GSER 2025', link: 'https://startupgenome.com/report/gser2025', data: 'Bengaluru #14 global ecosystem, ecosystem value $136B, 32 unicorns', confidence: 5, date: '2025' },
+            { id: 21, name: 'Tracxn - Bengaluru Startups', link: 'https://tracxn.com', data: '17,000+ funded startups, 183 soonicorns, funding rounds', confidence: 4, notes: 'Subscription data' },
+            { id: 22, name: 'Inc42', link: 'https://inc42.com', data: 'Startup news, funding data', confidence: 3, notes: 'News source' },
+            { id: 23, name: '3One4 Capital - Bengaluru Innovation Report 2025', data: '2.5M+ tech workforce, ecosystem metrics, AI/ML talent', confidence: 4, date: '2025' },
+            { id: 24, name: 'DPIIT Prabhaav - Karnataka Startups', link: 'https://www.prabhaav.in', data: '21,163 DPIIT-recognized startups, sector breakdown', confidence: 5, date: 'Jan 2025' }
+        ],
+        projections: [
+            { id: 'P1', name: 'NASSCOM Strategic Review FY24-25', link: 'https://nasscom.in/knowledge-center/publications/nasscom-strategic-review-2025', data: 'India IT revenue $283B (Exports $224B, Domestic $58.2B), IT talent 5.8M, $500B target by 2030', confidence: 5, date: 'Feb 2025' },
+            { id: 'P2', name: 'NASSCOM IT-BPM Revenue Growth Forecast', link: 'https://nasscom.in', data: 'India IT 6-7% growth FY27, AI-moderated projections', confidence: 4, date: '2025' },
+            { id: 'P3', name: 'CareEdge Research - India ESDM', link: 'https://www.careedge.in', data: 'India ESDM 20-25% CAGR projection, semiconductor investment impact', confidence: 4, date: '2025' },
+            { id: 'P4', name: 'Statista - India IT Services Market', link: 'https://www.statista.com/outlook/tmo/it-services/india', data: 'India IT services 8.83% CAGR 2025-2030', confidence: 4, date: '2025' },
+            { id: 'P5', name: 'Bessemer Venture Partners - Cloud Atlas', link: 'https://www.bvp.com/atlas', data: 'India cloud revenue $400B by 2030 projection', confidence: 3, date: '2025' },
+            { id: 'P6', name: 'IDC India IT Spending Forecast', link: 'https://www.idc.com', data: 'India domestic IT 7.2% growth 2024', confidence: 4, date: '2024' },
+            { id: 'P7', name: 'Gartner India IT Spending Forecast', link: 'https://www.gartner.com', data: 'India IT spending 10-11% growth FY25-26', confidence: 4, date: '2025' },
+            { id: 'P8', name: 'ICEA - India Electronics & Semiconductor Report', link: 'https://icea.org.in', data: 'India ESDM production data, base year figures', confidence: 4, date: '2025' },
+            { id: 'P9', name: 'McKinsey - Digital India (2019)', link: 'https://www.mckinsey.com/business-functions/mckinsey-digital/our-insights/digital-india-technology-to-transform-a-connected-nation', data: '17 digitizing sub-sector framework (baseline only, not used for projections)', confidence: 3, date: '2019' }
         ],
         cluster: [
             { id: 25, name: 'KDEM Vision Document 2025 - Mysuru Chapter', data: '$10B by 2030, 150,000 jobs, 2,800 startups', confidence: 4, date: 'Jul 2025' },
@@ -410,7 +426,7 @@ export function getKarnatakaBaseline() {
         currentESDM_USD_Bn: 36.69,         // MeitY actual FY24-25
         currentStartups_USD_Bn: 8.79,      // KDEM Excel projection (no NASSCOM alt)
         currentDigitizing_USD_Bn: 20.23,   // KDEM Excel bottom-up sum of 17 sub-sectors (not smooth CAGR)
-        currentTotalDigital_USD_Bn: 168,   // 85.12 + 17.46 + 36.69 + 8.79 + 20.23 = 168.29
+        currentTotalDigital_USD_Bn: 159,   // 85.12 + 17.46 + 36.69 + 20.23 = 159.50 (Startups excluded — double-counts with IT Exports/Domestic)
         currentDigitalEmployment: 3400000, // NASSCOM 5.8M India × 38% = 2.2M IT + 284K ESDM + 920K Startups
         currentITEmployment: 3400000,
         // FY 2021-22 actuals (for reference)
@@ -424,11 +440,14 @@ export function getKarnatakaBaseline() {
             total: 110.4,
             employment: 2180000
         },
-        // 2030 Targets (FY 2029-30 — KDEM aspiration)
-        targetRevenue_USD_Bn: 479,
+        // 2032 Targets (FY 2031-32 — revised conservative projection, startups excluded)
+        targetRevenue_USD_Bn: 329,
         targetEmployment: 8160000,
-        publicTargetRevenue_USD_Bn: 400,
+        targetYear: '2031-32',
+        publicTargetRevenue_USD_Bn: 329,
         publicTargetEmployment: 5000000,
+        errorBand: { low: 140, high: 175, note: 'IT Exports KA share could be 42% not 38% (+$9-13B); ESDM may include design services inflating share (-$10B); Digitizing sectors CAGRs may be overstated (-$6-10B).' },
+        startupNote: 'Startup revenue excluded from total to avoid double-counting with IT Exports/Domestic (NASSCOM figures include startup company revenues). Startups tracked as ecosystem health metrics.',
         // National context (FY 2024-25)
         indiaGDP_FY25_USD_Tn: 3.9,
         indiaIT_FY25_USD_Bn: 283,          // NASSCOM Strategic Review 2025
@@ -462,55 +481,79 @@ export function getKarnatakaBaseline() {
 
 export function getVerticalBaselines() {
     // FY24-25 "current" values: NASSCOM actuals for IT, MeitY actual for ESDM, Excel projections for Startups/Digitizing
-    // FY29-30 "target" values: KDEM aspirational targets from Excel model
+    // FY31-32 "target" values: revised conservative projections using industry-benchmarked CAGRs
     return [
         {
             id: 'it-exports', name: 'IT Exports',
-            current: 85.12, target: 228.66, unit: 'USD Bn',
+            current: 85.12, target: 165.0, unit: 'USD Bn',
             currentEmployment: 1830000, targetEmployment: 3370000,
             baseYear: '2021-22', baseActual: 67.64, baseEmployment: 1334000,
             indiaFY25: 224, karnatakaSharePct: 38,
-            actualGrowthCAGR: '~8% (FY22-25)', targetCAGR: '~22% (FY25-30)',
+            actualGrowthCAGR: '~8% (FY22-25)', targetCAGR: '10% (FY25-32)',
+            targetYear: '2031-32',
+            revisionNote: 'NASSCOM SR 2025 ($500B India IT by 2030, ~12% CAGR); Statista 8.83%; Bessemer $400B by 2030; AI-moderated growth (NASSCOM projects 6-7% FY27)',
             source: 'NASSCOM Strategic Review FY25: India $224B × 38% KA share',
             confidence: 4
         },
         {
             id: 'it-domestic', name: 'IT Domestic',
-            current: 17.46, target: 56.24, unit: 'USD Bn',
+            current: 17.46, target: 34.0, unit: 'USD Bn',
             currentEmployment: 370000, targetEmployment: 890000,
             baseYear: '2021-22', baseActual: 14.7, baseEmployment: 290000,
             indiaFY25: 58.2, karnatakaSharePct: 30,
-            actualGrowthCAGR: '~6% (FY22-25)', targetCAGR: '~26% (FY25-30)',
+            actualGrowthCAGR: '~6% (FY22-25)', targetCAGR: '10% (FY25-32)',
+            targetYear: '2031-32',
+            revisionNote: 'IDC India domestic IT 7.2% growth 2024; Gartner India IT spending 10-11% FY25-26',
             source: 'NASSCOM Strategic Review FY25: India $58.2B × 30% KA share',
             confidence: 4
         },
         {
             id: 'esdm', name: 'ESDM',
-            current: 36.69, target: 105.18, unit: 'USD Bn',
+            current: 36.69, target: 95.0, unit: 'USD Bn',
             currentEmployment: 284000, targetEmployment: 910000,
             baseYear: '2021-22', baseActual: 17.98, baseEmployment: 140000,
             indiaFY25: null, karnatakaSharePct: 20,
-            actualGrowthCAGR: '~27% (FY22-25)', targetCAGR: '~23% (FY25-30)',
+            actualGrowthCAGR: '~27% (FY22-25)', targetCAGR: '14.5% (FY25-32)',
+            targetYear: '2031-32',
+            revisionNote: 'CareEdge 20-25% India CAGR; moderated for Karnataka share dilution as Gujarat/TN fabs come online',
             source: 'MeitY + Care Edge Research FY24-25 actual',
             confidence: 5
         },
         {
             id: 'startups', name: 'Startups',
-            current: 8.79, target: 26.78, unit: 'USD Bn',
+            current: 8.79, target: 22.0, unit: 'USD Bn',
             currentEmployment: 920000, targetEmployment: 2980000,
             baseYear: '2021-22', baseActual: 4.0, baseEmployment: 424000,
             indiaFY25: null, karnatakaSharePct: 40,
-            actualGrowthCAGR: '~30% projected (FY22-25)', targetCAGR: '~25% (FY25-30)',
+            actualGrowthCAGR: '~30% projected (FY22-25)', targetCAGR: '14% (FY25-32)',
+            targetYear: '2031-32',
+            isEcosystemPillar: true,
+            revenueExcluded: true,
+            ecosystemMetrics: {
+                dpiitCount: 21163,
+                nonDpiitEstimate: '~20,000-25,000',
+                totalEstimate: '~40,000-46,000',
+                ecosystemValue: 136,
+                annualFunding: 3.6,
+                unicorns: 32,
+                soonicorns: 183,
+                source: 'DPIIT Prabhaav Jan 2025, Startup Genome GSER 2025, Tracxn 2025, 3One4 Capital Bengaluru Innovation Report 2025'
+            },
+            nonDpiitNote: 'DPIIT recognition covers an estimated 50-60% of eligible startups. Many bootstrapped companies, sole proprietorships, and early-stage ventures operate without DPIIT registration. Non-DPIIT estimate based on: MCA tech company registrations in Karnataka (<10 years), Tracxn database coverage (17,000+ funded), and Karnataka Startup Cell data (Elevate program). Total ecosystem estimated at 40,000-46,000 startups.',
+            revisionNote: 'DPIIT/NASSCOM $1T startup contribution by 2030; Bengaluru 26% of VC funding; moderated for funding winter',
+            note: 'Startup revenue excluded from total revenue target to avoid double-counting. NASSCOM IT revenue figures already include startup company revenues in IT Exports and IT Domestic. Startups tracked as an ecosystem health pillar with metrics on count, funding, and unicorns.',
             source: 'KDEM Excel projection (no independent FY25 actual available)',
             confidence: 3
         },
         {
             id: 'digitizing-sectors', name: 'Newly Digitizing',
-            current: 20.23, target: 61.98, unit: 'USD Bn',
+            current: 20.23, target: 35.0, unit: 'USD Bn',
             currentEmployment: 0, targetEmployment: 0,
             baseYear: '2021-22', baseActual: 6.0, baseEmployment: 0,
             indiaFY25: null, karnatakaSharePct: null,
-            actualGrowthCAGR: 'sub-sector specific (FY22-25)', targetCAGR: '~33% (FY25-30)',
+            actualGrowthCAGR: 'sub-sector specific (FY22-25)', targetCAGR: '8% (FY25-32)',
+            targetYear: '2031-32',
+            revisionNote: 'Aligned with India nominal GDP growth; McKinsey 2019 framework not used for projections',
             source: 'KDEM Excel — 17 sub-sectors (McKinsey framework), no independent FY25 actuals',
             confidence: 2
         }
@@ -565,41 +608,42 @@ export function getIndiaDigitalEconomyTimeline() {
 export function getKarnatakaITExportsTimeline() {
     // NASSCOM actual for FY24-25: India $224B × 38% = $85.12B
     // FY22-24 interpolated from FY21-22 base ($67.64B) at ~8% actual CAGR
-    // FY25-30 projected at ~22% CAGR to reach $229B KDEM target
+    // FY25-32 projected at 10% CAGR to reach $165B revised target
     return {
-        labels: ['2021-22', '2022-23', '2023-24', '2024-25', '2025-26', '2026-27', '2027-28', '2028-29', '2029-30'],
-        actual: [67.6, 73.1, 78.9, 85.1, null, null, null, null, null],
-        projected: [null, null, null, 85.1, 103.8, 126.5, 154.2, 188.0, 229],
-        target: 229,
+        labels: ['2021-22', '2022-23', '2023-24', '2024-25', '2025-26', '2026-27', '2027-28', '2028-29', '2029-30', '2030-31', '2031-32'],
+        actual: [67.6, 73.1, 78.9, 85.1, null, null, null, null, null, null, null],
+        projected: [null, null, null, 85.1, 93.6, 103.0, 113.3, 124.6, 137.1, 150.8, 165.8],
+        target: 165,
         todayIndex: 3,
-        source: 'NASSCOM Strategic Review FY25 (India $224B × 38% KA share)',
+        source: 'NASSCOM Strategic Review FY25 (India $224B × 38% KA share); 10% CAGR: NASSCOM SR 2025 ($500B India IT by 2030), Statista 8.83%, AI-moderated growth',
         confidence: 4,
-        note: 'NASSCOM actual FY24-25. STPI-only: $52B (covers ~60% of total IT exports).'
+        note: 'NASSCOM actual FY24-25. Revised to 10% CAGR (FY25-32) from original 22% (FY25-30). STPI-only: $52B (covers ~60% of total IT exports).'
     }
 }
 
 export function getKarnatakaDigitalEconomyTimeline() {
-    // Sum of all 5 verticals — NASSCOM/MeitY actuals for FY24-25, interpolated FY22-24, projected FY25-30
+    // Sum of 4 revenue verticals (Startups excluded — double-counts with IT Exports/Domestic)
     // IT Exports & Domestic: NASSCOM Strategic Review FY25 × KA share
     // ESDM: MeitY actual FY24-25
-    // Startups & Digitizing: KDEM Excel CAGR projections (no independent actuals)
-    // FY25-30: per-vertical CAGR to reach KDEM $479B aspiration
+    // Digitizing: KDEM Excel CAGR projections (no independent actuals)
+    // FY25-32: per-vertical conservative CAGRs to reach $329B by FY31-32
+    // Revised CAGRs: IT Exports 10%, IT Domestic 10%, ESDM 14.5%, Digitizing 8%
     return {
-        labels: ['2021-22', '2022-23', '2023-24', '2024-25', '2025-26', '2026-27', '2027-28', '2028-29', '2029-30'],
-        actual: [110, null, null, 168, null, null, null, null, null],
-        projected: [110, 127, 147, 168, 207, 255, 317, 390, 479],
-        target: 479,
+        labels: ['2021-22', '2022-23', '2023-24', '2024-25', '2025-26', '2026-27', '2027-28', '2028-29', '2029-30', '2030-31', '2031-32'],
+        actual: [106, null, null, 159, null, null, null, null, null, null, null],
+        projected: [106, 121, 138, 159, 177, 196, 217, 241, 267, 297, 329],
+        target: 329,
         todayIndex: 3,
         verticalBreakdown: {
-            'IT Exports':  [67.64, 73.1,  78.9,  85.1,  103.8, 126.5, 154.2, 188.0, 229],
-            'IT Domestic': [14.70, 15.6,  16.5,  17.5,  22.1,  27.9,  35.2,  44.5,  56.2],
-            'ESDM':        [17.98, 22.8,  29.0,  36.7,  45.3,  55.9,  69.0,  85.1,  105.0],
-            'Startups':    [4.00,  5.2,   6.76,  8.79,  11.0,  13.8,  17.3,  21.7,  26.8],
-            'Digitizing':  [6.00,  9.45,  13.93, 20.23, 24.8,  30.4,  37.2,  48.1,  62.0]
+            'IT Exports':  [67.64, 73.1,  78.9,  85.1,  93.6,  103.0, 113.3, 124.6, 137.1, 150.8, 165.8],
+            'IT Domestic': [14.70, 15.6,  16.5,  17.5,  19.2,  21.2,  23.3,  25.6,  28.2,  31.0,  34.1],
+            'ESDM':        [17.98, 22.8,  29.0,  36.7,  42.0,  48.1,  55.1,  63.1,  72.2,  82.7,  94.7],
+            'Startups':    [4.00,  5.2,   6.76,  8.79,  10.0,  11.4,  13.0,  14.8,  16.9,  19.3,  22.0],
+            'Digitizing':  [6.00,  9.45,  13.93, 20.23, 21.8,  23.6,  25.5,  27.5,  29.7,  32.1,  34.7]
         },
-        source: 'NASSCOM Strategic Review 2025 + MeitY FY25 + KDEM Excel targets',
+        source: 'NASSCOM Strategic Review 2025 + MeitY FY25 + revised conservative CAGRs (IT 10%, ESDM 14.5%, Digitizing 8%). Startup revenue excluded from total (double-counts with IT).',
         confidence: 4,
-        note: 'FY21-22 actual base. FY24-25: IT/ESDM from NASSCOM/MeitY actuals, Startups/Digitizing from KDEM Excel. FY25-30: per-vertical CAGR to KDEM targets.'
+        note: 'FY21-22 actual base. FY24-25: IT/ESDM from NASSCOM/MeitY actuals, Digitizing from KDEM Excel. Startup revenue excluded from total to avoid double-counting with IT Exports/Domestic (NASSCOM figures include startup company revenues). Startups vertical breakdown retained for ecosystem tracking. FY25-32: revised per-vertical CAGRs benchmarked to industry consensus (NASSCOM, IDC, CareEdge). Timeline target: $329B by FY31-32.'
     }
 }
 
@@ -615,25 +659,25 @@ export function getGDPComparisonTimeline() {
 }
 
 export function getRevenueWaterfall() {
+    // Startups excluded — revenue double-counts with IT Exports/Domestic
     return [
-        { name: 'IT Exports', value: 229, color: '#E96337' },
-        { name: 'IT Domestic', value: 56, color: '#E68634' },
-        { name: 'ESDM', value: 105, color: '#5BB9EC' },
-        { name: 'Startups', value: 27, color: '#8B5CF6' },
-        { name: 'Digitizing', value: 62, color: '#10B981' },
+        { name: 'IT Exports', value: 165, color: '#E96337' },
+        { name: 'IT Domestic', value: 34, color: '#E68634' },
+        { name: 'ESDM', value: 95, color: '#5BB9EC' },
+        { name: 'Digitizing', value: 35, color: '#10B981' },
         { name: 'Total Target', value: 0, isTotal: true }
     ]
 }
 
 export function getRevenueSankeyData() {
+    // Startups excluded — revenue double-counts with IT Exports/Domestic
     return {
         nodes: [
-            { name: '$479B Target', id: 'total', color: '#202124' },
-            { name: 'IT Exports ($229B)', id: 'it-exports' },
-            { name: 'ESDM ($105B)', id: 'esdm' },
-            { name: 'IT Domestic ($56B)', id: 'it-domestic' },
-            { name: 'Digitizing ($62B)', id: 'digitizing-sectors' },
-            { name: 'Startups ($27B)', id: 'startups' },
+            { name: '$329B Target', id: 'total', color: '#202124' },
+            { name: 'IT Exports ($165B)', id: 'it-exports' },
+            { name: 'ESDM ($95B)', id: 'esdm' },
+            { name: 'IT Domestic ($34B)', id: 'it-domestic' },
+            { name: 'Digitizing ($35B)', id: 'digitizing-sectors' },
             { name: 'Bengaluru', id: 'bengaluru', color: '#374151' },
             { name: 'Mysuru', id: 'mysuru', color: '#6b7280' },
             { name: 'Mangaluru', id: 'mangaluru', color: '#6b7280' },
@@ -642,107 +686,92 @@ export function getRevenueSankeyData() {
         ],
         links: [
             // Total to verticals
-            { source: '$479B Target', target: 'IT Exports ($229B)', value: 229 },
-            { source: '$479B Target', target: 'ESDM ($105B)', value: 105 },
-            { source: '$479B Target', target: 'IT Domestic ($56B)', value: 56 },
-            { source: '$479B Target', target: 'Digitizing ($62B)', value: 62 },
-            { source: '$479B Target', target: 'Startups ($27B)', value: 27 },
-            // IT Exports to geographies
-            { source: 'IT Exports ($229B)', target: 'Bengaluru', value: 221 },
-            { source: 'IT Exports ($229B)', target: 'Mysuru', value: 3 },
-            { source: 'IT Exports ($229B)', target: 'Mangaluru', value: 2 },
-            { source: 'IT Exports ($229B)', target: 'Other Clusters', value: 3 },
+            { source: '$329B Target', target: 'IT Exports ($165B)', value: 165 },
+            { source: '$329B Target', target: 'ESDM ($95B)', value: 95 },
+            { source: '$329B Target', target: 'IT Domestic ($34B)', value: 34 },
+            { source: '$329B Target', target: 'Digitizing ($35B)', value: 35 },
+            // IT Exports to geographies (96.7% Bengaluru)
+            { source: 'IT Exports ($165B)', target: 'Bengaluru', value: 159 },
+            { source: 'IT Exports ($165B)', target: 'Mysuru', value: 2 },
+            { source: 'IT Exports ($165B)', target: 'Mangaluru', value: 2 },
+            { source: 'IT Exports ($165B)', target: 'Other Clusters', value: 2 },
             // ESDM to geographies
-            { source: 'ESDM ($105B)', target: 'Bengaluru', value: 63 },
-            { source: 'ESDM ($105B)', target: 'Mysuru', value: 12 },
-            { source: 'ESDM ($105B)', target: 'Hubballi-Dharwad', value: 10 },
-            { source: 'ESDM ($105B)', target: 'Mangaluru', value: 8 },
-            { source: 'ESDM ($105B)', target: 'Other Clusters', value: 12 },
+            { source: 'ESDM ($95B)', target: 'Bengaluru', value: 57 },
+            { source: 'ESDM ($95B)', target: 'Mysuru', value: 11 },
+            { source: 'ESDM ($95B)', target: 'Hubballi-Dharwad', value: 9 },
+            { source: 'ESDM ($95B)', target: 'Mangaluru', value: 7 },
+            { source: 'ESDM ($95B)', target: 'Other Clusters', value: 11 },
             // IT Domestic
-            { source: 'IT Domestic ($56B)', target: 'Bengaluru', value: 46 },
-            { source: 'IT Domestic ($56B)', target: 'Other Clusters', value: 10 },
+            { source: 'IT Domestic ($34B)', target: 'Bengaluru', value: 28 },
+            { source: 'IT Domestic ($34B)', target: 'Other Clusters', value: 6 },
             // Digitizing
-            { source: 'Digitizing ($62B)', target: 'Bengaluru', value: 31 },
-            { source: 'Digitizing ($62B)', target: 'Mysuru', value: 8 },
-            { source: 'Digitizing ($62B)', target: 'Hubballi-Dharwad', value: 6 },
-            { source: 'Digitizing ($62B)', target: 'Other Clusters', value: 17 },
-            // Startups
-            { source: 'Startups ($27B)', target: 'Bengaluru', value: 21 },
-            { source: 'Startups ($27B)', target: 'Other Clusters', value: 6 }
+            { source: 'Digitizing ($35B)', target: 'Bengaluru', value: 18 },
+            { source: 'Digitizing ($35B)', target: 'Mysuru', value: 4 },
+            { source: 'Digitizing ($35B)', target: 'Hubballi-Dharwad', value: 3 },
+            { source: 'Digitizing ($35B)', target: 'Other Clusters', value: 10 }
         ],
-        source: 'KDEM Target Database + Apportionment Rules',
+        source: 'KDEM Target Database + Apportionment Rules (Startups excluded — double-counts with IT)',
         confidence: 3
     }
 }
 
 export function getRevenueTreemapData() {
+    // Startups excluded — revenue double-counts with IT Exports/Domestic
     return [
         {
             name: 'IT Exports',
-            value: 229,
+            value: 165,
             color: '#E96337',
             children: [
-                { name: 'IT Services', value: 130 },
-                { name: 'BPM', value: 45 },
-                { name: 'GCCs', value: 34 },
-                { name: 'ER&D', value: 20 }
+                { name: 'IT Services', value: 94 },
+                { name: 'BPM', value: 32 },
+                { name: 'GCCs', value: 24 },
+                { name: 'ER&D', value: 15 }
             ]
         },
         {
             name: 'ESDM',
-            value: 105,
+            value: 95,
             color: '#5BB9EC',
             children: [
-                { name: 'Semiconductor Design', value: 42 },
-                { name: 'Consumer Electronics', value: 25 },
-                { name: 'Industrial Electronics', value: 20 },
-                { name: 'Components', value: 18 }
+                { name: 'Semiconductor Design', value: 38 },
+                { name: 'Consumer Electronics', value: 23 },
+                { name: 'Industrial Electronics', value: 18 },
+                { name: 'Components', value: 16 }
             ]
         },
         {
             name: 'Digitizing Sectors',
-            value: 62,
+            value: 35,
             color: '#10B981',
             children: [
-                { name: 'Business Digitization & IoT', value: 12.75 },
-                { name: 'Flow-based Lending', value: 8.76 },
-                { name: 'Digital Communication', value: 6.10 },
-                { name: 'Transport & Logistics', value: 4.72 },
-                { name: 'Govt e-Marketplace', value: 4.53 },
-                { name: 'Digital Payments', value: 3.87 },
-                { name: 'Direct Benefit Transfer', value: 3.57 },
-                { name: 'Education Platforms', value: 3.36 },
-                { name: 'E-Commerce Supply Chain', value: 2.72 },
-                { name: 'Retail Supply Chain', value: 2.72 },
-                { name: 'Farmer Finance', value: 2.13 },
-                { name: 'Power Distribution', value: 2.06 },
-                { name: 'Agri Marketplace', value: 2.04 },
-                { name: 'Precision Agriculture', value: 1.84 },
-                { name: 'Healthcare', value: 0.29 },
-                { name: 'Talent Platforms', value: 0.20 },
-                { name: 'Smart Grids', value: 0.13 }
+                { name: 'Business Digitization & IoT', value: 7.2 },
+                { name: 'Flow-based Lending', value: 4.9 },
+                { name: 'Digital Communication', value: 3.4 },
+                { name: 'Transport & Logistics', value: 2.7 },
+                { name: 'Govt e-Marketplace', value: 2.6 },
+                { name: 'Digital Payments', value: 2.2 },
+                { name: 'Direct Benefit Transfer', value: 2.0 },
+                { name: 'Education Platforms', value: 1.9 },
+                { name: 'E-Commerce Supply Chain', value: 1.5 },
+                { name: 'Retail Supply Chain', value: 1.5 },
+                { name: 'Farmer Finance', value: 1.2 },
+                { name: 'Power Distribution', value: 1.2 },
+                { name: 'Agri Marketplace', value: 1.2 },
+                { name: 'Precision Agriculture', value: 1.0 },
+                { name: 'Healthcare', value: 0.2 },
+                { name: 'Talent Platforms', value: 0.1 },
+                { name: 'Smart Grids', value: 0.1 }
             ]
         },
         {
             name: 'IT Domestic',
-            value: 56,
+            value: 34,
             color: '#E68634',
             children: [
-                { name: 'Enterprise IT', value: 26 },
-                { name: 'Government IT', value: 16 },
-                { name: 'Digital Services', value: 14 }
-            ]
-        },
-        {
-            name: 'Startups',
-            value: 27,
-            color: '#8B5CF6',
-            children: [
-                { name: 'SaaS', value: 10 },
-                { name: 'DeepTech', value: 6 },
-                { name: 'Fintech', value: 5 },
-                { name: 'Consumer Tech', value: 3 },
-                { name: 'Other', value: 3 }
+                { name: 'Enterprise IT', value: 16 },
+                { name: 'Government IT', value: 10 },
+                { name: 'Digital Services', value: 8 }
             ]
         }
     ]

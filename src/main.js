@@ -44,7 +44,7 @@ async function initApp() {
         const baseline = getKarnatakaBaseline()
         const brandSubtitle = document.getElementById('brand-subtitle')
         if (brandSubtitle) {
-            brandSubtitle.textContent = `From $${baseline.currentTotalDigital_USD_Bn}B Today to $${baseline.targetRevenue_USD_Bn}B by 2030 — The Journey Ahead`
+            brandSubtitle.textContent = `From $${baseline.currentTotalDigital_USD_Bn}B Today to $${baseline.targetRevenue_USD_Bn}B by 2032 — The Journey Ahead`
         }
 
         // Setup event listeners

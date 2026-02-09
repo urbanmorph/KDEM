@@ -18,7 +18,7 @@ export async function renderSourcesTab(appData) {
                 <div class="tab-header">
                     <h2>Data Sources & References</h2>
                     <p class="tab-subtitle">Complete attribution with confidence ratings for all data in KDEM Strategic Dashboard</p>
-                    <p class="last-updated">Last Updated: February 5, 2026</p>
+                    <p class="last-updated">Last Updated: February 9, 2026</p>
                 </div>
 
                 <!-- Confidence Rating Framework -->
@@ -63,6 +63,16 @@ export async function renderSourcesTab(appData) {
                 <div class="sources-section mt-3">
                     <h4>Startup & Ecosystem Research</h4>
                     ${renderSourceTable(allSources.startup)}
+                </div>
+
+                <!-- Industry Data & Projections -->
+                <div class="section-header mt-4">
+                    <h3>Industry Data & Growth Projections</h3>
+                    <p>Sources used for per-vertical CAGR projections and the $329B FY 2031-32 target</p>
+                </div>
+
+                <div class="sources-section">
+                    ${renderSourceTable(allSources.projections)}
                 </div>
 
                 <!-- Cluster Vision Documents -->

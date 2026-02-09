@@ -37,21 +37,21 @@ export function getScaleContext(value, unit) {
 export const CITATIONS = {
     // KDEM Mission Targets
     'kdem_revenue_target': {
-        value: 400, unit: 'USD Billion', source: 'KDEM Mission', confidence: 5,
-        type: 'target', year: '2030',
-        formula: 'Sum of 5 vertical targets',
-        note: 'Exceeds Karnataka GSDP ($345B) - aspirational stretch target'
+        value: 329, unit: 'USD Billion', source: 'KDEM Mission (revised conservative projection)', confidence: 5,
+        type: 'target', year: '2032',
+        formula: 'Sum of 4 revenue vertical targets using industry-benchmarked CAGRs (Startups excluded — double-counts with IT)',
+        note: 'Revised from $400B by 2030 to $329B by 2032 using conservative CAGRs. Startup revenue excluded to avoid double-counting with IT Exports/Domestic.'
     },
     'kdem_employment_target': {
         value: 5000000, unit: 'Jobs', source: 'KDEM Mission', confidence: 5,
-        type: 'target', year: '2030'
+        type: 'target', year: '2032'
     },
 
     // IT Exports
     'it_exports_revenue_2030': {
-        value: 229, unit: 'USD Billion', source: 'KDEM/NASSCOM/STPI', confidence: 4,
-        type: 'projected', year: '2030',
-        formula: 'Based on ~15% CAGR from $52B (2024-25)'
+        value: 165, unit: 'USD Billion', source: 'KDEM/NASSCOM/STPI (revised)', confidence: 4,
+        type: 'projected', year: '2032',
+        formula: 'Based on 10% CAGR from $85.1B (FY24-25)'
     },
     'it_exports_employment_ratio': {
         value: 20, unit: 'employees per $1M USD', source: 'NASSCOM', confidence: 4,
@@ -60,8 +60,8 @@ export const CITATIONS = {
 
     // IT Domestic
     'it_domestic_revenue_2030': {
-        value: 40, unit: 'USD Billion', source: 'KDEM/NASSCOM', confidence: 3,
-        type: 'projected', year: '2030'
+        value: 34, unit: 'USD Billion', source: 'KDEM/NASSCOM (revised)', confidence: 3,
+        type: 'projected', year: '2032'
     },
     'it_domestic_employment_ratio': {
         value: 25, unit: 'employees per $1M USD', source: 'NASSCOM', confidence: 4,
@@ -70,8 +70,8 @@ export const CITATIONS = {
 
     // ESDM
     'esdm_revenue_2030': {
-        value: 105, unit: 'USD Billion', source: 'KDEM/MEITY/IBEF', confidence: 4,
-        type: 'projected', year: '2030',
+        value: 95, unit: 'USD Billion', source: 'KDEM/MEITY/IBEF (revised)', confidence: 4,
+        type: 'projected', year: '2032',
         formula: 'Based on India ESDM growth trajectory, Karnataka ~25% share'
     },
     'esdm_employment_ratio': {

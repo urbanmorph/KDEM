@@ -21,14 +21,14 @@ export async function renderRoadmapTab(appData) {
     return `
         <div class="roadmap-tab">
             <div class="tab-header">
-                <h2>Strategic Roadmap 2025-2030</h2>
-                <p class="tab-subtitle">Phased approach to building Karnataka's $400 billion digital economy</p>
+                <h2>Strategic Roadmap 2025-2032</h2>
+                <p class="tab-subtitle">Phased approach to building Karnataka's $329 billion digital economy</p>
             </div>
 
             <!-- Timeline -->
             <div class="section-header">
                 <h3>Implementation Timeline</h3>
-                <p>Key milestones and deliverables across 5 years</p>
+                <p>Key milestones and deliverables across 7 years</p>
             </div>
 
             <div class="timeline">

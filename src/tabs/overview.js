@@ -1,6 +1,6 @@
 /**
  * Overview Tab Renderer
- * Redesigned to tell the story: Where Karnataka is Today → The Journey → The $400B Target
+ * Redesigned to tell the story: Where Karnataka is Today → The Journey → The $329B Target
  * Uses ECharts (gauge, sankey, treemap, waterfall) + Chart.js (annotated area, doughnut)
  */
 
@@ -8,13 +8,13 @@ import { getVerticalOverview, getTotalMetrics, fetchConversionRatios, fetchTarge
 import {
     getKarnatakaBaseline, getVerticalBaselines, getIndiaDigitalEconomyTimeline,
     getKarnatakaDigitalEconomyTimeline, getGDPComparisonTimeline,
-    getRevenueWaterfall, getRevenueSankeyData, getRevenueTreemapData
+    getRevenueWaterfall, getRevenueSankeyData
 } from '../services/referenceData.js'
 import { formatNumber } from '../utils/formatting.js'
 import { annotatedMetricCard, renderConfidenceStars } from '../utils/components.js'
-import { Chart, CHART_COLORS, destroyChart, createGradient, getResponsiveOptions } from '../utils/chartSetup.js'
-import { createDoughnutChart, createAnnotatedAreaChart, createAreaChart } from '../utils/chartFactories.js'
-import { createSpeedometerGauge, createSankeyChart, createTreemapChart, createWaterfallChart } from '../utils/echartsFactories.js'
+import { Chart, destroyChart, createGradient, getResponsiveOptions } from '../utils/chartSetup.js'
+import { createAnnotatedAreaChart, createAreaChart } from '../utils/chartFactories.js'
+import { createSpeedometerGauge, createSankeyChart, createWaterfallChart } from '../utils/echartsFactories.js'
 
 export async function renderOverviewTab(appData) {
     try {
@@ -25,7 +25,10 @@ export async function renderOverviewTab(appData) {
             fetchTargets({ year: 2030 })
         ])
 
-        const coreVerticals = appData.verticals.filter(v => v.category === 'core')
+        const pillarOrder = ['it-exports', 'it-domestic', 'esdm', 'digitizing-sectors', 'startups']
+        const coreVerticals = appData.verticals
+            .filter(v => v.category === 'core')
+            .sort((a, b) => pillarOrder.indexOf(a.id) - pillarOrder.indexOf(b.id))
         const baseline = getKarnatakaBaseline()
         const verticalBaselines = getVerticalBaselines()
 
@@ -41,8 +44,8 @@ export async function renderOverviewTab(appData) {
                     ${annotatedMetricCard({
                         label: 'Current Digital Economy', value: baseline.currentTotalDigital_USD_Bn, unit: 'USD Billion',
                         icon: '📊', type: 'benchmark', confidence: 3,
-                        source: baseline.source, target: `$${baseline.targetRevenue_USD_Bn}B by 2030`,
-                        formula: 'Sum of IT Exports + IT Domestic + ESDM + Startups + Digitizing'
+                        source: baseline.source, target: `$${baseline.targetRevenue_USD_Bn}B by 2032`,
+                        formula: 'Sum of IT Exports + IT Domestic + ESDM + Digitizing (Startup revenue excluded — embedded in IT figures)'
                     })}
                     ${annotatedMetricCard({
                         label: 'Karnataka GSDP', value: baseline.currentGSDP_USD_Bn, unit: 'USD Billion',
@@ -53,7 +56,7 @@ export async function renderOverviewTab(appData) {
                     ${annotatedMetricCard({
                         label: 'Digital Economy Employment', value: baseline.currentDigitalEmployment, unit: 'Jobs',
                         icon: '👥', type: 'benchmark', confidence: 4,
-                        source: baseline.source, target: `${(baseline.targetEmployment / 1000000).toFixed(1)}M by 2030`,
+                        source: baseline.source, target: `${(baseline.targetEmployment / 1000000).toFixed(1)}M by 2032`,
                         formula: 'Total digital economy workforce across all 5 verticals'
                     })}
                     ${annotatedMetricCard({
@@ -64,10 +67,15 @@ export async function renderOverviewTab(appData) {
                     })}
                 </div>
 
+                <div class="error-band-note" style="background: #fef3c7; border-left: 4px solid #E68634; padding: 12px 16px; margin: -8px 0 16px 0; border-radius: 4px; font-size: 0.85rem; color: #92400e; line-height: 1.5;">
+                    <strong>Note:</strong> Estimate range $${baseline.errorBand.low}-${baseline.errorBand.high}B. ${baseline.errorBand.note}
+                    <br/><em style="font-size: 0.8rem; color: #a16207;">${baseline.startupNote}</em>
+                </div>
+
                 <!-- SECTION 2: VERTICAL BASELINES — The 5 Pillars -->
                 <div class="section-header mt-4">
                     <h3>Mission of KDEM: The 5 Pillars</h3>
-                    <p>Each vertical's journey from today to the $${baseline.targetRevenue_USD_Bn}B goal</p>
+                    <p>4 revenue pillars + 1 ecosystem pillar on the journey to $${baseline.targetRevenue_USD_Bn}B</p>
                 </div>
 
                 <div class="pillars-grid">
@@ -80,7 +88,7 @@ export async function renderOverviewTab(appData) {
 
                 <!-- SECTION 3: PROGRESS GAUGES — Today vs Target -->
                 <div class="section-header mt-4">
-                    <h3>Progress Towards 2030 Vision</h3>
+                    <h3>Progress Towards 2032 Vision</h3>
                     <p>How far we've come and how far we need to go</p>
                 </div>
 
@@ -101,10 +109,10 @@ export async function renderOverviewTab(appData) {
                     </div>
                 </div>
 
-                <!-- SECTION 4: WATERFALL — How the 5 verticals add up to $400B -->
+                <!-- SECTION 4: WATERFALL — How the 4 revenue verticals add up to $329B -->
                 <div class="section-header mt-4">
-                    <h3>Building to $479B: Revenue by Vertical</h3>
-                    <p>How the five pillars combine to reach the target</p>
+                    <h3>Building to $329B: Revenue by Vertical</h3>
+                    <p>How the four revenue pillars combine to reach the FY 2031-32 target</p>
                 </div>
 
                 <div class="growth-charts-grid">
@@ -114,23 +122,10 @@ export async function renderOverviewTab(appData) {
                     </div>
                 </div>
 
-                <!-- SECTION 5: TREEMAP — Hierarchical composition -->
-                <div class="section-header mt-4">
-                    <h3>Revenue Composition: Verticals & Sub-sectors</h3>
-                    <p>Relative size of each vertical and its sub-sectors in the $479B target</p>
-                </div>
-
-                <div class="growth-charts-grid">
-                    <div class="growth-chart-card" style="grid-column: 1 / -1;">
-                        <div id="revenue-treemap" class="echart-container" style="height: 450px;"></div>
-                        <div class="chart-source">Source: KDEM Target Database ${renderConfidenceStars(3)}</div>
-                    </div>
-                </div>
-
-                <!-- SECTION 6: SANKEY — Flow from target to verticals to geographies -->
+                <!-- SECTION 5: SANKEY — Flow from target to verticals to geographies -->
                 <div class="section-header mt-4">
                     <h3>Revenue Flow: Target → Verticals → Geographies</h3>
-                    <p>How the $479B target distributes across verticals and geographic clusters</p>
+                    <p>How the $329B target distributes across verticals and geographic clusters</p>
                 </div>
 
                 <div class="growth-charts-grid">
@@ -169,22 +164,7 @@ export async function renderOverviewTab(appData) {
                     </div>
                 </div>
 
-                <!-- SECTION 9: Revenue Composition Doughnut -->
-                <div class="section-header mt-4">
-                    <h3>2030 Target: Revenue Composition</h3>
-                    <p>How the 5 verticals contribute to the $479B target</p>
-                </div>
-
-                <div class="growth-charts-grid">
-                    <div class="growth-chart-card" style="grid-column: 1 / -1; max-width: 600px; margin: 0 auto;">
-                        <div class="chart-container" style="height: 350px;">
-                            <canvas id="revenue-composition-chart"></canvas>
-                        </div>
-                        <div class="chart-source">Source: KDEM Target Database ${renderConfidenceStars(3)}</div>
-                    </div>
-                </div>
-
-                <!-- SECTION 10: Conversion Ratios -->
+                <!-- SECTION 9: Conversion Ratios -->
                 <div class="section-header mt-4">
                     <h3>Conversion Ratios (from Database)</h3>
                     <p>Industry-standard ratios used to cascade revenue → employment → land → capital</p>
@@ -207,6 +187,55 @@ export async function renderOverviewTab(appData) {
 }
 
 function renderPillarCard(vertical, target, current) {
+    const isEcosystem = current.isEcosystemPillar === true
+
+    if (isEcosystem) {
+        // Render ecosystem-focused card for Startups (no revenue in total)
+        const eco = current.ecosystemMetrics || {}
+        return `
+            <div class="pillar-card pillar-card--ecosystem" style="border-left: 4px solid #8B5CF6; background: linear-gradient(135deg, #faf5ff, #f5f3ff);">
+                <div class="pillar-header">
+                    <h4>${vertical.name}</h4>
+                    <span class="pillar-badge" style="background: #8B5CF6; color: white;">Ecosystem Pillar</span>
+                </div>
+                <div class="pillar-description">
+                    ${vertical.description || ''}
+                </div>
+                <div class="pillar-metrics">
+                    <div class="pillar-metric">
+                        <span class="metric-icon-small">🚀</span>
+                        <span class="metric-label-small">DPIIT Startups</span>
+                        <span class="metric-value-small">${formatNumber(eco.dpiitCount || 0)}</span>
+                    </div>
+                    <div class="pillar-metric">
+                        <span class="metric-icon-small">🏢</span>
+                        <span class="metric-label-small">Total Ecosystem</span>
+                        <span class="metric-value-small">${eco.totalEstimate || 'N/A'}</span>
+                    </div>
+                    <div class="pillar-metric">
+                        <span class="metric-icon-small">💰</span>
+                        <span class="metric-label-small">Annual Funding</span>
+                        <span class="metric-value-small">$${eco.annualFunding || 0}B</span>
+                    </div>
+                    <div class="pillar-metric">
+                        <span class="metric-icon-small">🦄</span>
+                        <span class="metric-label-small">Unicorns</span>
+                        <span class="metric-value-small">${eco.unicorns || 0} (${eco.soonicorns || 0} soonicorns)</span>
+                    </div>
+                </div>
+                <div style="background: #ede9fe; padding: 8px 12px; border-radius: 4px; margin-top: 8px; font-size: 0.78rem; color: #5b21b6; line-height: 1.4;">
+                    Revenue embedded in IT Exports/Domestic (NASSCOM figures include startup companies). Tracked as ecosystem health metrics.
+                </div>
+                <div class="pillar-footer">
+                    ${renderConfidenceStars(current.confidence || 3)}
+                    <span class="pillar-source">${eco.source || current.source || ''}</span>
+                    <a href="#" class="view-details-link" data-vertical="${vertical.id}">View Details →</a>
+                </div>
+            </div>
+        `
+    }
+
+    // Standard revenue pillar card
     const targetRev = target.revenue_usd_bn || 0
     const currentRev = current.current || 0
     const pctProgress = targetRev > 0 ? ((currentRev / targetRev) * 100).toFixed(0) : 0
@@ -230,7 +259,7 @@ function renderPillarCard(vertical, target, current) {
                 </div>
                 <div class="pillar-metric">
                     <span class="metric-icon-small">🎯</span>
-                    <span class="metric-label-small">2030 Target</span>
+                    <span class="metric-label-small">2032 Target</span>
                     <span class="metric-value-small">$${formatNumber(targetRev)}B</span>
                 </div>
                 <div class="pillar-metric">
@@ -273,7 +302,7 @@ function renderGrowthCharts() {
 
             <div class="growth-chart-card">
                 <h4>Karnataka's Digital Economy Trajectory</h4>
-                <p class="chart-subtitle">All 5 verticals: from $110B (FY22) → $163B today (FY25) → $479B target (FY30)</p>
+                <p class="chart-subtitle">4 revenue verticals (excl. Startups): from $106B (FY22) → $159B today (FY25) → $329B target (FY32)</p>
                 <div class="chart-container">
                     <canvas id="karnataka-digital-economy-chart"></canvas>
                 </div>
@@ -335,11 +364,7 @@ function initAllCharts(verticalOverview, totalMetrics, baseline, verticalBaselin
     const waterfallData = getRevenueWaterfall()
     createWaterfallChart('revenue-waterfall', waterfallData)
 
-    // 3. TREEMAP — Hierarchical composition
-    const treemapData = getRevenueTreemapData()
-    createTreemapChart('revenue-treemap', treemapData)
-
-    // 4. SANKEY — Flow from target to verticals to geographies
+    // 3. SANKEY — Flow from target to verticals to geographies
     const sankeyData = getRevenueSankeyData()
     createSankeyChart('revenue-sankey', sankeyData.nodes, sankeyData.links)
 
@@ -445,15 +470,4 @@ function initAllCharts(verticalOverview, totalMetrics, baseline, verticalBaselin
         })
     }
 
-    // 7. DOUGHNUT — Revenue composition
-    const vertLabels = verticalOverview.map(v => v.name)
-    const vertRevenues = verticalOverview.map(v => v.revenue_usd_bn)
-    const totalRev = vertRevenues.reduce((a, b) => a + b, 0)
-    createDoughnutChart(
-        'revenue-composition-chart',
-        vertLabels,
-        vertRevenues,
-        CHART_COLORS.verticals.slice(0, vertLabels.length),
-        `$${totalRev.toFixed(0)}B Total`
-    )
 }
