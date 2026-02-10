@@ -341,14 +341,13 @@ body {
 }
 
 .cc-license-link {
-    color: rgba(255, 255, 255, 0.8);
     display: inline-block;
     transition: opacity 0.2s ease;
+    opacity: 0.85;
 }
 
 .cc-license-link:hover {
     opacity: 1;
-    color: white;
 }
 
 .footer-credits {
