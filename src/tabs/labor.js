@@ -514,8 +514,8 @@ function renderDataSources(sources) {
             `).join('')}
         </div>
         <p class="sources-note">
-            For complete list of data sources with confidence ratings, see
-            <a href="./SOURCES.md" target="_blank">SOURCES.md</a>
+            For complete list of data sources with confidence ratings, see the
+            <a href="#" onclick="document.querySelector('.nav-btn[data-tab=sources]')?.click(); return false;" class="source-link">Data Sources & References</a> tab
         </p>
     `
 }
