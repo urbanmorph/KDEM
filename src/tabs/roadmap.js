@@ -222,7 +222,7 @@ function renderEmploymentScenarios(scenarios) {
     return `
         <div class="section-header mt-4">
             <h3>Employment Scenarios at $329B Revenue</h3>
-            <p>Per-vertical AI-adjusted conversion ratios (excludes startup double-count and digitizing sectors)</p>
+            <p>Per-vertical AI-adjusted conversion ratios + digitizing sector estimates (excludes startup double-count)</p>
         </div>
 
         <div class="table-scroll-wrapper">

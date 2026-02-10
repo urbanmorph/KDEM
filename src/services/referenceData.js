@@ -437,17 +437,17 @@ export function getAIWorkforceImpact() {
             { phase: 'Post-2028', event: 'New equilibrium', impact: 'AI-augmented workforce model established', netEffect: 'Net positive if diversification succeeds; net negative if concentrated in IT services' }
         ],
         employmentScenarios: [
-            { scenario: 'Low AI Impact', revenueTarget: 329, employment: 5000000,
-              breakdown: 'IT Exports: 3.30M (20 emp/$1M) + IT Domestic: 748K (22 emp/$1M) + ESDM: 950K (10 emp/$1M)',
-              note: 'Current productivity sustained. Matches KDEM public 5M target. Unlikely given AI adoption trends.' },
-            { scenario: 'Medium AI Impact (Central Estimate)', revenueTarget: 329, employment: 4100000,
-              breakdown: 'IT Exports: 2.64M (16 emp/$1M) + IT Domestic: 612K (18 emp/$1M) + ESDM: 855K (9 emp/$1M)',
-              note: 'AI augments workers, ~25% IT productivity gain by 2032 (Bessemer Oct 2025: India IT 7.5-8M→6M headcount by 2031). Central estimate for planning.' },
-            { scenario: 'High AI Impact', revenueTarget: 329, employment: 3200000,
-              breakdown: 'IT Exports: 1.98M (12 emp/$1M) + IT Domestic: 476K (14 emp/$1M) + ESDM: 760K (8 emp/$1M)',
-              note: 'Aggressive AI adoption. Revenue grows but employment lags significantly.' }
+            { scenario: 'Low AI Impact', revenueTarget: 329, employment: 5500000,
+              breakdown: 'IT Exports: 3.30M (20 emp/$1M) + IT Domestic: 748K (22 emp/$1M) + ESDM: 950K (10 emp/$1M) + Digitizing: 499K (14.3 emp/$1M)',
+              note: 'Current productivity sustained + digitizing sectors. Exceeds KDEM public 5M target.' },
+            { scenario: 'Medium AI Impact (Central Estimate)', revenueTarget: 329, employment: 4600000,
+              breakdown: 'IT Exports: 2.64M (16 emp/$1M) + IT Domestic: 612K (18 emp/$1M) + ESDM: 855K (9 emp/$1M) + Digitizing: 499K (14.3 emp/$1M)',
+              note: 'AI augments workers, ~25% IT productivity gain by 2032 (Bessemer Oct 2025: India IT 7.5-8M→6M headcount by 2031) + digitizing. Central estimate.' },
+            { scenario: 'High AI Impact', revenueTarget: 329, employment: 3700000,
+              breakdown: 'IT Exports: 1.98M (12 emp/$1M) + IT Domestic: 476K (14 emp/$1M) + ESDM: 760K (8 emp/$1M) + Digitizing: 499K (14.3 emp/$1M)',
+              note: 'Aggressive AI adoption + digitizing. Revenue grows but core IT employment lags significantly.' }
         ],
-        scenarioNote: 'All scenarios exclude startup employment (double-counts with IT-BPM) and digitizing sectors (not yet modeled). Per-vertical ratios replace previous blended revenue-per-employee approach.',
+        scenarioNote: 'All scenarios exclude startup employment (double-counts with IT-BPM). Digitizing sector employment (~500K) is estimated from per sub-sector ratios (confidence 1/5). Per-vertical ratios replace previous blended approach.',
         source: 'Per-vertical AI-adjusted conversion ratios. Bessemer Oct 2025 (India IT headcount 7.5-8M→6M by 2031), NASSCOM AI-era projections, WEF Future of Jobs 2025',
         confidence: 3
     }
@@ -738,18 +738,18 @@ export function getKarnatakaBaseline() {
         },
         // 2032 Targets (FY 2031-32 — revised conservative projection, startups excluded)
         targetRevenue_USD_Bn: 329,
-        targetEmployment: 4100000, // Medium AI scenario (central estimate) — IT 2.64M + ITD 612K + ESDM 855K (excl startups & digitizing)
+        targetEmployment: 4600000, // Medium AI (4.1M core) + Digitizing (500K) — IT 2.64M + ITD 612K + ESDM 855K + Digitizing 499K (excl startups)
         targetEmploymentScenarios: {
-            lowAI: { value: 5000000, label: 'Low AI Impact', ratios: 'IT: 20, ITD: 22, ESDM: 10 emp/$1M', note: 'Current productivity sustained. Matches KDEM public 5M target. Unlikely given AI adoption trends.' },
-            mediumAI: { value: 4100000, label: 'Medium AI Impact', ratios: 'IT: 16, ITD: 18, ESDM: 9 emp/$1M', note: 'AI augments workers, ~25% IT productivity gain by 2032 (Bessemer Oct 2025: India IT 7.5-8M→6M headcount by 2031). Central estimate for planning.' },
-            highAI: { value: 3200000, label: 'High AI Impact', ratios: 'IT: 12, ITD: 14, ESDM: 8 emp/$1M', note: 'Aggressive AI adoption. Revenue grows but employment lags significantly.' },
-            source: 'Per-vertical AI-adjusted conversion ratios. AI impact based on Bessemer Oct 2025 (India IT headcount 7.5-8M→6M by 2031), NASSCOM AI-era projections (6-7% growth FY27), WEF Future of Jobs 2025.'
+            lowAI: { value: 5500000, label: 'Low AI Impact', ratios: 'IT: 20, ITD: 22, ESDM: 10, Digitizing: 14.3 emp/$1M', note: 'Current productivity sustained + digitizing 500K. Exceeds KDEM public 5M target.' },
+            mediumAI: { value: 4600000, label: 'Medium AI Impact', ratios: 'IT: 16, ITD: 18, ESDM: 9, Digitizing: 14.3 emp/$1M', note: 'AI augments workers, ~25% IT productivity gain by 2032 (Bessemer Oct 2025: India IT 7.5-8M→6M headcount by 2031) + digitizing 500K. Central estimate.' },
+            highAI: { value: 3700000, label: 'High AI Impact', ratios: 'IT: 12, ITD: 14, ESDM: 8, Digitizing: 14.3 emp/$1M', note: 'Aggressive AI adoption + digitizing 500K. Revenue grows but core IT employment lags.' },
+            source: 'Core verticals: Per-vertical AI-adjusted ratios (Bessemer Oct 2025, NASSCOM AI-era). Digitizing: per sub-sector ratios (5-40 emp/$1M by sector type, confidence 1/5).'
         },
         targetYear: '2031-32',
         publicTargetRevenue_USD_Bn: 329,
         publicTargetEmployment: 5000000, // KDEM stated target — achievable only under low-AI scenario
         errorBand: { low: 140, high: 175, note: 'IT Exports KA share could be 42% not 38% (+$9-13B); ESDM may include design services inflating share (-$10B); Digitizing sectors CAGRs may be overstated (-$6-10B).' },
-        employmentErrorBand: { low: 3200000, central: 4100000, high: 5000000, note: 'Range driven by AI impact on revenue-per-employee. All scenarios exclude startup employment (double-counts with IT) and digitizing sectors (not modeled).' },
+        employmentErrorBand: { low: 3700000, central: 4600000, high: 5500000, note: 'Range driven by AI impact on revenue-per-employee. Includes digitizing sector employment (~500K, estimated). Excludes startup employment (double-counts with IT).' },
         startupNote: 'Startup revenue excluded from total to avoid double-counting with IT Exports/Domestic (NASSCOM figures include startup company revenues). Startups tracked as ecosystem health metrics.',
         // National context (FY 2024-25)
         indiaGDP_FY25_USD_Tn: 3.9,
@@ -859,12 +859,13 @@ export function getVerticalBaselines() {
         {
             id: 'digitizing-sectors', name: 'Newly Digitizing',
             current: 20.23, target: 35.0, unit: 'USD Bn',
-            currentEmployment: 0, targetEmployment: 0,
+            currentEmployment: 0, targetEmployment: 499000,
             baseYear: '2021-22', baseActual: 6.0, baseEmployment: 0,
             indiaFY25: null, karnatakaSharePct: null,
             actualGrowthCAGR: 'sub-sector specific (FY22-25)', targetCAGR: '8% (FY25-32)',
             targetYear: '2031-32',
-            revisionNote: 'Aligned with India nominal GDP growth; McKinsey 2019 framework not used for projections',
+            employmentRatio: { blended: 14.3, unit: 'emp per $1M USD', source: 'Per sub-sector ratios (5-40 emp/$1M) based on sector labor intensity. See getDigitizingSubSectors() for per-sector breakdown. Confidence 1/5 — estimated, no actuals exist.' },
+            revisionNote: 'Aligned with India nominal GDP growth; McKinsey 2019 framework not used for projections. Employment estimated via per sub-sector ratios.',
             source: 'KDEM Excel — 17 sub-sectors (McKinsey framework), no independent FY25 actuals',
             confidence: 2
         }
@@ -1125,6 +1126,10 @@ export function getDigitizingSubSectors() {
         totalKaFY25: 20.23,
         totalKaFY30: 61.98,
         subSectorCount: 17,
+        totalEmploymentFY32: 499242,
+        blendedEmploymentRatio: 14.3,
+        employmentMethodology: 'Per sub-sector employment ratios applied to proportional FY31-32 revenue ($35B target distributed by FY25 share). Ratios based on sector-specific labor intensity: platforms/fintech 5-8 emp/$1M, services 15-25 emp/$1M, logistics/commerce 25-40 emp/$1M. No FY25 actual employment data exists — all figures are estimates (confidence 1/5).',
+        employmentConfidence: 1,
         sectors: [
         {
             name: 'Business Digitization & IoT Analytics',
@@ -1133,7 +1138,8 @@ export function getDigitizingSubSectors() {
             kaFY25: 1.93, kaFY30: 12.75, indiaFY30: 167.4,
             mcKinseyCategory: 'Business Digitisation (incl. Manufacturing IoT)',
             mcKinseyPotential2025: 90,
-            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2
+            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2,
+            employmentRatio: 15, employmentRationale: 'IoT implementation requires field engineers, sensor installation teams, and analytics staff; mid labor intensity', kaEmploymentFY32: 50764
         },
         {
             name: 'Flow-based Lending & Advanced Credit (MSMEs)',
@@ -1142,7 +1148,8 @@ export function getDigitizingSubSectors() {
             kaFY25: 2.93, kaFY30: 8.76, indiaFY30: 153.7,
             mcKinseyCategory: 'Financial Services',
             mcKinseyPotential2025: 170,
-            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2
+            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2,
+            employmentRatio: 5, employmentRationale: 'Fintech platforms; highly automated underwriting and disbursement, minimal physical operations', kaEmploymentFY32: 25689
         },
         {
             name: 'Digital Communication Services',
@@ -1151,7 +1158,8 @@ export function getDigitizingSubSectors() {
             kaFY25: 2.81, kaFY30: 6.10, indiaFY30: 76.1,
             mcKinseyCategory: 'Digital Communication Services',
             mcKinseyPotential2025: 55,
-            source: 'KDEM Excel + McKinsey Exhibit 18', confidence: 3
+            source: 'KDEM Excel + McKinsey Exhibit 18', confidence: 3,
+            employmentRatio: 8, employmentRationale: 'Telecom infrastructure; capital-intensive with moderate tech and network operations workforce', kaEmploymentFY32: 39419
         },
         {
             name: 'Efficient Transport & Logistics',
@@ -1160,7 +1168,8 @@ export function getDigitizingSubSectors() {
             kaFY25: 1.56, kaFY30: 4.72, indiaFY30: 32.2,
             mcKinseyCategory: 'Logistics',
             mcKinseyPotential2025: 30,
-            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2
+            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2,
+            employmentRatio: 35, employmentRationale: 'Logistics requires warehouse workers, delivery fleet, route optimization tech ops; physically labor-intensive', kaEmploymentFY32: 95741
         },
         {
             name: 'Government e-Marketplace',
@@ -1169,7 +1178,8 @@ export function getDigitizingSubSectors() {
             kaFY25: 2.17, kaFY30: 4.53, indiaFY30: 36.6,
             mcKinseyCategory: 'Government e-Marketplace',
             mcKinseyPotential2025: 25,
-            source: 'KDEM Excel + McKinsey Exhibit 18', confidence: 3
+            source: 'KDEM Excel + McKinsey Exhibit 18', confidence: 3,
+            employmentRatio: 8, employmentRationale: 'Procurement platform operations; moderate tech, vendor onboarding, and support staff', kaEmploymentFY32: 30441
         },
         {
             name: 'Digital Payments',
@@ -1178,7 +1188,8 @@ export function getDigitizingSubSectors() {
             kaFY25: 1.53, kaFY30: 3.87, indiaFY30: 51.3,
             mcKinseyCategory: 'Financial Services',
             mcKinseyPotential2025: 170,
-            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2
+            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2,
+            employmentRatio: 5, employmentRationale: 'UPI/payment platform; highly automated infrastructure, small merchant support ops', kaEmploymentFY32: 13414
         },
         {
             name: 'Direct Benefit Transfer',
@@ -1187,7 +1198,8 @@ export function getDigitizingSubSectors() {
             kaFY25: 1.62, kaFY30: 3.57, indiaFY30: 17.8,
             mcKinseyCategory: 'Direct Benefit Transfer',
             mcKinseyPotential2025: 15,
-            source: 'KDEM Excel + McKinsey Exhibit 18', confidence: 3
+            source: 'KDEM Excel + McKinsey Exhibit 18', confidence: 3,
+            employmentRatio: 12, employmentRationale: 'Government tech platform + last-mile verification agents + identity authentication workforce', kaEmploymentFY32: 34088
         },
         {
             name: 'Customizable Education Platforms',
@@ -1196,7 +1208,8 @@ export function getDigitizingSubSectors() {
             kaFY25: 1.37, kaFY30: 3.36, indiaFY30: 51.3,
             mcKinseyCategory: 'Education',
             mcKinseyPotential2025: 50,
-            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2
+            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2,
+            employmentRatio: 25, employmentRationale: 'EdTech requires content creators, tutors/teachers, curriculum designers, and tech teams; labor-intensive delivery', kaEmploymentFY32: 60058
         },
         {
             name: 'Digital Supply Chain - E-Commerce',
@@ -1205,7 +1218,8 @@ export function getDigitizingSubSectors() {
             kaFY25: 0.69, kaFY30: 2.72, indiaFY30: 25.9,
             mcKinseyCategory: 'Retail',
             mcKinseyPotential2025: 35,
-            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2
+            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2,
+            employmentRatio: 40, employmentRationale: 'Warehouse operations, last-mile delivery, inventory management; most physically labor-intensive digitizing sub-sector', kaEmploymentFY32: 48397
         },
         {
             name: 'Digital Supply Chain - Traditional Retail',
@@ -1214,7 +1228,8 @@ export function getDigitizingSubSectors() {
             kaFY25: 0.69, kaFY30: 2.72, indiaFY30: 11.7,
             mcKinseyCategory: 'Retail',
             mcKinseyPotential2025: 35,
-            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2
+            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2,
+            employmentRatio: 25, employmentRationale: 'Retail digitization requires store-level tech implementation, POS training, and supply chain integration staff', kaEmploymentFY32: 30248
         },
         {
             name: 'Digital Farmer Financing & Insurance',
@@ -1223,7 +1238,8 @@ export function getDigitizingSubSectors() {
             kaFY25: 0.70, kaFY30: 2.13, indiaFY30: 18.3,
             mcKinseyCategory: 'Agriculture',
             mcKinseyPotential2025: 70,
-            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2
+            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2,
+            employmentRatio: 15, employmentRationale: 'AgriFintech; field agents for farmer onboarding and credit assessment + platform operations', kaEmploymentFY32: 18412
         },
         {
             name: 'Digitally Enabled Power Distribution',
@@ -1232,7 +1248,8 @@ export function getDigitizingSubSectors() {
             kaFY25: 0.60, kaFY30: 2.06, indiaFY30: 16.1,
             mcKinseyCategory: 'Energy',
             mcKinseyPotential2025: 15,
-            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2
+            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2,
+            employmentRatio: 8, employmentRationale: 'Smart meter deployment and grid monitoring; capital-intensive utility infrastructure with specialized tech workforce', kaEmploymentFY32: 8417
         },
         {
             name: 'Universal Agricultural Marketplace',
@@ -1241,7 +1258,8 @@ export function getDigitizingSubSectors() {
             kaFY25: 0.51, kaFY30: 2.04, indiaFY30: 33.1,
             mcKinseyCategory: 'Agriculture',
             mcKinseyPotential2025: 70,
-            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2
+            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2,
+            employmentRatio: 20, employmentRationale: 'Agri marketplace requires produce aggregation network, quality testing, logistics coordination, and platform ops', kaEmploymentFY32: 17886
         },
         {
             name: 'Precision Agriculture',
@@ -1250,7 +1268,8 @@ export function getDigitizingSubSectors() {
             kaFY25: 0.57, kaFY30: 1.84, indiaFY30: 33.1,
             mcKinseyCategory: 'Agriculture',
             mcKinseyPotential2025: 70,
-            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2
+            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2,
+            employmentRatio: 18, employmentRationale: 'AgriTech; drone/sensor operators, agronomists, data analysts, and field tech support teams', kaEmploymentFY32: 17991
         },
         {
             name: 'Tech-enabled Healthcare',
@@ -1259,7 +1278,8 @@ export function getDigitizingSubSectors() {
             kaFY25: 0.14, kaFY30: 0.29, indiaFY30: 7.3,
             mcKinseyCategory: 'Healthcare',
             mcKinseyPotential2025: 10,
-            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2
+            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2,
+            employmentRatio: 25, employmentRationale: 'HealthTech; telemedicine doctors, diagnostic technicians, and health-tech support staff; high labor per revenue', kaEmploymentFY32: 6137
         },
         {
             name: 'Online Talent Platforms',
@@ -1268,7 +1288,8 @@ export function getDigitizingSubSectors() {
             kaFY25: 0.09, kaFY30: 0.20, indiaFY30: 99.3,
             mcKinseyCategory: 'Jobs and Skills',
             mcKinseyPotential2025: 70,
-            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2
+            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2,
+            employmentRatio: 8, employmentRationale: 'HR/talent matching platform; mostly automated with small curation and support ops team', kaEmploymentFY32: 1263
         },
         {
             name: 'Smart Grids with Distributed Generation',
@@ -1277,7 +1298,8 @@ export function getDigitizingSubSectors() {
             kaFY25: 0.05, kaFY30: 0.13, indiaFY30: 1.4,
             mcKinseyCategory: 'Energy',
             mcKinseyPotential2025: 15,
-            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2
+            source: 'KDEM Excel + McKinsey Exhibit 17', confidence: 2,
+            employmentRatio: 10, employmentRationale: 'Grid infrastructure; specialized power engineers, maintenance crews, and monitoring center staff', kaEmploymentFY32: 877
         }
     ]}
 }

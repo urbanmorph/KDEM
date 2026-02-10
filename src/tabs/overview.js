@@ -57,7 +57,7 @@ export async function renderOverviewTab(appData) {
                         label: 'Digital Economy Employment', value: baseline.currentDigitalEmployment, unit: 'Jobs',
                         icon: '👥', type: 'benchmark', confidence: 3,
                         source: baseline.source, target: `${((totalMetrics.total_employment || baseline.targetEmployment) / 1000000).toFixed(1)}M by 2032 (DB)`,
-                        formula: 'IT Exports + IT Domestic + ESDM (startup employment excluded — overlaps with NASSCOM IT-BPM figures)'
+                        formula: 'IT Exports + IT Domestic + ESDM + Digitizing Sectors (startup employment excluded — overlaps with NASSCOM IT-BPM figures)'
                     })}
                     ${annotatedMetricCard({
                         label: "Share of India's Digital Economy", value: baseline.karnatakaDigitalShareOfIndia_Pct, unit: '%',
