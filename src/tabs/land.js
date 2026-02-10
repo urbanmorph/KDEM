@@ -269,7 +269,8 @@ function renderLandRatios(landRatios) {
             </table>
             </div>
             <p class="conversion-note">
-                <strong>Source:</strong> KDEM Supabase Database (conversion_ratios table)
+                <strong>Source:</strong> KDEM Supabase Database (conversion_ratios table). Land targets are derived from
+                AI-adjusted employment (IT: 16, ITD: 18, ESDM: 9 emp/$1M medium scenario) × space ratio per employee.
             </p>
 
             <div class="example-calculation">

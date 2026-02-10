@@ -168,7 +168,7 @@ export async function renderOverviewTab(appData) {
                 <!-- SECTION 9: Conversion Ratios -->
                 <div class="section-header mt-4">
                     <h3>Conversion Ratios (from Database)</h3>
-                    <p>Industry-standard ratios used to cascade revenue → employment → land → capital</p>
+                    <p>Base ratios used to cascade revenue → employment → land → capital. Employment targets use AI-adjusted ratios (IT: 16, ITD: 18, ESDM: 9 emp/$1M — see Roadmap for scenarios)</p>
                 </div>
 
                 <div class="conversion-info">

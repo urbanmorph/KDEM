@@ -45,7 +45,7 @@ export async function renderFactorsTab(appData) {
                 <!-- Conversion Ratios from Database -->
                 <div class="section-header mt-4">
                     <h3>Conversion Ratios (from Database)</h3>
-                    <p>Industry-standard ratios used to cascade targets - loaded from Supabase</p>
+                    <p>Base ratios for cascading targets. Employment targets use AI-adjusted ratios — see note below table</p>
                 </div>
 
                 <div class="conversion-info">
@@ -185,7 +185,9 @@ function renderConversionTable(ratios) {
         </table>
         </div>
         <p class="conversion-note">
-            <strong>Note:</strong> These conversion ratios are loaded from the KDEM Supabase database and are used to auto-calculate factor targets when revenue targets are set.
+            <strong>Note:</strong> These are base conversion ratios from the KDEM database. Actual employment targets use AI-adjusted ratios
+            (IT: 16, ITD: 18, ESDM: 9 emp/$1M — medium scenario) reflecting AI productivity gains per Bessemer Oct 2025
+            and NASSCOM AI-era projections. Startup employment excluded (overlaps NASSCOM IT-BPM). See Roadmap tab for scenarios.
         </p>
     `
 }

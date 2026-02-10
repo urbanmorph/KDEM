@@ -181,7 +181,7 @@ export async function renderLaborTab(appData) {
                 <!-- Employment Conversion Ratios -->
                 <div class="section-header mt-4">
                     <h3>Industry Employment Conversion Ratios</h3>
-                    <p>How revenue translates to employment across verticals</p>
+                    <p>Base ratios for revenue → employment. Actual DB targets use AI-adjusted ratios for FY 2031-32 (see note below)</p>
                 </div>
 
                 <div class="conversion-table">
@@ -452,8 +452,9 @@ function renderEmploymentRatios(conversionRatios) {
             </table>
             </div>
             <p class="conversion-note">
-                <strong>Note:</strong> These conversion ratios are sourced from the KDEM database and based on industry benchmarks.
-                They are used to calculate employment targets from revenue goals across Karnataka's digital economy verticals.
+                <strong>Note:</strong> These are base conversion ratios from the KDEM database. Actual employment targets in the DB use
+                <em>AI-adjusted ratios</em> (IT Exports: 16, IT Domestic: 18, ESDM: 9 emp/$1M) reflecting ~25% IT productivity gains
+                per Bessemer Oct 2025 and NASSCOM AI-era projections. See Employment Target Analysis (Feb 2026) for derivation.
             </p>
         `
     }

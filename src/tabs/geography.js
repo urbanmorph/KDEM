@@ -44,8 +44,8 @@ async function renderSingleGeography(geographyId, appData) {
                     ${annotatedMetricCard({
                         label: 'Total Employment', value: details.totals.employment, unit: 'Jobs',
                         icon: '👥', type: 'computed', confidence: 3,
-                        source: 'Computed from conversion ratios',
-                        formula: 'Revenue × employment ratio per vertical'
+                        source: 'DB targets (AI-adjusted medium scenario)',
+                        formula: 'Revenue × AI-adjusted emp/$1M ratio per vertical (Bessemer Oct 2025, NASSCOM AI-era)'
                     })}
                     ${annotatedMetricCard({
                         label: 'Land Required', value: details.totals.land_sqft, unit: 'Sq Ft',

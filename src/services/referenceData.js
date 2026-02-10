@@ -442,7 +442,7 @@ export function getAIWorkforceImpact() {
               note: 'Current productivity sustained. Matches KDEM public 5M target. Unlikely given AI adoption trends.' },
             { scenario: 'Medium AI Impact (Central Estimate)', revenueTarget: 329, employment: 4100000,
               breakdown: 'IT Exports: 2.64M (16 emp/$1M) + IT Domestic: 612K (18 emp/$1M) + ESDM: 855K (9 emp/$1M)',
-              note: 'AI augments workers, ~25% IT productivity gain by 2032. Central estimate for planning.' },
+              note: 'AI augments workers, ~25% IT productivity gain by 2032 (Bessemer Oct 2025: India IT 7.5-8M→6M headcount by 2031). Central estimate for planning.' },
             { scenario: 'High AI Impact', revenueTarget: 329, employment: 3200000,
               breakdown: 'IT Exports: 1.98M (12 emp/$1M) + IT Domestic: 476K (14 emp/$1M) + ESDM: 760K (8 emp/$1M)',
               note: 'Aggressive AI adoption. Revenue grows but employment lags significantly.' }
@@ -741,7 +741,7 @@ export function getKarnatakaBaseline() {
         targetEmployment: 4100000, // Medium AI scenario (central estimate) — IT 2.64M + ITD 612K + ESDM 855K (excl startups & digitizing)
         targetEmploymentScenarios: {
             lowAI: { value: 5000000, label: 'Low AI Impact', ratios: 'IT: 20, ITD: 22, ESDM: 10 emp/$1M', note: 'Current productivity sustained. Matches KDEM public 5M target. Unlikely given AI adoption trends.' },
-            mediumAI: { value: 4100000, label: 'Medium AI Impact', ratios: 'IT: 16, ITD: 18, ESDM: 9 emp/$1M', note: 'AI augments workers, ~25% IT productivity gain by 2032. Central estimate for planning.' },
+            mediumAI: { value: 4100000, label: 'Medium AI Impact', ratios: 'IT: 16, ITD: 18, ESDM: 9 emp/$1M', note: 'AI augments workers, ~25% IT productivity gain by 2032 (Bessemer Oct 2025: India IT 7.5-8M→6M headcount by 2031). Central estimate for planning.' },
             highAI: { value: 3200000, label: 'High AI Impact', ratios: 'IT: 12, ITD: 14, ESDM: 8 emp/$1M', note: 'Aggressive AI adoption. Revenue grows but employment lags significantly.' },
             source: 'Per-vertical AI-adjusted conversion ratios. AI impact based on Bessemer Oct 2025 (India IT headcount 7.5-8M→6M by 2031), NASSCOM AI-era projections (6-7% growth FY27), WEF Future of Jobs 2025.'
         },
@@ -791,7 +791,7 @@ export function getVerticalBaselines() {
             current: 85.12, target: 165.0, unit: 'USD Bn',
             currentEmployment: 1830000, targetEmployment: 2640000, // AI-adjusted (medium): $165B × 16 emp/$1M
             targetEmploymentPreAI: 3370000, // Pre-AI ratio: $165B × 20 emp/$1M
-            employmentRatio: { current: 21.5, aiAdjusted: 16, unit: 'emp per $1M USD', source: 'NASSCOM avg; AI adjustment per Bessemer Oct 2025' },
+            employmentRatio: { current: 21.5, aiAdjusted: 16, unit: 'emp per $1M USD', source: 'Current ratio: NASSCOM FY25 (5.8M India IT ÷ $283B = 20.5; KA higher at 21.5 due to services mix). AI-adjusted: Bessemer Oct 2025 projects India IT headcount 7.5-8M→6M by 2031 (~25% reduction). 21.5 × 0.75 ≈ 16 emp/$1M.' },
             baseYear: '2021-22', baseActual: 67.64, baseEmployment: 1334000,
             indiaFY25: 224, karnatakaSharePct: 38,
             actualGrowthCAGR: '~8% (FY22-25)', targetCAGR: '10% (FY25-32)',
@@ -805,7 +805,7 @@ export function getVerticalBaselines() {
             current: 17.46, target: 34.0, unit: 'USD Bn',
             currentEmployment: 370000, targetEmployment: 612000, // AI-adjusted (medium): $34B × 18 emp/$1M
             targetEmploymentPreAI: 890000, // Pre-AI ratio: $34B × 25 emp/$1M
-            employmentRatio: { current: 21.2, aiAdjusted: 18, unit: 'emp per $1M USD', source: 'NASSCOM avg; domestic less affected by AI' },
+            employmentRatio: { current: 21.2, aiAdjusted: 18, unit: 'emp per $1M USD', source: 'Current ratio: NASSCOM FY25 domestic segment. AI-adjusted: ~15% reduction (vs 25% for exports) — domestic IT includes government projects, system integration, and enterprise IT support which are less automatable than export-oriented BPO/testing. Bessemer projection applies primarily to global delivery; domestic retains higher labor intensity.' },
             baseYear: '2021-22', baseActual: 14.7, baseEmployment: 290000,
             indiaFY25: 58.2, karnatakaSharePct: 30,
             actualGrowthCAGR: '~6% (FY22-25)', targetCAGR: '10% (FY25-32)',
@@ -819,7 +819,7 @@ export function getVerticalBaselines() {
             current: 36.69, target: 95.0, unit: 'USD Bn',
             currentEmployment: 284000, targetEmployment: 855000, // AI-adjusted (medium): $95B × 9 emp/$1M (manufacturing less affected by AI)
             targetEmploymentPreAI: 910000, // Pre-AI ratio: $95B × 10 emp/$1M
-            employmentRatio: { current: 7.7, aiAdjusted: 9, unit: 'emp per $1M USD', source: 'MeitY actual; ESDM is design-heavy in KA, not labor-intensive assembly' },
+            employmentRatio: { current: 7.7, aiAdjusted: 9, unit: 'emp per $1M USD', source: 'Current ratio: MeitY FY25 ($36.69B ÷ 284K = 7.7). Target ratio rises to 9 because KA ESDM growth to $95B includes expansion into OSAT packaging and PCB manufacturing (Mysuru PCB Park, KWIN City) which are more labor-intensive than current chip design focus. Net effect: sector composition shift toward manufacturing raises emp/$1M despite AI. AI has minimal impact on hardware manufacturing employment.' },
             baseYear: '2021-22', baseActual: 17.98, baseEmployment: 140000,
             indiaFY25: null, karnatakaSharePct: 20,
             actualGrowthCAGR: '~27% (FY22-25)', targetCAGR: '14.5% (FY25-32)',

@@ -95,11 +95,36 @@ AI will increase revenue-per-employee across IT services. How many jobs will $32
 ### Key insight:
 The KDEM public target of **5M jobs** is only achievable under the low-AI scenario (current productivity ratios sustained through 2032). Given the trajectory of AI adoption in IT services, the **medium AI scenario (4.1M)** is the most realistic central estimate.
 
+### Methodology: Deriving AI-adjusted ratios
+
+The AI productivity adjustment is applied **per-vertical**, not as a blended average, because AI impacts each sector differently:
+
+**IT Exports (21.5 → 16 emp/$1M, ~25% reduction):**
+- Bessemer Venture Partners (Oct 2025) projects India IT headcount declining from 7.5-8M to 6M by 2031
+- This is a ~25% reduction in the workforce serving the same or growing revenue base
+- Derivation: 21.5 current × (1 - 0.25) = 16.1, rounded to 16 emp/$1M
+- Export-oriented IT services (BPO, testing, L1/L2 support, code generation) are most susceptible to AI automation
+- AI coding tools (Cursor, GitHub Copilot) already reduce developer time by 30-55% on routine tasks
+
+**IT Domestic (21.2 → 18 emp/$1M, ~15% reduction):**
+- Domestic IT includes government projects, system integration, enterprise support — less automatable than export BPO/testing
+- The Bessemer projection applies primarily to global delivery models; domestic retains higher labor intensity
+- Government/PSU contracts often have minimum staffing requirements regardless of AI efficiency
+- Derivation: 21.2 current × (1 - 0.15) = 18.0 emp/$1M
+
+**ESDM (7.7 → 9 emp/$1M, +17% increase):**
+- Counter-intuitive: the ratio *increases* because sector composition shifts toward manufacturing
+- Current 7.7 reflects Karnataka's chip design + R&D focus (capital-intensive, low headcount per $1M)
+- Growth to $95B includes expansion into OSAT packaging (Mysuru PCB Park) and PCB manufacturing (KWIN City), which are more labor-intensive
+- AI has minimal impact on hardware manufacturing employment — factory workers aren't displaced by LLMs
+- Derivation: weighted average of design (7.7 emp/$1M, 50% of $95B) + manufacturing (10-12 emp/$1M, 50%) ≈ 9 emp/$1M
+
 ### Sources for AI adjustment:
 - **Bessemer Venture Partners (Oct 2025):** India IT headcount could decline from 7.5-8M to 6M by 2031 (~25% reduction)
 - **NASSCOM:** Projects only 6-7% IT growth in FY27 in the AI era (vs 10%+ pre-AI)
 - **WEF Future of Jobs Report 2025:** AI expected to create 97M new roles globally but displace 85M by 2025-2030
 - **AI coding tools (Cursor, GitHub Copilot):** Already reducing developer time by 30-55% on routine tasks
+- **MeitY ESDM production data:** Karnataka ESDM composition shifting from 100% design to design + manufacturing with ISM 2.0, OSAT facilities
 
 ---
 
