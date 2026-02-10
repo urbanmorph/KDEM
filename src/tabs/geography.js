@@ -8,7 +8,8 @@ import { getGeographyDetails, getGeographyOverview } from '../services/dataServi
 import { formatNumber } from '../utils/formatting.js'
 import { annotatedMetricCard, renderConfidenceStars } from '../utils/components.js'
 import { CHART_COLORS } from '../utils/chartSetup.js'
-import { createDoughnutChart, createRadarChart } from '../utils/chartFactories.js'
+import { createRadarChart } from '../utils/chartFactories.js'
+import { createTreemapChart } from '../utils/echartsFactories.js'
 
 export async function renderGeographyTab(geographyId, appData) {
     if (geographyId === 'clusters') {
@@ -70,7 +71,7 @@ async function renderSingleGeography(geographyId, appData) {
                     <div class="growth-charts-grid">
                         <div class="growth-chart-card" style="grid-column: 1 / -1; max-width: 600px; margin: 0 auto;">
                             <div class="chart-container" style="height: 350px;">
-                                <canvas id="geo-vertical-doughnut"></canvas>
+                                <div id="geo-vertical-treemap" style="height: 350px;"></div>
                             </div>
                             <div class="chart-source">Source: KDEM Target Database (Supabase)</div>
                         </div>
@@ -126,7 +127,7 @@ async function renderClustersView(appData) {
                     <div class="growth-chart-card" style="max-width: 500px; margin: 0 auto;">
                         <h4>Revenue Share by Tier</h4>
                         <div class="chart-container" style="height: 300px;">
-                            <canvas id="tier-doughnut-chart"></canvas>
+                            <div id="tier-treemap-chart" style="height: 300px;"></div>
                         </div>
                         <div class="chart-source">Source: KDEM Target Database (Supabase)</div>
                     </div>
@@ -294,31 +295,36 @@ function renderVerticalBreakdown(breakdown) {
 }
 
 function initSingleGeoCharts(details) {
-    // Vertical distribution doughnut for single geography
+    // Vertical distribution treemap for single geography
     if (details.verticalBreakdown.length > 0) {
-        const labels = details.verticalBreakdown.map(v => v.vertical.name)
-        const data = details.verticalBreakdown.map(v => v.revenue_usd_bn)
-        const totalRev = data.reduce((a, b) => a + b, 0)
-        const colors = details.verticalBreakdown.map(v =>
-            CHART_COLORS.verticalNames[v.vertical.id] || CHART_COLORS.verticals[0]
-        )
-        createDoughnutChart('geo-vertical-doughnut', labels, data, colors, `$${totalRev.toFixed(0)}B`)
+        const treemapData = details.verticalBreakdown
+            .filter(v => v.revenue_usd_bn > 0)
+            .map((v, i) => ({
+                name: v.vertical.name,
+                value: v.revenue_usd_bn,
+                itemStyle: { color: CHART_COLORS.verticalNames[v.vertical.id] || CHART_COLORS.verticals[i] }
+            }))
+        createTreemapChart('geo-vertical-treemap', treemapData)
     }
 }
 
 function initClustersCharts(overview, tier1, tier2, tier3) {
-    // Tier Revenue Distribution Doughnut
-    const tierLabels = ['Tier 1', 'Tier 2', 'Tier 3']
-    const tierRevenues = [
-        tier1.reduce((s, g) => s + g.revenue_usd_bn, 0),
-        tier2.reduce((s, g) => s + g.revenue_usd_bn, 0),
-        tier3.reduce((s, g) => s + g.revenue_usd_bn, 0)
-    ]
-    createDoughnutChart('tier-doughnut-chart', tierLabels, tierRevenues, CHART_COLORS.tiers)
+    // Tier Revenue Distribution Treemap (hierarchical: tiers > individual clusters)
+    const tierColors = { 'Tier 1': '#E96337', 'Tier 2': '#E68634', 'Tier 3': '#5BB9EC' }
+    const treemapData = [
+        { name: 'Tier 1', itemStyle: { color: tierColors['Tier 1'] },
+          children: tier1.map(c => ({ name: c.name, value: c.revenue_usd_bn })) },
+        { name: 'Tier 2', itemStyle: { color: tierColors['Tier 2'] },
+          children: tier2.map(c => ({ name: c.name, value: c.revenue_usd_bn })) },
+        { name: 'Tier 3', itemStyle: { color: tierColors['Tier 3'] },
+          children: tier3.map(c => ({ name: c.name, value: c.revenue_usd_bn })) }
+    ].filter(tier => tier.children.length > 0)
+    createTreemapChart('tier-treemap-chart', treemapData)
 
-    // Cluster Comparison Radar
+    // Cluster Comparison Radar — exclude Bengaluru and state-level aggregate
     const clustersWithData = overview.filter(g =>
-        g.revenue_usd_bn > 0 || g.employment > 0
+        g.id !== 'bengaluru' && g.id !== 'karnataka' &&
+        (g.revenue_usd_bn > 0 || g.employment > 0)
     ).slice(0, 6)
 
     if (clustersWithData.length > 0) {
