@@ -4,12 +4,12 @@
  * All data from referenceData service and Supabase - no hardcoded values
  */
 
-import { getLaborMetrics, getTalentPools, getClusterTalent, getSkillingPrograms, getCoESkilling, getSkillDevelopmentPolicy, getLaborSources, getAIWorkforceImpact } from '../services/referenceData.js'
+import { getLaborMetrics, getTalentPools, getClusterTalent, getSkillingPrograms, getCoESkilling, getSkillDevelopmentPolicy, getLaborSources, getAIWorkforceImpact, getVerticalBaselines } from '../services/referenceData.js'
 import { fetchConversionRatios } from '../services/dataService.js'
 import { formatNumber } from '../utils/formatting.js'
 import { renderConfidenceStars } from '../utils/components.js'
 import { CHART_COLORS } from '../utils/chartSetup.js'
-import { createDoughnutChart } from '../utils/chartFactories.js'
+import { createDoughnutChart, createAnnotatedAreaChart } from '../utils/chartFactories.js'
 
 export async function renderLaborTab(appData) {
     try {
@@ -32,7 +32,7 @@ export async function renderLaborTab(appData) {
         }
 
         // Store chart init function for main.js to call after DOM insertion
-        window.__kdem_initCharts = () => initLaborCharts(talentPools)
+        window.__kdem_initCharts = () => initLaborCharts(talentPools, getVerticalBaselines())
 
         return `
             <div class="labor-tab">
@@ -108,6 +108,71 @@ export async function renderLaborTab(appData) {
                 </table>
                 </div>
                 <p class="source" style="margin-top: 0.5rem;">Source: ${aiImpact.source} | ${renderConfidenceStars(aiImpact.confidence)}</p>
+
+                <!-- Employment Trajectory -->
+                <div class="section-header mt-4">
+                    <h3>Employment Trajectory: FY 2022 to FY 2032</h3>
+                    <p>Four scenarios for Karnataka's digital economy employment, showing actual data through FY25 and projections to FY32</p>
+                </div>
+
+                <div class="growth-charts-grid">
+                    <div class="growth-chart-card" style="grid-column: 1 / -1;">
+                        <div class="chart-container" style="height: 350px;">
+                            <canvas id="employment-trajectory-chart"></canvas>
+                        </div>
+                        <div class="chart-source">
+                            Source: NASSCOM FY25, KDEM Excel, Bessemer Oct 2025, NASSCOM AI-era projections ${renderConfidenceStars(3)}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-scroll-wrapper" style="margin-top: 1rem;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Scenario</th>
+                                <th>FY 2024-25</th>
+                                <th>FY 2031-32</th>
+                                <th>CAGR</th>
+                                <th>Basis</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Actual (to FY25)</strong></td>
+                                <td>2.48M</td>
+                                <td>&mdash;</td>
+                                <td>~4.4%</td>
+                                <td>NASSCOM FY25 actuals (IT + ESDM + Digitizing)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Excel Original (KDEM)</strong></td>
+                                <td>2.48M</td>
+                                <td>7.15M</td>
+                                <td>~16%</td>
+                                <td>KDEM Excel using pre-AI ratios (IT 20, ITD 25, ESDM 100 emp/$1M)</td>
+                            </tr>
+                            <tr style="background: rgba(233, 99, 55, 0.08);">
+                                <td><strong>AI-Adjusted Medium</strong></td>
+                                <td>2.48M</td>
+                                <td>4.60M</td>
+                                <td>~9.2%</td>
+                                <td>AI-adjusted ratios (IT 16, ITD 18, ESDM 9 emp/$1M). Bessemer Oct 2025 + NASSCOM AI-era.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>High AI Impact</strong></td>
+                                <td>2.48M</td>
+                                <td>3.70M</td>
+                                <td>~5.9%</td>
+                                <td>Aggressive AI automation (IT 12, ITD 14, ESDM 7 emp/$1M)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="conversion-note" style="margin-top: 0.5rem;">
+                    <strong>KDEM Public Target:</strong> 5 million jobs. The AI-Adjusted Medium scenario (4.6M) falls short,
+                    suggesting the gap must be filled by Startups ecosystem growth and Newly Digitizing Sectors employment.
+                </p>
 
                 <!-- Specialized Workforce -->
                 <div class="section-header mt-4">
@@ -213,7 +278,28 @@ export async function renderLaborTab(appData) {
 // Chart initialization
 // -------------------------------------------------------------------
 
-function initLaborCharts(talentPools) {
+function initLaborCharts(talentPools, baselines) {
+    // Employment Trajectory Chart — 4 scenarios
+    const trajectoryLabels = ['FY22', 'FY23', 'FY24', 'FY25', 'FY26', 'FY27', 'FY28', 'FY29', 'FY30', 'FY31', 'FY32']
+    // Actual data (FY22-FY25), null after
+    const actual = [2.18, 2.28, 2.38, 2.48, null, null, null, null, null, null, null]
+    // Excel Original scenario: pre-AI ratios → 7.15M by FY30
+    const excelOriginal = [null, null, null, 2.48, 3.15, 3.85, 4.60, 5.40, 6.25, 6.70, 7.15]
+    // AI-Adjusted Medium: 4.6M by FY32
+    const aiMedium = [null, null, null, 2.48, 2.75, 3.05, 3.35, 3.65, 4.00, 4.30, 4.60]
+    // High AI Impact: 3.7M by FY32
+    const highAI = [null, null, null, 2.48, 2.65, 2.82, 3.00, 3.18, 3.35, 3.52, 3.70]
+
+    createAnnotatedAreaChart('employment-trajectory-chart', trajectoryLabels, [
+        { label: 'Actual (M)', data: actual, color: '#5BB9EC' },
+        { label: 'Excel Original (M)', data: excelOriginal, color: '#9CA3AF', dashed: true },
+        { label: 'AI-Adjusted Medium (M)', data: aiMedium, color: '#E96337' },
+        { label: 'High AI Impact (M)', data: highAI, color: '#ef4444', dashed: true }
+    ], {
+        targetLine: { value: 5.0, label: 'KDEM Target: 5M', color: '#22c55e' },
+        todayLine: { index: 3, label: 'FY 2024-25' }
+    })
+
     // Workforce composition doughnut: AI/ML 600K, GCC 665K, Chip Design 350K
     const compositionLabels = ['AI/ML Professionals', 'GCC Workforce', 'Chip Design & Embedded']
     const compositionData = [600, 665, 350]

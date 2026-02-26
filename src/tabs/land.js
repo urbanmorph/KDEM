@@ -172,6 +172,13 @@ export async function renderLandTab(appData) {
                     <p>Industry-standard space requirements per employee${landRatios.length > 0 ? ' (loaded from database)' : ''}</p>
                 </div>
 
+                <div class="data-quality-warning" style="margin-bottom: 1rem;">
+                    <strong>Methodology:</strong> Land requirement = Employment Target × Space Ratio per vertical.
+                    Space ratios vary significantly by vertical — IT services use ~100 sq ft/emp (open-plan offices),
+                    ESDM uses ~33 sq ft/emp (factory floor density), and Startups use ~80 sq ft/emp (co-working).
+                    The generic 200 sq ft/emp figure is a fallback only; per-vertical DB values below are used in all dashboard calculations.
+                </div>
+
                 <div class="conversion-info">
                     ${renderLandRatios(landRatios)}
                 </div>
@@ -291,17 +298,22 @@ function renderLandRatios(landRatios) {
         `
     }
 
-    // Fallback: show generic industry-standard ratio
+    // Fallback: show generic industry-standard ratio with per-vertical context
     return `
         <div class="ratio-card">
             <div class="ratio-value">200 sq ft</div>
-            <div class="ratio-label">per employee</div>
+            <div class="ratio-label">per employee (generic fallback)</div>
             <p class="ratio-description">
-                Industry-standard office space requirement including workstations,
-                meeting rooms, common areas, and amenities. This ratio is used to
-                calculate land requirements from employment targets.
+                This is a generic industry-standard fallback. The actual per-vertical ratios stored in the
+                KDEM database are significantly different:
             </p>
-            <p class="source">Source: Industry Standard (no DB data available)</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                <li><strong>IT Exports / IT Domestic:</strong> 100 sq ft/emp (open-plan office)</li>
+                <li><strong>ESDM:</strong> 33 sq ft/emp (factory floor density)</li>
+                <li><strong>Startups:</strong> 80 sq ft/emp (co-working / shared spaces)</li>
+                <li><strong>Digitizing Sectors:</strong> 150 sq ft/emp (mixed use)</li>
+            </ul>
+            <p class="source">Source: Industry Standard fallback (DB conversion_ratios table not available)</p>
         </div>
 
         <div class="example-calculation">
@@ -312,11 +324,11 @@ function renderLandRatios(landRatios) {
             </div>
             <div class="calc-step">
                 <span class="calc-label">x</span>
-                <span class="calc-value">200 sq ft per employee</span>
+                <span class="calc-value">100 sq ft per employee (IT Exports)</span>
             </div>
             <div class="calc-result">
                 <span class="calc-label">Land Requirement:</span>
-                <span class="calc-value">${formatNumber(2000000)} sq ft</span>
+                <span class="calc-value">${formatNumber(1000000)} sq ft</span>
             </div>
         </div>
     `

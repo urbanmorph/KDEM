@@ -5,7 +5,7 @@
  */
 
 import { getVerticalDetails, fetchConversionRatios } from '../services/dataService.js'
-import { getDigitizingSubSectors, getVerticalTimeline } from '../services/referenceData.js'
+import { getDigitizingSubSectors, getVerticalTimeline, getVerticalBaselines } from '../services/referenceData.js'
 import { formatNumber } from '../utils/formatting.js'
 import { annotatedMetricCard, renderConfidenceStars } from '../utils/components.js'
 import { CHART_COLORS } from '../utils/chartSetup.js'
@@ -19,6 +19,21 @@ export async function renderVerticalTab(verticalId, appData) {
             fetchConversionRatios(verticalId)
         ])
         const vertical = details.vertical
+        const targetYearLabel = 'FY 2029-30'
+
+        // Look up current vertical baseline for "current vs target" context
+        const baselines = getVerticalBaselines()
+        const baseline = baselines.find(b => b.id === verticalId)
+
+        // Find land ratio for this vertical from conversion ratios
+        const landRatio = conversionRatios.find(r =>
+            (r.to_metric === 'land' || r.to_factor_id === 'land') &&
+            (r.from_metric === 'employment' || r.from_factor_id === 'labour')
+        )
+        const landRatioValue = landRatio ? (landRatio.ratio || landRatio.conversion_ratio || 200) : 200
+        const landRatioSource = landRatio
+            ? `DB conversion ratio: ${landRatioValue} sq ft/emp (${landRatio.vertical_id || verticalId})`
+            : 'Industry standard: 200 sq ft/employee (fallback)'
 
         // Store chart init function for main.js to call after DOM insertion
         window.__kdem_initCharts = () => initVerticalCharts(details, conversionRatios, verticalId)
@@ -33,25 +48,27 @@ export async function renderVerticalTab(verticalId, appData) {
                 <!-- Overview Metrics -->
                 <div class="metrics-grid">
                     ${annotatedMetricCard({
-                        label: 'Revenue', value: details.totals.revenue_usd_bn, unit: 'USD Billion',
+                        label: `Revenue Target (${targetYearLabel})`, value: details.totals.revenue_usd_bn, unit: 'USD Billion',
                         icon: '💰', type: 'target', confidence: 4,
                         source: 'KDEM Target Database (Supabase)',
-                        formula: 'Sum of geographic revenue targets'
+                        formula: 'Sum of geographic revenue targets',
+                        target: baseline ? `Current (FY 2024-25): $${baseline.current}B` : undefined
                     })}
                     ${annotatedMetricCard({
-                        label: 'Employment', value: details.totals.employment, unit: 'Jobs',
+                        label: `Employment Target (${targetYearLabel})`, value: details.totals.employment, unit: 'Jobs',
                         icon: '👥', type: 'computed', confidence: 3,
                         source: 'DB targets (AI-adjusted medium scenario)',
-                        formula: 'Revenue × AI-adjusted emp/$1M ratio per vertical (Bessemer Oct 2025, NASSCOM AI-era)'
+                        formula: 'Revenue × AI-adjusted emp/$1M ratio per vertical (Bessemer Oct 2025, NASSCOM AI-era)',
+                        target: baseline ? `Current (FY 2024-25): ${formatNumber(baseline.currentEmployment)}` : undefined
                     })}
                     ${annotatedMetricCard({
-                        label: 'Land', value: details.totals.land_sqft, unit: 'Sq Ft',
+                        label: `Land Target (${targetYearLabel})`, value: details.totals.land_sqft, unit: 'Sq Ft',
                         icon: '🏗️', type: 'computed', confidence: 3,
-                        source: 'Industry standard: 200 sq ft/employee',
-                        formula: 'Employment × 200 sq ft per employee'
+                        source: landRatioSource,
+                        formula: `Employment × ${landRatioValue} sq ft per employee`
                     })}
                     ${annotatedMetricCard({
-                        label: 'Capital', value: details.totals.capital_inr_cr, unit: 'INR Crores',
+                        label: `Capital Target (${targetYearLabel})`, value: details.totals.capital_inr_cr, unit: 'INR Crores',
                         icon: '💼', type: 'computed', confidence: 2,
                         source: 'Computed from land + geography premiums',
                         formula: 'Land costs × geography multiplier'

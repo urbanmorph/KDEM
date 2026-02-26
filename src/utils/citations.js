@@ -54,8 +54,9 @@ export const CITATIONS = {
         formula: 'Based on 10% CAGR from $85.1B (FY24-25)'
     },
     'it_exports_employment_ratio': {
-        value: 20, unit: 'employees per $1M USD', source: 'NASSCOM', confidence: 4,
-        type: 'actual'
+        value: 16, unit: 'employees per $1M USD', source: 'NASSCOM (AI-adjusted medium)', confidence: 3,
+        type: 'estimated',
+        note: 'Base ratio 20 (NASSCOM FY25). AI-adjusted to 16 per Bessemer Oct 2025 (~25% productivity gain). Used for FY32 target calculation.'
     },
 
     // IT Domestic
@@ -64,8 +65,9 @@ export const CITATIONS = {
         type: 'projected', year: '2032'
     },
     'it_domestic_employment_ratio': {
-        value: 25, unit: 'employees per $1M USD', source: 'NASSCOM', confidence: 4,
-        type: 'actual'
+        value: 18, unit: 'employees per $1M USD', source: 'NASSCOM (AI-adjusted medium)', confidence: 3,
+        type: 'estimated',
+        note: 'Base ratio ~21 (NASSCOM FY25 domestic). AI-adjusted to 18 (~15% reduction; domestic less automatable).'
     },
 
     // ESDM
@@ -75,15 +77,16 @@ export const CITATIONS = {
         formula: 'Based on India ESDM growth trajectory, Karnataka ~25% share'
     },
     'esdm_employment_ratio': {
-        value: 100, unit: 'employees per $1M USD', source: 'ICEA', confidence: 5,
-        type: 'actual',
-        note: 'ESDM is 5x more labor-intensive than IT Services'
+        value: 9, unit: 'employees per $1M USD', source: 'MeitY FY25 actual + KDEM projection', confidence: 3,
+        type: 'estimated',
+        note: 'AI-adjusted medium scenario. Current ratio ~7.7 (MeitY FY25: $36.69B / 284K). Target 9 reflects expansion into OSAT/PCB manufacturing (more labor-intensive). DB legacy value is 100 (ICEA generic); see Category B reconciliation.'
     },
 
     // Startups
     'startups_revenue_2030': {
-        value: 105, unit: 'USD Billion', source: 'KDEM/NASSCOM', confidence: 3,
-        type: 'projected', year: '2030'
+        value: 22, unit: 'USD Billion', source: 'KDEM Excel projection (revised)', confidence: 3,
+        type: 'projected', year: '2031-32',
+        note: 'Revised from $105B. Startup revenue excluded from total to avoid double-counting with IT Exports/Domestic.'
     },
 
     // Economic Context
@@ -100,14 +103,14 @@ export const CITATIONS = {
     'bengaluru_soonicorns': { value: 183, unit: 'Soonicorns (39% of India)', source: 'Bengaluru Innovation Report 2025', confidence: 5, type: 'actual' },
 
     // Land & Infrastructure
-    'land_ratio': { value: 200, unit: 'sq ft per employee', source: 'Industry Standard', confidence: 4, type: 'actual' },
+    'land_ratio': { value: 200, unit: 'sq ft per employee', source: 'Industry Standard (generic fallback)', confidence: 3, type: 'estimated', note: 'Generic fallback only. Per-vertical DB ratios: IT Exports 100, ESDM 33, Startups 80, IT Domestic 100, Digitizing 150 sq ft/emp.' },
     'bengaluru_premium': { value: 1.20, unit: 'multiplier', source: 'Real Estate Industry Data', confidence: 3, type: 'estimated' },
 
     // Conversion Ratios
-    'revenue_to_employment_it': { value: 20, unit: 'emp/$1M', source: 'NASSCOM', confidence: 4, type: 'actual' },
-    'revenue_to_employment_domestic': { value: 25, unit: 'emp/$1M', source: 'NASSCOM', confidence: 4, type: 'actual' },
-    'revenue_to_employment_esdm': { value: 100, unit: 'emp/$1M', source: 'ICEA', confidence: 5, type: 'actual' },
-    'employment_to_land': { value: 200, unit: 'sq ft/emp', source: 'Industry Standard', confidence: 4, type: 'actual' },
+    'revenue_to_employment_it': { value: 16, unit: 'emp/$1M', source: 'NASSCOM (AI-adjusted medium)', confidence: 3, type: 'estimated', note: 'Base ratio 20 (NASSCOM FY25). AI-adjusted to 16 per Bessemer Oct 2025 (~25% productivity gain by FY32).' },
+    'revenue_to_employment_domestic': { value: 18, unit: 'emp/$1M', source: 'NASSCOM (AI-adjusted medium)', confidence: 3, type: 'estimated', note: 'Base ratio ~21 (NASSCOM FY25). AI-adjusted to 18 (~15% reduction; domestic less automatable than exports).' },
+    'revenue_to_employment_esdm': { value: 9, unit: 'emp/$1M', source: 'MeitY FY25 + KDEM projection', confidence: 3, type: 'estimated', note: 'Current ratio 7.7. Target 9 reflects OSAT/PCB expansion. DB legacy value is 100 (ICEA generic).' },
+    'employment_to_land': { value: 200, unit: 'sq ft/emp', source: 'Industry Standard (generic fallback)', confidence: 3, type: 'estimated', note: 'Generic fallback. Per-vertical DB values: IT Exports 100, ESDM 33, Startups 80, IT Domestic 100, Digitizing 150 sq ft/emp.' },
 
     // Capital/VC
     'bengaluru_vc_total': { value: 79, unit: 'USD Billion', source: 'Bengaluru Innovation Report 2025', confidence: 5, type: 'actual' },

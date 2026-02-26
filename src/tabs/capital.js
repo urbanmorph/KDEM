@@ -13,6 +13,7 @@ import {
     getPolicies,
     getNationalOpportunities
 } from '../services/referenceData.js'
+import { fetchConversionRatios } from '../services/dataService.js'
 import { renderConfidenceStars } from '../utils/components.js'
 import { CHART_COLORS } from '../utils/chartSetup.js'
 import { createDoughnutChart } from '../utils/chartFactories.js'
@@ -60,6 +61,18 @@ function getWomenFundingData() {
 
 export async function renderCapitalTab(appData) {
     try {
+        // Load conversion ratios for capital methodology section
+        let capitalRatios = []
+        try {
+            const allRatios = await fetchConversionRatios()
+            capitalRatios = allRatios.filter(r =>
+                (r.to_metric === 'capital' || r.to_factor_id === 'capital') ||
+                (r.from_metric === 'land' && r.to_metric === 'capital')
+            )
+        } catch (err) {
+            console.warn('Could not load conversion ratios for capital methodology:', err)
+        }
+
         const vcMetrics = getVCMetrics()
         const investorBase = getInvestorBase()
         const sectorFunding = getSectorFunding()
@@ -85,8 +98,73 @@ export async function renderCapitalTab(appData) {
                     <p class="tab-subtitle">Funding ecosystem, venture capital, and investment trends across Karnataka's digital economy</p>
                 </div>
 
-                <!-- Venture Capital Ecosystem -->
+                <!-- Capital as a Factor of Production -->
                 <div class="section-header">
+                    <h3>Capital as a Factor of Production</h3>
+                    <p>How capital requirements are computed from land targets in the KDEM 3D model</p>
+                </div>
+
+                <div class="data-quality-warning" style="margin-bottom: 1rem;">
+                    <strong>Formula:</strong> Capital (INR Cr) = Land (sq ft) &times; Construction Cost (INR/sq ft) &times; Geography Multiplier
+                </div>
+
+                <div class="table-scroll-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Vertical</th>
+                                <th>Construction Cost (INR/sq ft)</th>
+                                <th>Basis</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>IT Exports</strong></td><td>3,500</td><td>Grade A office build-out</td></tr>
+                            <tr><td><strong>IT Domestic</strong></td><td>3,500</td><td>Grade A office build-out</td></tr>
+                            <tr><td><strong>ESDM</strong></td><td>4,000</td><td>Manufacturing facility (cleanroom, power infra)</td></tr>
+                            <tr><td><strong>Startups</strong></td><td>2,500</td><td>Co-working / flexible office fit-out</td></tr>
+                            <tr><td><strong>Digitizing Sectors</strong></td><td>3,000</td><td>Mixed-use (office + light industrial)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p class="conversion-note" style="margin-top: 0.75rem;">
+                    <strong>Geography Multipliers:</strong> Bengaluru 1.20x (20% premium) | Mysuru 0.70x | Mangaluru 0.75x |
+                    Hubballi-Dharwad 0.65x | Tumakuru 0.60x | Kalaburagi 0.50x | Shivamogga 0.55x
+                </p>
+                <p class="conversion-note">
+                    <strong>Source:</strong> KDEM Supabase Database (conversion_ratios + geography_conversion_multipliers tables) ${renderConfidenceStars(3)}
+                </p>
+
+                ${capitalRatios.length > 0 ? `
+                    <div class="section-header mt-4" style="margin-top: 1rem;">
+                        <h4>DB Capital Conversion Ratios</h4>
+                    </div>
+                    <div class="table-scroll-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Vertical</th>
+                                    <th>Ratio</th>
+                                    <th>Unit</th>
+                                    <th>Source</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${capitalRatios.map(r => `
+                                    <tr>
+                                        <td><strong>${r.vertical_id || 'All'}</strong></td>
+                                        <td>${r.ratio || r.conversion_ratio || ''}</td>
+                                        <td>${r.unit || ''}</td>
+                                        <td>${r.source || ''}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                ` : ''}
+
+                <!-- Venture Capital Ecosystem -->
+                <div class="section-header mt-4">
                     <h3>Bengaluru Venture Capital Ecosystem</h3>
                 </div>
 

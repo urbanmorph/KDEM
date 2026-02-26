@@ -23,6 +23,7 @@ async function renderSingleGeography(geographyId, appData) {
     try {
         const details = await getGeographyDetails(geographyId, 2030)
         const geography = details.geography
+        const targetYearLabel = 'FY 2029-30'
 
         // Store chart init function for main.js to call after DOM insertion
         window.__kdem_initCharts = () => initSingleGeoCharts(details)
@@ -37,25 +38,25 @@ async function renderSingleGeography(geographyId, appData) {
                 <!-- Overview Metrics -->
                 <div class="metrics-grid">
                     ${annotatedMetricCard({
-                        label: 'Total Revenue', value: details.totals.revenue_usd_bn, unit: 'USD Billion',
+                        label: `Total Revenue (${targetYearLabel})`, value: details.totals.revenue_usd_bn, unit: 'USD Billion',
                         icon: '💰', type: 'target', confidence: 4,
                         source: 'KDEM Target Database (Supabase)',
                         formula: 'Sum of vertical revenue targets for this geography'
                     })}
                     ${annotatedMetricCard({
-                        label: 'Total Employment', value: details.totals.employment, unit: 'Jobs',
+                        label: `Total Employment (${targetYearLabel})`, value: details.totals.employment, unit: 'Jobs',
                         icon: '👥', type: 'computed', confidence: 3,
                         source: 'DB targets (AI-adjusted medium scenario)',
                         formula: 'Revenue × AI-adjusted emp/$1M ratio per vertical (Bessemer Oct 2025, NASSCOM AI-era)'
                     })}
                     ${annotatedMetricCard({
-                        label: 'Land Required', value: details.totals.land_sqft, unit: 'Sq Ft',
+                        label: `Land Required (${targetYearLabel})`, value: details.totals.land_sqft, unit: 'Sq Ft',
                         icon: '🏗️', type: 'computed', confidence: 3,
-                        source: 'Industry standard: 200 sq ft/employee',
-                        formula: 'Employment × 200 sq ft per employee'
+                        source: 'Per-vertical DB ratios (IT 100, ESDM 33, Startups 80 sq ft/emp)',
+                        formula: 'Employment × per-vertical space ratio from DB'
                     })}
                     ${annotatedMetricCard({
-                        label: 'Capital Investment', value: details.totals.capital_inr_cr, unit: 'INR Crores',
+                        label: `Capital Investment (${targetYearLabel})`, value: details.totals.capital_inr_cr, unit: 'INR Crores',
                         icon: '💼', type: 'computed', confidence: 2,
                         source: 'Computed from land + geography premiums',
                         formula: 'Land costs × geography multiplier'
