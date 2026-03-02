@@ -195,14 +195,14 @@ export async function renderLaborTab(appData) {
                         <div class="chart-container">
                             <canvas id="workforce-composition-chart"></canvas>
                         </div>
-                        <div class="chart-source">Source: Bengaluru Innovation Report 2025</div>
+                        <div class="chart-source">Source: Bengaluru Innovation Report 2025 (3One4 Capital) ${renderConfidenceStars(4)}</div>
                     </div>
                     <div class="growth-chart-card">
                         <h4>Talent Pool Size (thousands)</h4>
                         <div class="chart-container">
                             <canvas id="talent-pool-bar-chart"></canvas>
                         </div>
-                        <div class="chart-source">Source: Bengaluru Innovation Report 2025</div>
+                        <div class="chart-source">Source: Bengaluru Innovation Report 2025 (3One4 Capital) ${renderConfidenceStars(4)}</div>
                     </div>
                 </div>
 

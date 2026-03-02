@@ -89,7 +89,7 @@ export async function renderVerticalTab(verticalId, appData) {
                         <div class="growth-chart-card" style="grid-column: 1 / -1;">
                             <h4>Revenue by Geography &mdash; FY 2029-30 Target</h4>
                             <div id="vertical-geo-treemap" class="echart-container" style="height: 350px;"></div>
-                            <div class="chart-source">Source: KDEM Target Database (Supabase)</div>
+                            <div class="chart-source">Source: KDEM Target Database (Supabase) ${renderConfidenceStars(3)}</div>
                         </div>
                     </div>
                 ` : ''}

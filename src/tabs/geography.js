@@ -74,7 +74,7 @@ async function renderSingleGeography(geographyId, appData) {
                             <div class="chart-container" style="height: 350px;">
                                 <div id="geo-vertical-treemap" style="height: 350px;"></div>
                             </div>
-                            <div class="chart-source">Source: KDEM Target Database (Supabase)</div>
+                            <div class="chart-source">Source: KDEM Target Database (Supabase) — apportionment rules applied to vertical targets ${renderConfidenceStars(3)}</div>
                         </div>
                     </div>
                 ` : ''}
@@ -82,7 +82,7 @@ async function renderSingleGeography(geographyId, appData) {
                 <!-- Vertical Breakdown Table -->
                 <div class="section-header mt-4">
                     <h3>Distribution by Vertical</h3>
-                    <p>How different digital economy verticals contribute to ${geography.name}</p>
+                    <p>How different digital economy verticals contribute to ${geography.name} (FY 2029-30 targets)</p>
                 </div>
 
                 <div class="vertical-breakdown">

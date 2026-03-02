@@ -39,8 +39,8 @@ INSERT INTO conversion_ratios (vertical_id, from_metric, to_metric, ratio, unit,
 -- =============================================================================
 INSERT INTO conversion_ratios (vertical_id, from_metric, to_metric, ratio, unit, basis, confidence_rating) VALUES
   -- Revenue to Employment
-  ('esdm', 'revenue', 'employment', 100, 'employees_per_million_usd',
-   'ICEA industry benchmarks for ESDM sector', 4),
+  ('esdm', 'revenue', 'employment', 8, 'employees_per_million_usd',
+   'MeitY FY24-25 actual: $36.69B / 284K employees = 7.7 emp/$1M. Karnataka ESDM is design-heavy (40% national share in electronic design). Rounded to 8.', 4),
 
   -- Employment to Land
   ('esdm', 'employment', 'land', 33.33, 'sqft_per_employee',
@@ -55,8 +55,8 @@ INSERT INTO conversion_ratios (vertical_id, from_metric, to_metric, ratio, unit,
 -- =============================================================================
 INSERT INTO conversion_ratios (vertical_id, from_metric, to_metric, ratio, unit, basis, confidence_rating) VALUES
   -- Revenue to Employment
-  ('startups', 'revenue', 'employment', 15, 'employees_per_million_usd',
-   'Karnataka startup ecosystem average (lean teams)', 3),
+  ('startups', 'revenue', 'employment', 105, 'employees_per_million_usd',
+   'KDEM Excel FY24-25: $8.79B / 920K employees = 104.7 emp/$1M. High ratio reflects labor-intensive startup ecosystem. Note: startup employment double-counts with NASSCOM IT-BPM.', 3),
 
   -- Employment to Land
   ('startups', 'employment', 'land', 80, 'sqft_per_employee',

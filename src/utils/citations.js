@@ -77,9 +77,9 @@ export const CITATIONS = {
         formula: 'Based on India ESDM growth trajectory, Karnataka ~25% share'
     },
     'esdm_employment_ratio': {
-        value: 9, unit: 'employees per $1M USD', source: 'MeitY FY25 actual + KDEM projection', confidence: 3,
+        value: 8, unit: 'employees per $1M USD', source: 'MeitY FY24-25 actual ($36.69B / 284K = 7.7, rounded to 8)', confidence: 4,
         type: 'estimated',
-        note: 'AI-adjusted medium scenario. Current ratio ~7.7 (MeitY FY25: $36.69B / 284K). Target 9 reflects expansion into OSAT/PCB manufacturing (more labor-intensive). DB legacy value is 100 (ICEA generic); see Category B reconciliation.'
+        note: 'Karnataka ESDM is design-heavy (40% national share in electronic design), not labor-intensive assembly. DB migration 012 corrected from 100 to 8.'
     },
 
     // Startups
@@ -109,7 +109,7 @@ export const CITATIONS = {
     // Conversion Ratios
     'revenue_to_employment_it': { value: 16, unit: 'emp/$1M', source: 'NASSCOM (AI-adjusted medium)', confidence: 3, type: 'estimated', note: 'Base ratio 20 (NASSCOM FY25). AI-adjusted to 16 per Bessemer Oct 2025 (~25% productivity gain by FY32).' },
     'revenue_to_employment_domestic': { value: 18, unit: 'emp/$1M', source: 'NASSCOM (AI-adjusted medium)', confidence: 3, type: 'estimated', note: 'Base ratio ~21 (NASSCOM FY25). AI-adjusted to 18 (~15% reduction; domestic less automatable than exports).' },
-    'revenue_to_employment_esdm': { value: 9, unit: 'emp/$1M', source: 'MeitY FY25 + KDEM projection', confidence: 3, type: 'estimated', note: 'Current ratio 7.7. Target 9 reflects OSAT/PCB expansion. DB legacy value is 100 (ICEA generic).' },
+    'revenue_to_employment_esdm': { value: 8, unit: 'emp/$1M', source: 'MeitY FY24-25 actual (7.7, rounded to 8)', confidence: 4, type: 'estimated', note: 'KA ESDM is design-heavy. DB migration 012 corrected from 100 to 8. AI-adjusted target for FY32 may rise to 9 with OSAT/PCB expansion.' },
     'employment_to_land': { value: 200, unit: 'sq ft/emp', source: 'Industry Standard (generic fallback)', confidence: 3, type: 'estimated', note: 'Generic fallback. Per-vertical DB values: IT Exports 100, ESDM 33, Startups 80, IT Domestic 100, Digitizing 150 sq ft/emp.' },
 
     // Capital/VC

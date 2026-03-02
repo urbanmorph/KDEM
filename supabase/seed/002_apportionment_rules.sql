@@ -117,24 +117,24 @@ INSERT INTO apportionment_rules (
   basis, confidence_rating, status
 ) VALUES
   ('startups', 'karnataka', 'bengaluru',
-   'percentage', 90.0,
-   'Startup ecosystem heavily concentrated in Bengaluru', 5, 'active'),
+   'percentage', 75.0,
+   'KDEM Excel BB Workings: Startups 75% Bengaluru. DPIIT Karnataka district data supports ~20-25% BB startup registrations.', 4, 'active'),
 
   ('startups', 'karnataka', 'mysuru',
-   'percentage', 3.0,
-   'Emerging startup ecosystem', 3, 'active'),
+   'percentage', 8.0,
+   'KDEM Excel BB Workings: Mysuru is top BB startup hub. DPIIT Prabhaav: 1,200+ registered startups in Mysuru district.', 3, 'active'),
 
   ('startups', 'karnataka', 'mangaluru',
-   'percentage', 2.5,
-   'Coastal startup ecosystem', 3, 'active'),
+   'percentage', 6.0,
+   'KDEM Silicon Beach initiative + Xpheno talent report. DPIIT Prabhaav: 800+ registered startups in DK district.', 3, 'active'),
 
   ('startups', 'karnataka', 'hdb-corridor',
-   'percentage', 2.0,
-   'Growing startup presence', 3, 'active'),
+   'percentage', 5.0,
+   'KDEM BB program + Hubballi startup ecosystem (KLE, BVB universities). DPIIT Prabhaav: 600+ registered startups.', 3, 'active'),
 
   ('startups', 'karnataka', 'rest-of-karnataka',
-   'percentage', 2.5,
-   'Distributed startups', 2, 'active');
+   'percentage', 6.0,
+   'DPIIT Karnataka: distributed startup registrations across Belagavi, Kalaburagi, Tumakuru, Shivamogga, etc.', 2, 'active');
 
 -- =============================================================================
 -- DIGITIZING SECTORS (Estimated distribution)

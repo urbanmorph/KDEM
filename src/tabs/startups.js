@@ -96,8 +96,7 @@ export async function renderStartupsTab(appData) {
                 <div class="chart-container" style="max-width: 480px; margin: 0 auto;">
                     <canvas id="startups-funding-doughnut" height="320"></canvas>
                 </div>
-
-                <!-- Rankings are displayed as styled cards in the section above -->
+                <div class="chart-source" style="text-align: center;">Source: Bengaluru Innovation Report 2025 (3One4 Capital) ${renderConfidenceStars(5)}</div>
 
                 <!-- Beyond Bengaluru Ecosystem -->
                 <div class="section-header mt-4">
