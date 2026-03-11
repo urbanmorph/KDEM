@@ -4,11 +4,11 @@
  * Uses ECharts (gauge, sankey, treemap, waterfall) + Chart.js (annotated area, doughnut)
  */
 
-import { getVerticalOverview, getTotalMetrics, fetchConversionRatios, fetchTargets } from '../services/dataService.js'
+import { getVerticalOverview, getTotalMetrics, fetchTargets } from '../services/dataService.js'
 import {
     getKarnatakaBaseline, getVerticalBaselines, getIndiaDigitalEconomyTimeline,
     getKarnatakaDigitalEconomyTimeline, getGDPComparisonTimeline,
-    getRevenueWaterfall, getRevenueSankeyData
+    getRevenueWaterfall, getRevenueSankeyData, getRoadmapRevenueTrajectory
 } from '../services/referenceData.js'
 import { formatNumber } from '../utils/formatting.js'
 import { annotatedMetricCard, renderConfidenceStars } from '../utils/components.js'
@@ -18,10 +18,9 @@ import { createSpeedometerGauge, createSankeyChart, createWaterfallChart } from 
 
 export async function renderOverviewTab(appData) {
     try {
-        const [verticalOverview, totalMetrics, conversionRatios, allTargets] = await Promise.all([
+        const [verticalOverview, totalMetrics, allTargets] = await Promise.all([
             getVerticalOverview(2030),
             getTotalMetrics(2030),
-            fetchConversionRatios(),
             fetchTargets({ year: 2030 })
         ])
 
@@ -36,46 +35,62 @@ export async function renderOverviewTab(appData) {
 
         return `
             <div class="overview-tab">
-                <div class="tab-header">
-                    <h2>Karnataka Digital Economy Overview</h2>
+                <!-- SECTION 1: ECONOMIC CONTEXT -->
+                <div class="section-header">
+                    <h3>A $345 Billion State Powering India's Digital Future</h3>
+                    <p>Karnataka produces 8.5% of India's GDP and 38% of its digital exports</p>
                 </div>
 
-                <div class="metrics-grid">
-                    ${annotatedMetricCard({
-                        label: 'Current Digital Economy', value: baseline.currentTotalDigital_USD_Bn, unit: 'USD Billion',
-                        icon: '📊', type: 'benchmark', confidence: 3,
-                        source: baseline.source, target: `$${baseline.targetRevenue_USD_Bn}B by 2032`,
-                        formula: 'Sum of IT Exports + IT Domestic + ESDM + Digitizing (Startup revenue excluded — embedded in IT figures)'
-                    })}
-                    ${annotatedMetricCard({
-                        label: 'Karnataka GSDP', value: baseline.currentGSDP_USD_Bn, unit: 'USD Billion',
-                        icon: '🏛️', type: 'benchmark', confidence: 5,
-                        source: 'PRS India Budget Analysis 2025-26 (Rs 28.7L Cr @ Rs 83/$)',
-                        formula: `Digital economy = ${Math.round(baseline.currentTotalDigital_USD_Bn / baseline.currentGSDP_USD_Bn * 100)}% of GSDP today`
-                    })}
-                    ${annotatedMetricCard({
-                        label: 'Digital Economy Employment', value: baseline.currentDigitalEmployment, unit: 'Jobs',
-                        icon: '👥', type: 'benchmark', confidence: 3,
-                        source: baseline.source, target: `${((totalMetrics.total_employment || baseline.targetEmployment) / 1000000).toFixed(1)}M by 2032 (DB)`,
-                        formula: 'IT Exports + IT Domestic + ESDM + Digitizing Sectors (startup employment excluded — overlaps with NASSCOM IT-BPM figures)'
-                    })}
-                    ${annotatedMetricCard({
-                        label: "Share of India's Digital Economy", value: baseline.karnatakaDigitalShareOfIndia_Pct, unit: '%',
-                        icon: '🎯', type: 'benchmark', confidence: 3,
-                        source: baseline.source,
-                        formula: 'Karnataka digital economy / India digital economy'
-                    })}
+                <div class="economic-context">
+                    <div class="growth-charts-grid">
+                        <div class="growth-chart-card" style="grid-column: 1 / -1;">
+                            <div class="chart-container">
+                                <canvas id="gdp-comparison-chart"></canvas>
+                            </div>
+                            <div class="chart-source">Source: MoSPI, RBI Handbook 2025 ${renderConfidenceStars(5)}</div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="error-band-note" style="background: #fef3c7; border-left: 4px solid #E68634; padding: 12px 16px; margin: -8px 0 16px 0; border-radius: 4px; font-size: 0.85rem; color: #92400e; line-height: 1.5;">
-                    <strong>Note:</strong> Estimate range $${baseline.errorBand.low}-${baseline.errorBand.high}B. ${baseline.errorBand.note}
-                    <br/><em style="font-size: 0.8rem; color: #a16207;">${baseline.startupNote}</em>
-                </div>
-
-                <!-- SECTION 2: VERTICAL BASELINES — The 5 Pillars -->
+                <!-- SECTION 2: PROGRESS GAUGES -->
                 <div class="section-header mt-4">
-                    <h3>Mission of KDEM: The 5 Pillars</h3>
-                    <p>4 revenue pillars + 1 ecosystem pillar on the journey to $${baseline.targetRevenue_USD_Bn}B</p>
+                    <h3>$${baseline.currentTotalDigital_USD_Bn}B Down, $${baseline.targetRevenue_USD_Bn - baseline.currentTotalDigital_USD_Bn}B to Go</h3>
+                    <p>Karnataka's digital economy today versus the 2032 target</p>
+                </div>
+
+                <div class="gauge-grid-echarts">
+                    <div class="gauge-item-echarts">
+                        <div id="revenue-speedometer" class="echart-container" style="height: 260px;"></div>
+                        <div class="gauge-label">
+                            <strong>$${baseline.currentTotalDigital_USD_Bn}B</strong> of $${baseline.targetRevenue_USD_Bn}B Revenue Target
+                            <br/><span class="scenario-range">Optimistic $${baseline.revenueScenarios.optimistic.total}B · Stretch $${baseline.revenueScenarios.stretch.total}B</span>
+                            <br/>${renderConfidenceStars(3)}
+                        </div>
+                    </div>
+                    <div class="gauge-item-echarts">
+                        <div id="employment-speedometer" class="echart-container" style="height: 260px;"></div>
+                        <div class="gauge-label">
+                            <strong>${formatNumber(baseline.currentDigitalEmployment)}</strong> of ${((totalMetrics.total_employment || baseline.targetEmployment) / 1000000).toFixed(1)}M Employment Target
+                            <br/><span style="font-size: 0.75rem; color: #6b7280;">AI-adjusted (medium scenario)</span>
+                            <br/>${renderConfidenceStars(3)}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 3: GROWTH TRAJECTORIES -->
+                <div class="section-header mt-4">
+                    <h3>Riding a Decade of Compounding Growth</h3>
+                    <p>India's digital economy is heading to $1.2T — Karnataka aims to capture a disproportionate share</p>
+                </div>
+
+                <div class="growth-trends">
+                    ${renderGrowthCharts()}
+                </div>
+
+                <!-- SECTION 4: THE 5 PILLARS -->
+                <div class="section-header mt-4">
+                    <h3>Five Pillars to $${baseline.targetRevenue_USD_Bn}B–$${baseline.revenueScenarios.stretch.total}B</h3>
+                    <p>Four revenue engines and one ecosystem accelerator — shown with conservative targets and scenario ranges</p>
                 </div>
 
                 <div class="pillars-grid">
@@ -86,34 +101,10 @@ export async function renderOverviewTab(appData) {
                     }).join('')}
                 </div>
 
-                <!-- SECTION 3: PROGRESS GAUGES — Today vs Target -->
+                <!-- SECTION 5: WATERFALL -->
                 <div class="section-header mt-4">
-                    <h3>Progress Towards 2032 Vision</h3>
-                    <p>How far we've come and how far we need to go</p>
-                </div>
-
-                <div class="gauge-grid-echarts">
-                    <div class="gauge-item-echarts">
-                        <div id="revenue-speedometer" class="echart-container" style="height: 260px;"></div>
-                        <div class="gauge-label">
-                            <strong>$${baseline.currentTotalDigital_USD_Bn}B</strong> of $${baseline.targetRevenue_USD_Bn}B Revenue Target
-                            <br/>${renderConfidenceStars(3)}
-                        </div>
-                    </div>
-                    <div class="gauge-item-echarts">
-                        <div id="employment-speedometer" class="echart-container" style="height: 260px;"></div>
-                        <div class="gauge-label">
-                            <strong>${formatNumber(baseline.currentDigitalEmployment)}</strong> of ${((totalMetrics.total_employment || baseline.targetEmployment) / 1000000).toFixed(1)}M Employment Target
-                            <br/><span style="font-size: 0.75rem; color: #6b7280;">AI-adjusted (medium scenario) — Source: DB targets</span>
-                            <br/>${renderConfidenceStars(3)}
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SECTION 4: WATERFALL — How the 4 revenue verticals add up to $329B -->
-                <div class="section-header mt-4">
-                    <h3>Building to $329B: Revenue by Vertical</h3>
-                    <p>How the four revenue pillars combine to reach the FY 2031-32 target</p>
+                    <h3>The Math: How Four Verticals Add Up</h3>
+                    <p>IT Exports carries half the weight, ESDM is the fastest grower</p>
                 </div>
 
                 <div class="growth-charts-grid">
@@ -123,57 +114,28 @@ export async function renderOverviewTab(appData) {
                     </div>
                 </div>
 
-                <!-- SECTION 5: SANKEY — Flow from target to verticals to geographies -->
+                <!-- SECTION 6: SANKEY -->
                 <div class="section-header mt-4">
-                    <h3>Revenue Flow: Target → Verticals → Geographies</h3>
-                    <p>How the $329B target distributes across verticals and geographic clusters</p>
+                    <h3>Where the Money Lands: Bengaluru 90%, Beyond Bengaluru 10%</h3>
+                    <p>$329B flowing from verticals to geographies — diversification is the next frontier</p>
                 </div>
 
                 <div class="growth-charts-grid">
                     <div class="growth-chart-card" style="grid-column: 1 / -1;">
                         <div id="revenue-sankey" class="echart-container" style="height: 420px;"></div>
-                        <div class="chart-source">Source: KDEM Apportionment Rules ${renderConfidenceStars(3)}</div>
+                        <div class="chart-source">Source: KDEM Projection Model ${renderConfidenceStars(3)}</div>
                     </div>
                 </div>
 
-                <!-- SECTION 7: GROWTH TRAJECTORIES with annotations -->
-                <div class="section-header mt-4">
-                    <h3>Growth Trajectories & Projections</h3>
-                    <p>Historical performance (solid) and future projections (dashed) with target lines</p>
-                </div>
-
-                <div class="growth-trends">
-                    ${renderGrowthCharts()}
-                </div>
-
-                <!-- SECTION 8: ECONOMIC CONTEXT -->
-                <div class="section-header mt-4">
-                    <h3>Economic Context: GDP & GSDP</h3>
-                    <p>India's GDP and Karnataka's contribution to the national economy</p>
-                </div>
-
-                <div class="economic-context">
-                    <div class="growth-charts-grid">
-                        <div class="growth-chart-card" style="grid-column: 1 / -1;">
-                            <h4>GDP Comparison: India vs Karnataka</h4>
-                            <p class="chart-subtitle">Karnataka contributes ~8.5% to India's GDP</p>
-                            <div class="chart-container">
-                                <canvas id="gdp-comparison-chart"></canvas>
-                            </div>
-                            <div class="chart-source">Source: MoSPI, RBI Handbook 2025 ${renderConfidenceStars(5)}</div>
-                        </div>
+                <!-- BB CTA -->
+                <div class="bb-cta">
+                    <div class="bb-cta-content">
+                        <h3>That 10% Is Where the Story Gets Interesting</h3>
+                        <p>$33–50 billion across three scenarios. 150 companies already there. Rs 3,220 crore in ESDM investments. Eight clusters from Mysuru to Kalaburagi building Karnataka's next digital frontier — not by replicating Bengaluru, but by digitalizing the industries already there.</p>
+                        <a href="#" class="bb-cta-link" data-tab="clusters">Explore Beyond Bengaluru</a>
                     </div>
                 </div>
 
-                <!-- SECTION 9: Conversion Ratios -->
-                <div class="section-header mt-4">
-                    <h3>Conversion Ratios (from Database)</h3>
-                    <p>Base ratios used to cascade revenue → employment → land → capital. Employment targets use AI-adjusted ratios (IT: 16, ITD: 18, ESDM: 9 emp/$1M — see Roadmap for scenarios)</p>
-                </div>
-
-                <div class="conversion-info">
-                    ${renderConversionRatiosTable(conversionRatios)}
-                </div>
             </div>
         `
     } catch (error) {
@@ -204,22 +166,18 @@ function renderPillarCard(vertical, target, current) {
                 </div>
                 <div class="pillar-metrics">
                     <div class="pillar-metric">
-                        <span class="metric-icon-small">🚀</span>
                         <span class="metric-label-small">DPIIT Startups</span>
                         <span class="metric-value-small">${formatNumber(eco.dpiitCount || 0)}</span>
                     </div>
                     <div class="pillar-metric">
-                        <span class="metric-icon-small">🏢</span>
                         <span class="metric-label-small">Total Ecosystem</span>
                         <span class="metric-value-small">${eco.totalEstimate || 'N/A'}</span>
                     </div>
                     <div class="pillar-metric">
-                        <span class="metric-icon-small">💰</span>
                         <span class="metric-label-small">Annual Funding</span>
                         <span class="metric-value-small">$${eco.annualFunding || 0}B</span>
                     </div>
                     <div class="pillar-metric">
-                        <span class="metric-icon-small">🦄</span>
                         <span class="metric-label-small">Unicorns</span>
                         <span class="metric-value-small">${eco.unicorns || 0} (${eco.soonicorns || 0} soonicorns)</span>
                     </div>
@@ -230,21 +188,29 @@ function renderPillarCard(vertical, target, current) {
                 <div class="pillar-footer">
                     ${renderConfidenceStars(current.confidence || 3)}
                     <span class="pillar-source">${eco.source || current.source || ''}</span>
-                    <a href="#" class="view-details-link" data-vertical="${vertical.id}">View Details →</a>
                 </div>
             </div>
         `
     }
 
     // Standard revenue pillar card
+    const pillarColors = {
+        'it-exports': '#E96337',
+        'it-domestic': '#E68634',
+        'esdm': '#5BB9EC',
+        'digitizing-sectors': '#10B981',
+        'startups': '#8B5CF6'
+    }
+    const borderColor = pillarColors[vertical.id] || '#E96337'
     const targetRev = target.revenue_usd_bn || 0
     const currentRev = current.current || 0
     const pctProgress = targetRev > 0 ? ((currentRev / targetRev) * 100).toFixed(0) : 0
     const gap = targetRev - currentRev
     const growthMultiple = currentRev > 0 ? (targetRev / currentRev).toFixed(1) : '—'
+    const hasScenarios = current.optimistic && current.stretch
 
     return `
-        <div class="pillar-card">
+        <div class="pillar-card" style="border-left: 4px solid ${borderColor};">
             <div class="pillar-header">
                 <h4>${vertical.name}</h4>
                 <span class="pillar-badge">${growthMultiple}x growth needed</span>
@@ -254,36 +220,45 @@ function renderPillarCard(vertical, target, current) {
             </div>
             <div class="pillar-metrics">
                 <div class="pillar-metric">
-                    <span class="metric-icon-small">📊</span>
                     <span class="metric-label-small">Today</span>
                     <span class="metric-value-small">$${formatNumber(currentRev)}B</span>
                 </div>
                 <div class="pillar-metric">
-                    <span class="metric-icon-small">🎯</span>
                     <span class="metric-label-small">2032 Target</span>
                     <span class="metric-value-small">$${formatNumber(targetRev)}B</span>
                 </div>
                 <div class="pillar-metric">
-                    <span class="metric-icon-small">📈</span>
                     <span class="metric-label-small">Gap</span>
                     <span class="metric-value-small">$${formatNumber(gap)}B</span>
                 </div>
                 <div class="pillar-metric">
-                    <span class="metric-icon-small">👥</span>
                     <span class="metric-label-small">Employment Target</span>
                     <span class="metric-value-small">${formatNumber(target.employment || 0)}</span>
                 </div>
             </div>
+            ${hasScenarios ? `
+            <div class="pillar-scenario-range">
+                <span class="scenario-bar">
+                    <span class="scenario-bar-fill" style="background: ${borderColor}; width: ${Math.min((currentRev / current.stretch) * 100, 100)}%"></span>
+                    <span class="scenario-marker scenario-marker--conservative" style="left: ${(targetRev / current.stretch) * 100}%" title="Conservative $${targetRev}B"></span>
+                    <span class="scenario-marker scenario-marker--optimistic" style="left: ${(current.optimistic / current.stretch) * 100}%" title="Optimistic $${current.optimistic}B"></span>
+                </span>
+                <span class="scenario-labels">
+                    <span>$${formatNumber(targetRev)}B</span>
+                    <span style="color: #E96337;">$${formatNumber(current.optimistic)}B</span>
+                    <span style="color: #10B981;">$${formatNumber(current.stretch)}B</span>
+                </span>
+            </div>
+            ` : ''}
             <div class="pillar-progress">
                 <div class="progress-bar-mini">
                     <div class="progress-fill-mini" style="width: ${Math.min(pctProgress, 100)}%"></div>
                 </div>
-                <span class="progress-text-mini">${pctProgress}% of target</span>
+                <span class="progress-text-mini">${pctProgress}% of conservative target</span>
             </div>
             <div class="pillar-footer">
                 ${renderConfidenceStars(current.confidence || 3)}
                 <span class="pillar-source">${current.source || ''}</span>
-                <a href="#" class="view-details-link" data-vertical="${vertical.id}">View Details →</a>
             </div>
         </div>
     `
@@ -293,8 +268,8 @@ function renderGrowthCharts() {
     return `
         <div class="growth-charts-grid">
             <div class="growth-chart-card">
-                <h4>India Digital Economy Growth</h4>
-                <p class="chart-subtitle">Projected to reach $1.2 Trillion by 2029-30</p>
+                <h4>India's Digital Economy: $283B and Accelerating</h4>
+                <p class="chart-subtitle">On track to $1.2 Trillion by 2029-30</p>
                 <div class="chart-container">
                     <canvas id="india-digital-economy-chart"></canvas>
                 </div>
@@ -302,50 +277,13 @@ function renderGrowthCharts() {
             </div>
 
             <div class="growth-chart-card">
-                <h4>Karnataka's Digital Economy Trajectory</h4>
-                <p class="chart-subtitle">4 revenue verticals (excl. Startups): from $106B (FY22) → $159B today (FY25) → $329B target (FY32)</p>
+                <h4>Karnataka's Share: $159B → $329B–$454B</h4>
+                <p class="chart-subtitle">Three scenarios: Conservative, Optimistic, and Stretch</p>
                 <div class="chart-container">
                     <canvas id="karnataka-digital-economy-chart"></canvas>
                 </div>
                 <div class="chart-source">Source: NASSCOM Strategic Review 2025, MeitY, KDEM Excel ${renderConfidenceStars(4)}</div>
             </div>
-        </div>
-    `
-}
-
-function renderConversionRatiosTable(ratios) {
-    if (!ratios || ratios.length === 0) {
-        return `<div class="no-data-message"><p>No conversion ratios in database. Seed the conversion_ratios table.</p></div>`
-    }
-
-    return `
-        <div class="table-scroll-wrapper">
-            <table class="data-table">
-            <thead>
-                <tr>
-                    <th>Vertical</th>
-                    <th>From Metric</th>
-                    <th>To Metric</th>
-                    <th>Ratio</th>
-                    <th>Unit</th>
-                    <th>Source</th>
-                    <th>Confidence</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${ratios.map(r => `
-                    <tr>
-                        <td><strong>${r.vertical_id || 'All'}</strong></td>
-                        <td>${r.from_metric || r.from_factor_id || ''}</td>
-                        <td>${r.to_metric || r.to_factor_id || ''}</td>
-                        <td>${r.ratio || r.conversion_ratio || ''}</td>
-                        <td>${r.unit || ''}</td>
-                        <td>${r.source || ''}</td>
-                        <td>${renderConfidenceStars(r.confidence_rating || 3)}</td>
-                    </tr>
-                `).join('')}
-            </tbody>
-        </table>
         </div>
     `
 }
@@ -386,15 +324,20 @@ function initAllCharts(verticalOverview, totalMetrics, baseline, verticalBaselin
     )
 
     const kaTimeline = getKarnatakaDigitalEconomyTimeline()
+    const roadmap = getRoadmapRevenueTrajectory()
+    // Pad scenario arrays to match KA timeline (11 points: 3 historical + 8 projected)
+    const padded = (arr) => [null, null, null, ...arr]
     createAnnotatedAreaChart(
         'karnataka-digital-economy-chart',
         kaTimeline.labels,
         [
             { label: 'Actual (USD Bn)', data: kaTimeline.actual, color: '#5BB9EC' },
-            { label: 'Projected (USD Bn)', data: kaTimeline.projected, color: '#5BB9EC', dashed: true }
+            { label: `Conservative ($${roadmap.scenarios.conservative.target}B)`, data: kaTimeline.projected, color: '#5BB9EC', dashed: true },
+            { label: `Optimistic ($${roadmap.scenarios.optimistic.target}B)`, data: padded(roadmap.optimistic), color: '#E96337', dashed: true, fill: false, pointRadius: 0, borderWidth: 1.5, hideLabel: true },
+            { label: `Stretch ($${roadmap.scenarios.stretch.target}B)`, data: padded(roadmap.stretch), color: '#10B981', dashed: true, fill: false, pointRadius: 0, borderWidth: 1.5, hideLabel: true }
         ],
         {
-            targetLine: { value: kaTimeline.target, label: `Target: $${kaTimeline.target}B`, color: '#ef4444' },
+            targetLine: { value: kaTimeline.target, label: `Conservative: $${kaTimeline.target}B`, color: '#ef4444' },
             todayLine: { index: kaTimeline.todayIndex, label: 'FY 2024-25' }
         }
     )
@@ -472,4 +415,14 @@ function initAllCharts(verticalOverview, totalMetrics, baseline, verticalBaselin
         })
     }
 
+    // BB CTA link handler
+    const bbLink = document.querySelector('.bb-cta-link[data-tab="clusters"]')
+    if (bbLink) {
+        bbLink.addEventListener('click', (e) => {
+            e.preventDefault()
+            if (window.KDEM && window.KDEM.loadTab) {
+                window.KDEM.loadTab('clusters')
+            }
+        })
+    }
 }

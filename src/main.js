@@ -7,12 +7,8 @@ import { fetchVerticals, fetchGeographies, fetchFactors } from './services/dataS
 import { initAnimatedCounters } from './utils/formatting.js'
 import { getKarnatakaBaseline } from './services/referenceData.js'
 
-// Tab renderers are now loaded dynamically on-demand to reduce initial bundle size
-// This improves initial page load performance by code splitting
-
 // State
 let currentTab = 'overview'
-let currentCategory = 'strategy'
 let appData = {
     verticals: [],
     geographies: [],
@@ -31,29 +27,19 @@ async function initApp() {
     console.log('Initializing KDEM Dashboard v3.0...')
 
     try {
-        // Show loading state
         showLoading()
-
-        // Load initial data
         await loadInitialData()
 
-        // Update last updated date
         document.getElementById('last-updated-date').textContent = appData.lastUpdated
 
-        // Update brand subtitle with dynamic baseline numbers
         const baseline = getKarnatakaBaseline()
         const brandSubtitle = document.getElementById('brand-subtitle')
         if (brandSubtitle) {
             brandSubtitle.textContent = `From $${baseline.currentTotalDigital_USD_Bn}B Today to $${baseline.targetRevenue_USD_Bn}B by 2032 — The Journey Ahead`
         }
 
-        // Setup event listeners
         setupEventListeners()
-
-        // Load initial tab
         await loadTab('overview')
-
-        // Hide loading, show content
         hideLoading()
 
         console.log('Dashboard initialized successfully')
@@ -70,7 +56,6 @@ async function loadInitialData() {
     console.log('Loading initial data from Supabase...')
 
     try {
-        // Load dimension data in parallel
         const [verticals, geographies, factors] = await Promise.all([
             fetchVerticals(),
             fetchGeographies(),
@@ -92,73 +77,22 @@ async function loadInitialData() {
  * Setup event listeners
  */
 function setupEventListeners() {
-    // Category navigation
-    const categoryButtons = document.querySelectorAll('.category-btn')
-    categoryButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const category = btn.dataset.category
-            switchCategory(category)
-        })
-    })
-
-    // Tab navigation
+    // Tab navigation (flat — no categories)
     const navButtons = document.querySelectorAll('.nav-btn')
     navButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-            const tabId = btn.dataset.tab
-            loadTab(tabId)
+            loadTab(btn.dataset.tab)
         })
     })
 
     // Retry button
     const retryBtn = document.getElementById('retry-btn')
     if (retryBtn) {
-        retryBtn.addEventListener('click', () => {
-            initApp()
-        })
+        retryBtn.addEventListener('click', () => initApp())
     }
 
     // Scroll collapse behavior
     setupScrollCollapse()
-
-    // Mobile hamburger menu
-    setupMobileMenu()
-}
-
-/**
- * Switch between categories and show appropriate tabs
- */
-function switchCategory(category) {
-    console.log(`Switching to category: ${category}`)
-
-    // Update current category FIRST before loading tab
-    currentCategory = category
-
-    // Update active category button
-    const categoryButtons = document.querySelectorAll('.category-btn')
-    categoryButtons.forEach(btn => {
-        if (btn.dataset.category === category) {
-            btn.classList.add('active')
-        } else {
-            btn.classList.remove('active')
-        }
-    })
-
-    // Show appropriate tab group and load first tab
-    const tabGroups = document.querySelectorAll('.secondary-nav .tab-group')
-    tabGroups.forEach(group => {
-        if (group.dataset.category === category) {
-            group.style.display = 'flex'
-
-            // Load the first tab in this category
-            const firstTab = group.querySelector('.nav-btn')
-            if (firstTab) {
-                loadTab(firstTab.dataset.tab)
-            }
-        } else {
-            group.style.display = 'none'
-        }
-    })
 }
 
 /**
@@ -166,21 +100,16 @@ function switchCategory(category) {
  */
 function setupScrollCollapse() {
     const tabNavContainer = document.querySelector('.tab-nav-container')
-    let lastScrollTop = 0
-    let scrollThreshold = 100 // Collapse after 100px scroll
+    const scrollThreshold = 100
 
     window.addEventListener('scroll', () => {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop
 
         if (scrollTop > scrollThreshold) {
-            // Scrolled down past threshold - collapse
             tabNavContainer.classList.add('collapsed')
         } else {
-            // At top of page - expand
             tabNavContainer.classList.remove('collapsed')
         }
-
-        lastScrollTop = scrollTop
     })
 }
 
@@ -191,27 +120,19 @@ async function loadTab(tabId) {
     console.log(`Loading tab: ${tabId}`)
 
     try {
-        // Update active tab button within the current category
-        const activeTabGroup = document.querySelector(`.secondary-nav .tab-group[data-category="${currentCategory}"]`)
-        if (activeTabGroup) {
-            const navButtons = activeTabGroup.querySelectorAll('.nav-btn')
-            navButtons.forEach(btn => {
-                if (btn.dataset.tab === tabId) {
-                    btn.classList.add('active')
-                } else {
-                    btn.classList.remove('active')
-                }
-            })
-        }
+        // Update active tab button
+        const navButtons = document.querySelectorAll('.main-nav .nav-btn')
+        navButtons.forEach(btn => {
+            if (btn.dataset.tab === tabId) {
+                btn.classList.add('active')
+            } else {
+                btn.classList.remove('active')
+            }
+        })
 
-        // Get content container
         const contentContainer = document.getElementById('tab-content')
-
-        // Show loading
         showLoading()
 
-        // Render tab content based on tabId
-        // Use dynamic imports to lazy-load tab components
         let content = ''
 
         switch(tabId) {
@@ -221,81 +142,9 @@ async function loadTab(tabId) {
                 break
             }
 
-            case 'it-exports': {
-                const { renderVerticalTab } = await import('./tabs/vertical.js')
-                content = await renderVerticalTab('it-exports', appData)
-                break
-            }
-
-            case 'it-domestic': {
-                const { renderVerticalTab } = await import('./tabs/vertical.js')
-                content = await renderVerticalTab('it-domestic', appData)
-                break
-            }
-
-            case 'esdm': {
-                const { renderVerticalTab } = await import('./tabs/vertical.js')
-                content = await renderVerticalTab('esdm', appData)
-                break
-            }
-
-            case 'startups': {
-                const { renderStartupsTab } = await import('./tabs/startups.js')
-                content = await renderStartupsTab(appData)
-                break
-            }
-
-            case 'digitizing-sectors': {
-                const { renderVerticalTab } = await import('./tabs/vertical.js')
-                content = await renderVerticalTab('digitizing-sectors', appData)
-                break
-            }
-
-            case 'bengaluru': {
-                const { renderGeographyTab } = await import('./tabs/geography.js')
-                content = await renderGeographyTab('bengaluru', appData)
-                break
-            }
-
             case 'clusters': {
                 const { renderGeographyTab } = await import('./tabs/geography.js')
                 content = await renderGeographyTab('clusters', appData)
-                break
-            }
-
-            case 'factors': {
-                const { renderFactorsTab } = await import('./tabs/factors.js')
-                content = await renderFactorsTab(appData)
-                break
-            }
-
-            case 'land': {
-                const { renderLandTab } = await import('./tabs/land.js')
-                content = await renderLandTab(appData)
-                break
-            }
-
-            case 'labor': {
-                const { renderLaborTab } = await import('./tabs/labor.js')
-                content = await renderLaborTab(appData)
-                break
-            }
-
-            case 'capital': {
-                const { renderCapitalTab } = await import('./tabs/capital.js')
-                content = await renderCapitalTab(appData)
-                break
-            }
-
-            case 'organisation': {
-                const { renderOrganisationTab } = await import('./tabs/organisation.js')
-                content = await renderOrganisationTab(appData)
-                break
-            }
-
-            case 'roadmap': {
-                const { renderRoadmapTab } = await import('./tabs/roadmap.js')
-                content = await renderRoadmapTab(appData)
                 break
             }
 
@@ -309,36 +158,25 @@ async function loadTab(tabId) {
                 content = '<h2>Tab not found</h2><p>This tab is under construction.</p>'
         }
 
-        // Update content
         contentContainer.innerHTML = content
 
         // Show content BEFORE chart init — ECharts needs visible containers
         hideLoading()
-        // Force browser layout reflow so containers have dimensions
         void contentContainer.offsetHeight
 
-        // Initialize animated counters
         initAnimatedCounters(contentContainer)
 
-        // Initialize charts if the tab exports an init function
         if (typeof window.__kdem_initCharts === 'function') {
             window.__kdem_initCharts()
             window.__kdem_initCharts = null
         }
 
-        // Setup event listeners for view details links (in overview tab)
-        setupViewDetailsLinks()
-
-        // Update current tab
         currentTab = tabId
-
-        // Scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' })
 
     } catch (error) {
         console.error(`Error loading tab ${tabId}:`, error)
 
-        // Stale chunk after deploy — reload page to get fresh assets
         if (error.message && error.message.includes('dynamically imported module')) {
             console.warn('Stale deployment detected, reloading...')
             window.location.reload()
@@ -349,9 +187,6 @@ async function loadTab(tabId) {
     }
 }
 
-/**
- * Show loading state
- */
 function showLoading() {
     const loadingEl = document.getElementById('loading-state')
     const errorEl = document.getElementById('error-state')
@@ -362,9 +197,6 @@ function showLoading() {
     if (contentEl) contentEl.style.display = 'none'
 }
 
-/**
- * Hide loading state
- */
 function hideLoading() {
     const loadingEl = document.getElementById('loading-state')
     const contentEl = document.getElementById('tab-content')
@@ -373,9 +205,6 @@ function hideLoading() {
     if (contentEl) contentEl.style.display = 'block'
 }
 
-/**
- * Show error state
- */
 function showError(message) {
     const loadingEl = document.getElementById('loading-state')
     const errorEl = document.getElementById('error-state')
@@ -399,69 +228,5 @@ if (document.readyState === 'loading') {
 window.KDEM = {
     appData,
     loadTab,
-    switchCategory,
-    currentTab: () => currentTab,
-    currentCategory: () => currentCategory
-}
-
-/**
- * Setup event listeners for "View Details" links in pillar cards
- */
-function setupViewDetailsLinks() {
-    const viewDetailsLinks = document.querySelectorAll('.view-details-link')
-    viewDetailsLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault()
-            const verticalId = link.dataset.vertical
-            if (verticalId) {
-                // Switch to the correct category before loading the tab
-                if (['it-exports', 'it-domestic', 'esdm', 'digitizing-sectors'].includes(verticalId)) {
-                    switchCategory('verticals')
-                } else if (verticalId === 'startups') {
-                    switchCategory('strategy')
-                }
-                loadTab(verticalId)
-            }
-        })
-    })
-}
-
-/**
- * Setup mobile hamburger menu
- */
-function setupMobileMenu() {
-    const hamburgerBtn = document.querySelector('.hamburger-btn')
-    const tabNavContainer = document.querySelector('.tab-nav-container')
-    const navButtons = document.querySelectorAll('.nav-btn')
-    const categoryButtons = document.querySelectorAll('.category-btn')
-
-    if (!hamburgerBtn) return
-
-    // Toggle menu on hamburger click
-    hamburgerBtn.addEventListener('click', (e) => {
-        e.stopPropagation()
-        tabNavContainer.classList.toggle('mobile-menu-open')
-    })
-
-    // Close menu when a tab is clicked
-    navButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            tabNavContainer.classList.remove('mobile-menu-open')
-        })
-    })
-
-    // Close menu when a category is clicked
-    categoryButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Don't close immediately on category click - let user see the tabs
-            // Only close when they click a tab
-        })
-    })
-
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!tabNavContainer.contains(e.target)) {
-            tabNavContainer.classList.remove('mobile-menu-open')
-        }
-    })
+    currentTab: () => currentTab
 }

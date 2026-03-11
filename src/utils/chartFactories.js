@@ -304,17 +304,19 @@ export function createAnnotatedAreaChart(canvasId, labels, datasets, annotations
             labels,
             datasets: datasets.map((ds, i) => {
                 const color = ds.color || CHART_COLORS.verticals[i % CHART_COLORS.verticals.length]
+                const fillOpt = ds.fill !== undefined ? ds.fill : true
                 return {
                     label: ds.label,
                     data: ds.data,
                     borderColor: color,
-                    backgroundColor: createGradient(chartCtx, color),
-                    fill: true,
+                    backgroundColor: fillOpt === true ? createGradient(chartCtx, color) : (ds.backgroundColor || 'transparent'),
+                    fill: fillOpt,
                     tension: 0.4,
-                    pointRadius: ds.dashed ? 3 : 4,
+                    pointRadius: ds.pointRadius !== undefined ? ds.pointRadius : (ds.dashed ? 3 : 4),
                     pointBackgroundColor: color,
                     borderDash: ds.dashed ? [6, 4] : [],
-                    borderWidth: ds.dashed ? 2 : 2.5
+                    borderWidth: ds.borderWidth || (ds.dashed ? 2 : 2.5),
+                    order: ds.order !== undefined ? ds.order : i
                 }
             })
         },
@@ -326,7 +328,13 @@ export function createAnnotatedAreaChart(canvasId, labels, datasets, annotations
                     annotations: annotationConfig
                 },
                 datalabels: {
-                    display: window.innerWidth >= 768,
+                    display: function(context) {
+                        if (window.innerWidth < 768) return false
+                        // Only show labels for datasets that haven't opted out
+                        const ds = datasets[context.datasetIndex]
+                        if (ds && ds.hideLabel) return false
+                        return true
+                    },
                     color: '#202124',
                     font: { size: 10, weight: '600' },
                     anchor: 'end',

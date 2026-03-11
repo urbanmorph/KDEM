@@ -567,6 +567,17 @@ export function getRoadmapRevenueTrajectory() {
         projected: [159, 177, 196, 217, 241, 267, 297, 329],
         target: 329,
         todayIndex: 0,
+        // Optimistic: IT Exports 12%, IT Domestic 13%, ESDM 17%, Digitizing 14% — $400B
+        optimistic: [159, 182, 208, 238, 272, 311, 355, 406],
+        optimisticTarget: 406,
+        // Stretch: All optimistic catalysts land + AI product hub — $450B
+        stretch: [159, 185, 215, 250, 290, 337, 391, 454],
+        stretchTarget: 454,
+        scenarios: {
+            conservative: { target: 329, label: 'Conservative', color: '#5BB9EC', note: 'IT 10%, ESDM 14.5%, Digitizing 8% CAGRs — industry consensus' },
+            optimistic: { target: 406, label: 'Optimistic', color: '#E96337', note: 'IT 12% (GCC share rises to 42%), ESDM 17% (OSAT lands), Digitizing 14% (proximity sectors accelerate)' },
+            stretch: { target: 454, label: 'Stretch', color: '#10B981', note: 'All optimistic catalysts + AI product hub status + DPI-as-a-Service' }
+        },
         phases: [
             { label: 'Foundation', xMin: 0, xMax: 1.5, color: 'rgba(233, 99, 55, 0.06)' },
             { label: 'Navigate', xMin: 1.5, xMax: 3.5, color: 'rgba(230, 134, 52, 0.06)' },
@@ -738,6 +749,12 @@ export function getKarnatakaBaseline() {
         },
         // 2032 Targets (FY 2031-32 — revised conservative projection, startups excluded)
         targetRevenue_USD_Bn: 329,
+        // Scenario targets by vertical (FY 2031-32)
+        revenueScenarios: {
+            conservative: { total: 329, itExports: 165, itDomestic: 34, esdm: 95, digitizing: 35 },
+            optimistic: { total: 406, itExports: 195, itDomestic: 42, esdm: 115, digitizing: 54 },
+            stretch: { total: 454, itExports: 210, itDomestic: 48, esdm: 135, digitizing: 61 }
+        },
         targetEmployment: 4600000, // Medium AI (4.1M core) + Digitizing (500K) — IT 2.64M + ITD 612K + ESDM 855K + Digitizing 499K (excl startups)
         targetEmploymentScenarios: {
             lowAI: { value: 5500000, label: 'Low AI Impact', ratios: 'IT: 20, ITD: 22, ESDM: 10, Digitizing: 14.3 emp/$1M', note: 'Current productivity sustained + digitizing 500K. Exceeds KDEM public 5M target.' },
@@ -788,7 +805,7 @@ export function getVerticalBaselines() {
     return [
         {
             id: 'it-exports', name: 'IT Exports',
-            current: 85.12, target: 165.0, unit: 'USD Bn',
+            current: 85.12, target: 165.0, optimistic: 195.0, stretch: 210.0, unit: 'USD Bn',
             currentEmployment: 1830000, targetEmployment: 2640000, // AI-adjusted (medium): $165B × 16 emp/$1M
             targetEmploymentPreAI: 3370000, // Pre-AI ratio: $165B × 20 emp/$1M
             employmentRatio: { current: 21.5, aiAdjusted: 16, unit: 'emp per $1M USD', source: 'Current ratio: NASSCOM FY25 (5.8M India IT ÷ $283B = 20.5; KA higher at 21.5 due to services mix). AI-adjusted: Bessemer Oct 2025 projects India IT headcount 7.5-8M→6M by 2031 (~25% reduction). 21.5 × 0.75 ≈ 16 emp/$1M.' },
@@ -802,7 +819,7 @@ export function getVerticalBaselines() {
         },
         {
             id: 'it-domestic', name: 'IT Domestic',
-            current: 17.46, target: 34.0, unit: 'USD Bn',
+            current: 17.46, target: 34.0, optimistic: 42.0, stretch: 48.0, unit: 'USD Bn',
             currentEmployment: 370000, targetEmployment: 612000, // AI-adjusted (medium): $34B × 18 emp/$1M
             targetEmploymentPreAI: 890000, // Pre-AI ratio: $34B × 25 emp/$1M
             employmentRatio: { current: 21.2, aiAdjusted: 18, unit: 'emp per $1M USD', source: 'Current ratio: NASSCOM FY25 domestic segment. AI-adjusted: ~15% reduction (vs 25% for exports) — domestic IT includes government projects, system integration, and enterprise IT support which are less automatable than export-oriented BPO/testing. Bessemer projection applies primarily to global delivery; domestic retains higher labor intensity.' },
@@ -816,7 +833,7 @@ export function getVerticalBaselines() {
         },
         {
             id: 'esdm', name: 'ESDM',
-            current: 36.69, target: 95.0, unit: 'USD Bn',
+            current: 36.69, target: 95.0, optimistic: 115.0, stretch: 135.0, unit: 'USD Bn',
             currentEmployment: 284000, targetEmployment: 855000, // AI-adjusted (medium): $95B × 9 emp/$1M (manufacturing less affected by AI)
             targetEmploymentPreAI: 910000, // Pre-AI ratio: $95B × 10 emp/$1M
             employmentRatio: { current: 7.7, aiAdjusted: 9, unit: 'emp per $1M USD', source: 'Current ratio: MeitY FY25 ($36.69B ÷ 284K = 7.7). Target ratio rises to 9 because KA ESDM growth to $95B includes expansion into OSAT packaging and PCB manufacturing (Mysuru PCB Park, KWIN City) which are more labor-intensive than current chip design focus. Net effect: sector composition shift toward manufacturing raises emp/$1M despite AI. AI has minimal impact on hardware manufacturing employment.' },
@@ -858,7 +875,7 @@ export function getVerticalBaselines() {
         },
         {
             id: 'digitizing-sectors', name: 'Newly Digitizing',
-            current: 20.23, target: 35.0, unit: 'USD Bn',
+            current: 20.23, target: 35.0, optimistic: 54.0, stretch: 61.0, unit: 'USD Bn',
             currentEmployment: 0, targetEmployment: 499000,
             baseYear: '2021-22', baseActual: 6.0, baseEmployment: 0,
             indiaFY25: null, karnatakaSharePct: null,
@@ -991,10 +1008,7 @@ export function getRevenueSankeyData() {
             { name: 'IT Domestic ($34B)', id: 'it-domestic' },
             { name: 'Digitizing ($35B)', id: 'digitizing-sectors' },
             { name: 'Bengaluru', id: 'bengaluru', color: '#374151' },
-            { name: 'Mysuru', id: 'mysuru', color: '#6b7280' },
-            { name: 'Mangaluru', id: 'mangaluru', color: '#6b7280' },
-            { name: 'Hubballi-Dharwad', id: 'hubballi', color: '#6b7280' },
-            { name: 'Other Clusters', id: 'others', color: '#9ca3af' }
+            { name: 'Beyond Bengaluru', id: 'beyond-bengaluru', color: '#6b7280' }
         ],
         links: [
             // Total to verticals
@@ -1002,27 +1016,20 @@ export function getRevenueSankeyData() {
             { source: '$329B Target', target: 'ESDM ($95B)', value: 95 },
             { source: '$329B Target', target: 'IT Domestic ($34B)', value: 34 },
             { source: '$329B Target', target: 'Digitizing ($35B)', value: 35 },
-            // IT Exports to geographies (96.7% Bengaluru)
-            { source: 'IT Exports ($165B)', target: 'Bengaluru', value: 159 },
-            { source: 'IT Exports ($165B)', target: 'Mysuru', value: 2 },
-            { source: 'IT Exports ($165B)', target: 'Mangaluru', value: 2 },
-            { source: 'IT Exports ($165B)', target: 'Other Clusters', value: 2 },
-            // ESDM to geographies
-            { source: 'ESDM ($95B)', target: 'Bengaluru', value: 57 },
-            { source: 'ESDM ($95B)', target: 'Mysuru', value: 11 },
-            { source: 'ESDM ($95B)', target: 'Hubballi-Dharwad', value: 9 },
-            { source: 'ESDM ($95B)', target: 'Mangaluru', value: 7 },
-            { source: 'ESDM ($95B)', target: 'Other Clusters', value: 11 },
-            // IT Domestic
+            // IT Exports to geographies (~4% BB — GCC spoke-shore model, 96% still Bengaluru)
+            { source: 'IT Exports ($165B)', target: 'Bengaluru', value: 158 },
+            { source: 'IT Exports ($165B)', target: 'Beyond Bengaluru', value: 7 },
+            // ESDM to geographies (10.8% BB — phased from 5% today via EMC 2.0 capex)
+            { source: 'ESDM ($95B)', target: 'Bengaluru', value: 85 },
+            { source: 'ESDM ($95B)', target: 'Beyond Bengaluru', value: 10 },
+            // IT Domestic (17% BB — Mangaluru fintech heritage + campus expansions)
             { source: 'IT Domestic ($34B)', target: 'Bengaluru', value: 28 },
-            { source: 'IT Domestic ($34B)', target: 'Other Clusters', value: 6 },
-            // Digitizing
-            { source: 'Digitizing ($35B)', target: 'Bengaluru', value: 18 },
-            { source: 'Digitizing ($35B)', target: 'Mysuru', value: 4 },
-            { source: 'Digitizing ($35B)', target: 'Hubballi-Dharwad', value: 3 },
-            { source: 'Digitizing ($35B)', target: 'Other Clusters', value: 10 }
+            { source: 'IT Domestic ($34B)', target: 'Beyond Bengaluru', value: 6 },
+            // Digitizing (29% BB — industry proximity drives digital adoption in Tier 2/3 clusters)
+            { source: 'Digitizing ($35B)', target: 'Bengaluru', value: 25 },
+            { source: 'Digitizing ($35B)', target: 'Beyond Bengaluru', value: 10 }
         ],
-        source: 'KDEM Target Database + Apportionment Rules (Startups excluded — double-counts with IT)',
+        source: 'KDEM Projection Model — BB at 10% of KDE (Startups excluded — double-counts with IT)',
         confidence: 3
     }
 }
@@ -1302,4 +1309,359 @@ export function getDigitizingSubSectors() {
             employmentRatio: 10, employmentRationale: 'Grid infrastructure; specialized power engineers, maintenance crews, and monitoring center staff', kaEmploymentFY32: 877
         }
     ]}
+}
+
+// ============================================================
+// BEYOND BENGALURU DATA
+// Source: BB Data Points.docx, KDEM research, policy documents
+// ============================================================
+
+export function getBBHeadlineMetrics() {
+    return {
+        newCompanies: { value: 114, period: 'Last 3 Years (FY23-26)', jobs: 3572, source: 'BB Data Points.docx (KDEM Internal)', confidence: 4 },
+        expandedCompanies: { value: 36, period: 'Last 3 Years (FY23-26)', jobs: 5165, source: 'BB Data Points.docx (KDEM Internal)', confidence: 4 },
+        totalCompanies: 150,
+        totalJobs: 8737,
+        esdmInvestmentPipeline: { value: 3220, unit: 'Rs Crore', source: 'BB Data Points.docx (KDEM Internal)', confidence: 3 },
+        clusterSeedFund: { value: 75, unit: 'Rs Crore', mangaluruAllocation: 25, source: 'Karnataka Startup Policy 2025-2030', confidence: 5 }
+    }
+}
+
+export function getBBTractionData() {
+    return {
+        newCompanies: [
+            { year: 'FY 23-24', mysuru: 12, mangaluru: 9, hdb: 11, employment: 670, total: 32 },
+            { year: 'FY 24-25', mysuru: 16, mangaluru: 12, hdb: 23, employment: 1987, total: 51 },
+            { year: 'FY 25-26', mysuru: 11, mangaluru: 16, hdb: 4, employment: 915, total: 31 }
+        ],
+        expandedCompanies: [
+            { year: 'FY 23-24', mysuru: 5, mangaluru: 2, hdb: 3, employment: 1380, total: 10 },
+            { year: 'FY 24-25', mysuru: 6, mangaluru: 1, hdb: 7, employment: 1565, total: 14 },
+            { year: 'FY 25-26', mysuru: 6, mangaluru: 3, hdb: 8, employment: 2220, total: 12 }
+        ],
+        source: 'BB Data Points.docx (KDEM Internal)',
+        confidence: 4
+    }
+}
+
+export function getBBVerticalStrengths() {
+    return [
+        {
+            vertical: 'ESDM',
+            strength: 'Very Strong',
+            clusters: 'Mysuru, HDB, Tumakuru',
+            signal: 'Rs 3,220 Cr committed investments; EMC 2.0 clusters (245+224+218 acres)',
+            companies: ['Nidec (Rs 600 Cr)', 'Vayu Assets (Rs 1,250 Cr)', 'Tecchren Batteries (Rs 800 Cr)', 'TSUYO (Rs 200 Cr)', 'Kaynes Technology'],
+            bbShareOfTarget: '25-35%',
+            confidence: 3
+        },
+        {
+            vertical: 'IT Exports / GCCs',
+            strength: 'Strong',
+            clusters: 'Mysuru, Mangaluru',
+            signal: 'EG A/S 850 seats in Mangaluru; Spoke-Shore nano-GCC strategy; Infosys/Wipro campuses in Mysuru',
+            companies: ['EG A/S (850 employees)', 'Infosys', 'Wipro', 'Cognizant'],
+            bbShareOfTarget: '3-5%',
+            confidence: 3
+        },
+        {
+            vertical: 'IT Domestic / Fintech',
+            strength: 'Strong',
+            clusters: 'Mangaluru',
+            signal: 'Banking heritage (Canara, Syndicate, Corporation, Vijaya, Karnataka Bank); fintech hub vision',
+            companies: ['Robosoft Technologies', 'Niveus Solutions', 'Novigo Solutions'],
+            bbShareOfTarget: '15-20%',
+            confidence: 3
+        },
+        {
+            vertical: 'Startups',
+            strength: 'Strong',
+            clusters: 'All Tier 1 + Kalaburagi',
+            signal: '114 new companies in 3 years; BB Blue (11 events, 300+ startups); KAN Accelerator (Cohort 2: 293 applications)',
+            companies: [],
+            bbShareOfTarget: 'Ecosystem metric',
+            confidence: 4
+        },
+        {
+            vertical: 'Digitizing Sectors',
+            strength: 'Strong',
+            clusters: 'Mangaluru (Data Centers, Fintech), HDB (EV/Clean Energy), Mysuru (Healthcare IT, Precision Ag), Kalaburagi (Agritech)',
+            signal: 'Industry proximity analysis shows 7 high-potential sub-sector groupings across BB clusters, driven by existing industrial base rather than greenfield IT',
+            companies: ['TSUYO (EV)', 'Samnan Chemicals', 'Nidec (Motors)', 'ARAI (Automotive R&D)'],
+            bbShareOfTarget: '30-40%',
+            confidence: 3
+        }
+    ]
+}
+
+export function getBBEsdmInvestments() {
+    return {
+        committed: [
+            { company: 'Vayu Assets', location: 'Chamarajanagar', investment: 1250, unit: 'Rs Crore', jobs: 1912, sector: 'PCB Manufacturing' },
+            { company: 'Tecchren Batteries', location: 'Chamarajanagar', investment: 800, unit: 'Rs Crore', jobs: '200-1,000', sector: 'LFP Batteries (Phase 1 of Rs 2,000 Cr)' },
+            { company: 'Nidec Corporation', location: 'Dharwad', investment: 600, unit: 'Rs Crore', jobs: '800 (scaling to 3,000)', sector: 'Motors & Drives' },
+            { company: 'Samnan Chemicals', location: 'Tumakuru', investment: 370, unit: 'Rs Crore', jobs: '300+', sector: 'Specialty Chemicals' },
+            { company: 'TSUYO Manufacturing', location: 'Hubballi', investment: 200, unit: 'Rs Crore', jobs: '100+', sector: 'EV Powertrains' },
+            { company: 'Kaynes Technology', location: 'Mysuru', investment: null, unit: 'Rs Crore', jobs: 'TBD', sector: 'Semiconductor / EMS (5-acre plant)' }
+        ],
+        lois: [
+            { company: 'Hyperfin Technologies', location: 'Mangaluru' },
+            { company: 'AddAptech Advisory', location: 'Mangaluru' },
+            { company: 'Exathought Technology', location: 'Mangaluru' },
+            { company: 'Abyssal Techedge', location: 'HDB' },
+            { company: 'Graymatics', location: 'HDB' },
+            { company: 'MiPhi', location: 'Mysuru' },
+            { company: 'McLaren Strategic Solutions', location: 'Mysuru' },
+            { company: 'CloudSeven', location: 'Mysuru' }
+        ],
+        emcClusters: [
+            { name: 'Kochanahalli (Mysuru)', acres: 245.67 },
+            { name: 'Kotur-Belur (Dharwad)', acres: 224.5 },
+            { name: 'Vasanthanarasapura (Tumakuru)', acres: 218.2 }
+        ],
+        totalInvestment: 3220,
+        source: 'BB Data Points.docx + Karnataka ESDM Policy',
+        confidence: 3
+    }
+}
+
+export function getBBPolicies() {
+    return [
+        { name: 'LEAP', allocation: 'Rs 1,000 Cr (5 years)', target: '5 lakh jobs outside Bengaluru across 6 clusters', focus: '16 initiatives incl. Fund of Funds, ELEVATE NxT (deep-tech grants), Elevate Beyond Bengaluru (decentralized grants), 6 Centres of Excellence, Innovation/Prototype Labs, Digital Clinics, Karnataka Startup Foundry', source: 'eitbt.karnataka.gov.in/LEAP', confidence: 5 },
+        { name: 'IT Policy BB Incentives', allocation: 'Rs 967 Cr', target: 'Rs 50K/employee relocation subsidy; electricity & property tax reimbursement', focus: '16 specific incentives for Beyond Bengaluru', source: 'Karnataka IT/BT Policy 2025-30', confidence: 5 },
+        { name: 'GCC Spoke-Shore Strategy', allocation: '—', target: '500 new GCCs by 2029; nano-GCC centers in BB cities', focus: 'Bengaluru as hub, Tier 2 as spokes', source: 'Karnataka GCC Policy 2024-29', confidence: 5 },
+        { name: 'Cluster Seed Fund', allocation: 'Rs 75 Cr', target: 'Early-stage startup support (Rs 25 Cr for Mangaluru)', focus: 'Seed funding across clusters', source: 'Karnataka Startup Policy 2025-30', confidence: 5 },
+        { name: 'BB Blue Events', allocation: '—', target: '11 events, 300+ startups, 50+ investors, 24 fund-ready startups', focus: 'Investor connect for BB startups', source: 'KDEM Internal', confidence: 4 },
+        { name: 'KAN Accelerator', allocation: '—', target: 'Cohort 1: 60 startups selected; Cohort 2: 293 applications', focus: 'Startup acceleration across clusters', source: 'KDEM Internal', confidence: 4 }
+    ]
+}
+
+export function getBBSuccessStories() {
+    return [
+        {
+            title: 'EG A/S — Mangaluru',
+            subtitle: 'Nordic SaaS company scales to 850 employees',
+            description: 'Northern Europe-based SaaS company EG A/S grew from 40 employees to 850 in Mangaluru, with 60% of the workforce from the local region including fresh graduates. Their 100,000 sq ft facility at wrkwrk Triangle is designed for 1,500+ seats.',
+            metrics: [
+                { label: 'Growth', value: '40 → 850 employees' },
+                { label: 'Facility', value: '100,000 sq ft (1,500+ capacity)' },
+                { label: 'Local Hiring', value: '60% from Mangaluru region' }
+            ],
+            significance: 'Validates Mangaluru as a GCC destination — "Silicon Beach of India"',
+            source: 'BB Data Points.docx',
+            confidence: 4
+        },
+        {
+            title: 'rProcess & Forefront — Chamarajanagar',
+            subtitle: 'Tier 3 IT expansion with 70% women workforce',
+            description: 'Mysuru-based rProcess (350+ employees) and Forefront Healthcare (100+ employees) expanded into Chamarajanagar. All recruits are from within 15 km radius, with <1% attrition. Government incentives translate to 30-40% effective subsidy on total investment.',
+            metrics: [
+                { label: 'Employees', value: '450+ across both companies' },
+                { label: 'Women Workforce', value: '70%+' },
+                { label: 'Attrition', value: '<1%' }
+            ],
+            significance: 'Proves Tier 3 viability with local hiring, low attrition, and policy support',
+            source: 'BB Data Points.docx',
+            confidence: 4
+        },
+        {
+            title: 'ARAI R&D Centre — Mandya',
+            subtitle: 'Rs 500 Cr Union Govt automotive R&D facility',
+            description: 'The Union Government announced a Rs 500 crore Automotive Research Association of India (ARAI) centre in Mandya on ~100 acres. It will support vehicle testing, certification, and advanced automotive R&D for southern India.',
+            metrics: [
+                { label: 'Investment', value: 'Rs 500 Crore' },
+                { label: 'Land', value: '~100 acres' },
+                { label: 'Focus', value: 'EV & automotive R&D' }
+            ],
+            significance: 'Union Govt investment signal for Karnataka beyond Bengaluru',
+            source: 'BB Data Points.docx',
+            confidence: 4
+        }
+    ]
+}
+
+// ============================================================
+// BEYOND BENGALURU: DIGITIZING SECTORS PROXIMITY ANALYSIS
+// Source: KDEM industry proximity analysis (McKinsey framework + regional industrial data)
+// ============================================================
+
+export function getBBDigitizingProximity() {
+    return {
+        insight: "BB clusters' digitization advantage lies in transforming existing industries — not replicating Bengaluru's IT model. Each cluster's industrial base creates natural demand for specific digital sub-sectors.",
+        source: 'KDEM Industry Proximity Analysis (McKinsey framework + public data)',
+        confidence: 2,
+        opportunities: [
+            {
+                group: 'EV & Clean Energy Manufacturing',
+                proximity: 5,
+                targetRevenue: '$4-6B',
+                targetJobs: '60-90K',
+                clusters: ['Hubballi-Dharwad', 'Mysuru', 'Tumakuru'],
+                subsectors: ['Electric Vehicles', 'Battery Storage', 'Clean Energy Tech'],
+                rationale: 'TSUYO EV powertrains in Hubballi, Tecchren LFP batteries (Rs 2,000 Cr) in Chamarajanagar, ARAI R&D in Mandya, Nidec motors in Dharwad. Existing auto component and engineering base provides supply chain depth.',
+                existing: 'Nidec, TSUYO, Tecchren Batteries, ARAI Mandya'
+            },
+            {
+                group: 'Data Centers & Digital Infrastructure',
+                proximity: 5,
+                targetRevenue: '$3-5B',
+                targetJobs: '15-25K',
+                clusters: ['Mangaluru'],
+                subsectors: ['Cloud Infrastructure', 'Data Center Operations'],
+                rationale: 'Subsea cable landing (2Africa, IAX) positions Mangaluru as 1GW+ hyperscale hub. Coastal climate reduces cooling costs by 15-20%. Land availability at fraction of Bengaluru prices.',
+                existing: 'Subsea cable operators, planned hyperscale campuses'
+            },
+            {
+                group: 'Agritech & Precision Agriculture',
+                proximity: 4,
+                targetRevenue: '$2-4B',
+                targetJobs: '80-120K',
+                clusters: ['Kalaburagi', 'Mysuru', 'Shivamogga'],
+                subsectors: ['Precision Agriculture', 'Agritech Platforms', 'Food Processing Tech'],
+                rationale: 'North Karnataka is the agricultural heartland — oilseeds, pulses, sugarcane. LEAP agritech incubation already active in Kalaburagi. Mysuru silk and spice corridor. Digital layer over existing agricultural value chains.',
+                existing: 'LEAP incubatees, UAS Dharwad agritech programs'
+            },
+            {
+                group: 'Fintech & Banking Technology',
+                proximity: 4,
+                targetRevenue: '$2-3B',
+                targetJobs: '30-50K',
+                clusters: ['Mangaluru'],
+                subsectors: ['Fintech', 'Digital Banking', 'Insurance Tech'],
+                rationale: 'Mangaluru originated 5 national banks (Canara, Syndicate, Corporation, Vijaya, Karnataka Bank). Banking DNA runs deep — workforce understands financial products. Natural fintech hub with domain expertise unavailable elsewhere.',
+                existing: 'Robosoft Technologies, Niveus Solutions, banking heritage workforce'
+            },
+            {
+                group: 'Healthcare Digitization',
+                proximity: 3,
+                targetRevenue: '$1.5-3B',
+                targetJobs: '25-40K',
+                clusters: ['Mysuru', 'Mangaluru'],
+                subsectors: ['HealthTech', 'Telemedicine', 'Medical Devices (Digital)'],
+                rationale: 'Mysuru has strong medical education infrastructure (JSS Medical, Mysore Medical College). Mangaluru has Kasturba Medical College and 8+ hospital networks. Existing healthcare ecosystem creates demand for digital health solutions.',
+                existing: 'Hospital networks, medical education institutions'
+            },
+            {
+                group: 'Electronics & Semiconductor Assembly',
+                proximity: 4,
+                targetRevenue: '$3-5B',
+                targetJobs: '40-60K',
+                clusters: ['Mysuru', 'Tumakuru', 'Dharwad'],
+                subsectors: ['Electronic Components', 'PCB/EMS', 'Semiconductor Packaging'],
+                rationale: 'EMC 2.0 clusters (688 acres across 3 locations) provide dedicated ESDM land. Kaynes Technology semiconductor plant in Mysuru. Vayu Assets Rs 1,250 Cr PCB plant in Chamarajanagar. State policy offers 25% capex subsidy.',
+                existing: 'Kaynes Technology, Vayu Assets, Samnan Chemicals'
+            },
+            {
+                group: 'Logistics & Supply Chain Tech',
+                proximity: 3,
+                targetRevenue: '$1-2B',
+                targetJobs: '20-35K',
+                clusters: ['Mangaluru', 'Hubballi-Dharwad', 'Tumakuru'],
+                subsectors: ['Supply Chain Digitization', 'Port Tech', 'Warehouse Automation'],
+                rationale: 'Mangaluru New Port (NMPT) handles 40+ MTPA cargo. HDB is the north Karnataka logistics hub (rail junction). Tumakuru on the Bengaluru-Mumbai industrial corridor. Port + rail + highway intersections create natural logistics tech demand.',
+                existing: 'NMPT operations, rail freight corridors, industrial corridor projects'
+            }
+        ]
+    }
+}
+
+// ============================================================
+// BEYOND BENGALURU: FY31-32 PROJECTIONS
+// Source: KDEM projection model (bottom-up build from traction + policy data)
+// ============================================================
+
+export function getBBProjections() {
+    return {
+        assumptions: {
+            totalKDE_FY25: 159,
+            totalKDE_FY32: 329,
+            bbShare_FY25: 6.8,
+            bbShare_FY32: 10.0
+        },
+        scenarios: {
+            conservative: { totalKDE: 329, bbTotal: 32.9, bbShare: 10.0, label: 'Conservative' },
+            optimistic: { totalKDE: 406, bbTotal: 42.0, bbShare: 10.3, label: 'Optimistic' },
+            stretch: { totalKDE: 454, bbTotal: 50.0, bbShare: 11.0, label: 'Stretch' }
+        },
+        rows: [
+            {
+                vertical: 'ESDM',
+                fy25_state: 36.69,
+                fy25_bb: 1.83,
+                fy25_bbShare: 5,
+                fy32_state: 95,
+                fy32_bb: 10.3,
+                fy32_bbShare: 10.8,
+                fy32_optimistic: 14.4,
+                fy32_stretch: 18.9,
+                cagr: 27,
+                driver: 'Industrial capex + EMC 2.0',
+                methodology: 'BB ESDM share ramps from 5% to 10% of state ESDM by FY28 (driven by Rs 3,220 Cr committed capex in Mysuru, HDB, Tumakuru, Chamarajanagar), then grows at 17% CAGR FY28-32 as EMC 2.0 plants reach production scale. State ESDM grows at 14.5% CAGR ($36.69B → $95B).',
+                sources: [
+                    'MeitY + Care Edge Research: FY24-25 ESDM actuals ($36.69B)',
+                    'BB Data Points.docx: Rs 3,220 Cr committed investments across 6 companies',
+                    'Karnataka ESDM Policy: EMC 2.0 clusters (688 acres across 3 locations)',
+                    'KDEM internal model: 5% → 10% → 10.8% BB share trajectory'
+                ],
+                confidence: 3
+            },
+            {
+                vertical: 'Digitizing Sectors',
+                fy25_state: 20.23,
+                fy25_bb: 3.84,
+                fy25_bbShare: 19,
+                fy32_state: 35,
+                fy32_bb: 10.2,
+                fy32_bbShare: 29,
+                fy32_optimistic: 14.6,
+                fy32_stretch: 16.5,
+                cagr: 15,
+                driver: 'Industry proximity + digital overlay',
+                methodology: 'BB digitizing sectors grow at 15% CAGR, driven by industry proximity — digitalizing existing industries (agritech in Kalaburagi, fintech in Mangaluru, EV tech in HDB) rather than building new IT. State digitizing grows at 8.1% CAGR ($20.23B → $35B). BB share rises from 19% to 29% as digital adoption accelerates in Tier 2/3 industrial clusters.',
+                sources: [
+                    'McKinsey India digitization framework (17 sub-sectors)',
+                    'KDEM Industry Proximity Analysis: 7 opportunity groupings mapped to BB clusters',
+                    'KDEM Excel models: sub-sector revenue projections and employment ratios',
+                    'State digitizing target: $35B (8.1% CAGR, aligned with India nominal GDP growth)'
+                ],
+                confidence: 2
+            },
+            {
+                vertical: 'IT (Exports + Domestic)',
+                fy25_state: 102.58,
+                fy25_bb: 5.17,
+                fy25_bbShare: 5,
+                fy32_state: 199,
+                fy32_bb: 12.4,
+                fy32_bbShare: 6.2,
+                fy32_optimistic: 13.0,
+                fy32_stretch: 14.6,
+                cagr: 13.2,
+                driver: 'GCC spoke-shore + campus expansion',
+                methodology: 'Residual calculation: $32.9B (10% BB target) minus ESDM ($10.3B) minus Digitizing ($10.2B) = $12.4B for IT. Implies 13.2% CAGR, supported by GCC spoke-shore strategy (EG A/S model scaling), Infosys/Wipro Mysuru campuses, and Rs 50K/employee relocation subsidy under IT Policy.',
+                sources: [
+                    'NASSCOM Strategic Review FY24-25: IT revenue actuals',
+                    'Karnataka GCC Policy 2024-29: 500 new GCCs by 2029, nano-GCC centers in BB',
+                    'BB Data Points.docx: EG A/S 40→850 employees in Mangaluru',
+                    'IT/BT Policy 2025-30: Rs 967 Cr BB incentives, Rs 50K/employee relocation subsidy'
+                ],
+                confidence: 3
+            }
+        ],
+        leap: {
+            without: { bbDigitizing: 10.2, bbTotal: 32.9, bbShare: 10.0 },
+            with: { bbDigitizing: 12.7, bbTotal: 35.4, bbShare: 10.8 },
+            increment: 2.5,
+            methodology: "LEAP's Rs 1,000 Cr ($120M) over 5 years targets startup acceleration and local digital services — not ESDM (driven by industrial capex) or large IT (driven by corporate GCC decisions). LEAP doubles the startup + digitizing services base ($4.8B → $9.6B by FY30), adding ~$2.5B incremental by FY32. This is a 21x investment multiplier — ambitious but comparable to Israel's Yozma fund returns.",
+            sources: [
+                'LEAP program: eitbt.karnataka.gov.in — Rs 1,000 Cr, 5 lakh jobs target, 16 initiatives',
+                'Karnataka Startup Policy 2025-30: Cluster Seed Fund Rs 75 Cr, Fund of Funds',
+                'BB Blue events: 11 events, 300+ startups, 50+ investors, 24 fund-ready startups',
+                'KAN Accelerator: Cohort 2 received 293 applications'
+            ],
+            confidence: 2
+        },
+        source: 'KDEM Projection Model (bottom-up from traction + policy + proximity analysis)',
+        confidence: 2
+    }
 }
