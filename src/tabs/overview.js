@@ -237,17 +237,10 @@ function renderPillarCard(vertical, target, current) {
                 </div>
             </div>
             ${hasScenarios ? `
-            <div class="pillar-scenario-range">
-                <div class="scenario-bar">
-                    <div class="scenario-bar-fill" style="background: ${borderColor}; width: ${Math.min((currentRev / current.stretch) * 100, 100)}%"></div>
-                    <div class="scenario-marker scenario-marker--conservative" style="left: ${(conservativeTarget / current.stretch) * 100}%"></div>
-                    <div class="scenario-marker scenario-marker--optimistic" style="left: ${(current.optimistic / current.stretch) * 100}%"></div>
-                </div>
-                <div class="scenario-labels">
-                    <span class="scenario-label" style="left: ${(conservativeTarget / current.stretch) * 100}%; color: #5BB9EC;">$${conservativeTarget}B</span>
-                    <span class="scenario-label" style="left: ${(current.optimistic / current.stretch) * 100}%; color: #E96337;">$${current.optimistic}B</span>
-                    <span class="scenario-label" style="left: 100%; color: #10B981;">$${current.stretch}B</span>
-                </div>
+            <div class="pillar-scenario-chips">
+                <span class="scenario-chip scenario-chip--conservative">$${conservativeTarget}B</span>
+                <span class="scenario-chip scenario-chip--optimistic">$${current.optimistic}B</span>
+                <span class="scenario-chip scenario-chip--stretch">$${current.stretch}B</span>
             </div>
             ` : ''}
             <div class="pillar-progress">

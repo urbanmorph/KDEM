@@ -651,59 +651,39 @@ body {
     border-top: 1px solid var(--border-color);
 }
 
-/* Scenario range bar on pillar cards */
-.pillar-scenario-range {
+/* Scenario chips on pillar cards */
+.pillar-scenario-chips {
+    display: flex;
+    gap: 0.4rem;
     margin-top: 0.75rem;
-    padding: 0.5rem 0 1.5rem;
 }
 
-.scenario-bar {
-    display: block;
-    position: relative;
-    height: 6px;
-    background: #f0f0f0;
-    border-radius: 3px;
-}
-
-.scenario-bar-fill {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    border-radius: 3px;
-    opacity: 0.3;
-}
-
-.scenario-marker {
-    position: absolute;
-    top: -3px;
-    width: 2px;
-    height: 12px;
-    border-radius: 1px;
-    transform: translateX(-50%);
-}
-
-.scenario-marker--conservative {
-    background: #5BB9EC;
-}
-
-.scenario-marker--optimistic {
-    background: #E96337;
-}
-
-.scenario-labels {
-    position: relative;
-    height: 1.2rem;
-    margin-top: 0.3rem;
-}
-
-.scenario-label {
-    position: absolute;
-    top: 0;
-    transform: translateX(-50%);
-    font-size: 0.68rem;
+.scenario-chip {
+    flex: 1;
+    text-align: center;
+    font-size: 0.72rem;
     font-weight: 600;
-    white-space: nowrap;
+    padding: 0.25rem 0;
+    border-radius: 4px;
+    border: 1.5px solid;
+}
+
+.scenario-chip--conservative {
+    color: #5BB9EC;
+    border-color: #5BB9EC;
+    background: rgba(91, 185, 236, 0.08);
+}
+
+.scenario-chip--optimistic {
+    color: #E96337;
+    border-color: #E96337;
+    background: rgba(233, 99, 55, 0.08);
+}
+
+.scenario-chip--stretch {
+    color: #10B981;
+    border-color: #10B981;
+    background: rgba(16, 185, 129, 0.08);
 }
 
 .scenario-range {
