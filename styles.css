@@ -654,7 +654,7 @@ body {
 /* Scenario range bar on pillar cards */
 .pillar-scenario-range {
     margin-top: 0.75rem;
-    padding: 0.5rem 0;
+    padding: 0.5rem 0 1.5rem;
 }
 
 .scenario-bar {
@@ -663,7 +663,6 @@ body {
     height: 6px;
     background: #f0f0f0;
     border-radius: 3px;
-    margin-bottom: 0.35rem;
 }
 
 .scenario-bar-fill {
@@ -693,11 +692,18 @@ body {
 }
 
 .scenario-labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.7rem;
-    color: var(--text-secondary);
+    position: relative;
+    height: 1.2rem;
+    margin-top: 0.3rem;
+}
+
+.scenario-label {
+    position: absolute;
+    top: 0;
+    transform: translateX(-50%);
+    font-size: 0.68rem;
     font-weight: 600;
+    white-space: nowrap;
 }
 
 .scenario-range {

@@ -208,6 +208,8 @@ function renderPillarCard(vertical, target, current) {
     const gap = targetRev - currentRev
     const growthMultiple = currentRev > 0 ? (targetRev / currentRev).toFixed(1) : '—'
     const hasScenarios = current.optimistic && current.stretch
+    // Use referenceData target (consistent with scenario data), fallback to DB
+    const conservativeTarget = current.target || targetRev
 
     return `
         <div class="pillar-card" style="border-left: 4px solid ${borderColor};">
@@ -225,11 +227,11 @@ function renderPillarCard(vertical, target, current) {
                 </div>
                 <div class="pillar-metric">
                     <span class="metric-label-small">2032 Target</span>
-                    <span class="metric-value-small">$${formatNumber(targetRev)}B</span>
+                    <span class="metric-value-small">$${formatNumber(conservativeTarget)}B</span>
                 </div>
                 <div class="pillar-metric">
                     <span class="metric-label-small">Gap</span>
-                    <span class="metric-value-small">$${formatNumber(gap)}B</span>
+                    <span class="metric-value-small">$${formatNumber(conservativeTarget - currentRev)}B</span>
                 </div>
                 <div class="pillar-metric">
                     <span class="metric-label-small">Employment Target</span>
@@ -238,16 +240,16 @@ function renderPillarCard(vertical, target, current) {
             </div>
             ${hasScenarios ? `
             <div class="pillar-scenario-range">
-                <span class="scenario-bar">
-                    <span class="scenario-bar-fill" style="background: ${borderColor}; width: ${Math.min((currentRev / current.stretch) * 100, 100)}%"></span>
-                    <span class="scenario-marker scenario-marker--conservative" style="left: ${(targetRev / current.stretch) * 100}%" title="Conservative $${targetRev}B"></span>
-                    <span class="scenario-marker scenario-marker--optimistic" style="left: ${(current.optimistic / current.stretch) * 100}%" title="Optimistic $${current.optimistic}B"></span>
-                </span>
-                <span class="scenario-labels">
-                    <span>$${formatNumber(targetRev)}B</span>
-                    <span style="color: #E96337;">$${formatNumber(current.optimistic)}B</span>
-                    <span style="color: #10B981;">$${formatNumber(current.stretch)}B</span>
-                </span>
+                <div class="scenario-bar">
+                    <div class="scenario-bar-fill" style="background: ${borderColor}; width: ${Math.min((currentRev / current.stretch) * 100, 100)}%"></div>
+                    <div class="scenario-marker scenario-marker--conservative" style="left: ${(conservativeTarget / current.stretch) * 100}%"></div>
+                    <div class="scenario-marker scenario-marker--optimistic" style="left: ${(current.optimistic / current.stretch) * 100}%"></div>
+                </div>
+                <div class="scenario-labels">
+                    <span class="scenario-label" style="left: ${(conservativeTarget / current.stretch) * 100}%; color: #5BB9EC;">$${conservativeTarget}B</span>
+                    <span class="scenario-label" style="left: ${(current.optimistic / current.stretch) * 100}%; color: #E96337;">$${current.optimistic}B</span>
+                    <span class="scenario-label" style="left: 100%; color: #10B981;">$${current.stretch}B</span>
+                </div>
             </div>
             ` : ''}
             <div class="pillar-progress">
