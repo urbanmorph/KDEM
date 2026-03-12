@@ -269,7 +269,7 @@ function renderPillarCard(vertical, target, current) {
         <div class="pillar-card" style="border-left: 4px solid ${borderColor};">
             <div class="pillar-header">
                 <h4>${vertical.name}</h4>
-                <span class="pillar-badge">${growthMultiple}x growth needed</span>
+                <span class="pillar-badge" style="color: #5BB9EC; border-color: #5BB9EC; background: rgba(91, 185, 236, 0.12);">${growthMultiple}x growth needed</span>
             </div>
             <div class="pillar-description">
                 ${vertical.description || ''}
@@ -316,7 +316,7 @@ function renderPillarCard(vertical, target, current) {
 function renderGrowthCharts() {
     return `
         <div class="growth-charts-grid">
-            <div class="growth-chart-card">
+            <div class="growth-chart-card" style="grid-column: 1 / -1;">
                 <h4>India's Digital Economy: $283B and Accelerating</h4>
                 <p class="chart-subtitle">On track to $1.2 Trillion by 2029-30</p>
                 <div class="chart-container">
@@ -325,7 +325,7 @@ function renderGrowthCharts() {
                 <div class="chart-source">Source: ICRIER estimates, MoSPI, IMF ${renderConfidenceStars(3)}</div>
             </div>
 
-            <div class="growth-chart-card">
+            <div class="growth-chart-card" style="grid-column: 1 / -1;">
                 <h4>Karnataka's Share: $159B → $329B–$454B</h4>
                 <p class="chart-subtitle">Three scenarios: Conservative, Optimistic, and Stretch</p>
                 <div class="chart-container">
@@ -467,6 +467,7 @@ function initAllCharts(verticalOverview, totalMetrics, baseline, verticalBaselin
                         font: { size: 10, weight: '600' },
                         anchor: 'end',
                         align: 'top',
+                        clamp: true,
                         formatter: (value, context) => {
                             const ds = context.dataset
                             if (ds.actualValues) {
@@ -475,6 +476,9 @@ function initAllCharts(verticalOverview, totalMetrics, baseline, verticalBaselin
                             return `$${value}B`
                         }
                     }
+                },
+                layout: {
+                    padding: { right: 0, left: 0 }
                 },
                 scales: {
                     y: {

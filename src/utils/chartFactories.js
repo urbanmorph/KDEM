@@ -339,8 +339,12 @@ export function createAnnotatedAreaChart(canvasId, labels, datasets, annotations
                     font: { size: 10, weight: '600' },
                     anchor: 'end',
                     align: 'top',
+                    clamp: true,
                     formatter: (value) => value != null ? `$${value}B` : ''
                 }
+            },
+            layout: {
+                padding: { right: 0, left: 0 }
             },
             scales: {
                 y: {
