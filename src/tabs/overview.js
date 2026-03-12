@@ -108,7 +108,7 @@ export async function renderOverviewTab(appData) {
                 </div>
 
                 <div class="growth-charts-grid">
-                    <div class="growth-chart-card" style="grid-column: 1 / -1; max-width: 700px; margin: 0 auto;">
+                    <div class="growth-chart-card chart-card-centered">
                         <div id="revenue-waterfall" class="echart-container" style="height: 350px;"></div>
                         <div class="chart-source">Source: KDEM Target Database ${renderConfidenceStars(3)}</div>
                     </div>

@@ -165,7 +165,7 @@ async function renderBeyondBengaluru(appData) {
                 </div>
 
                 <div class="growth-charts-grid">
-                    <div class="growth-chart-card" style="grid-column: 1 / -1; max-width: 700px; margin: 0 auto;">
+                    <div class="growth-chart-card chart-card-centered">
                         <h4>ESDM Investment by Company</h4>
                         <div class="chart-container">
                             <canvas id="bb-esdm-investments-chart"></canvas>
@@ -206,7 +206,7 @@ async function renderBeyondBengaluru(appData) {
                 <div class="growth-charts-grid">
                     <div class="growth-chart-card" style="grid-column: 1 / -1;">
                         <h4>Revenue Potential by Sub-Sector</h4>
-                        <div id="bb-proximity-treemap" style="width: 100%; height: 420px;"></div>
+                        <div id="bb-proximity-treemap" class="echart-container" style="height: 420px;"></div>
                         <div class="chart-source">Source: ${proximity.source} ${renderConfidenceStars(proximity.confidence)}</div>
                     </div>
                 </div>
@@ -229,7 +229,7 @@ async function renderBeyondBengaluru(appData) {
                 </div>
 
                 <div class="growth-charts-grid">
-                    <div class="growth-chart-card" style="grid-column: 1 / -1; max-width: 600px; margin: 0 auto;">
+                    <div class="growth-chart-card chart-card-centered">
                         <h4>Vertical Strength by Cluster</h4>
                         <div class="chart-container">
                             <canvas id="bb-vertical-radar-chart"></canvas>

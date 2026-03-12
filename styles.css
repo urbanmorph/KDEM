@@ -762,6 +762,12 @@ body {
     box-shadow: var(--shadow-md);
 }
 
+.chart-card-centered {
+    grid-column: 1 / -1;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
 .growth-chart-card h4 {
     font-size: 1.125rem;
     font-weight: 600;
@@ -3204,6 +3210,77 @@ body {
         line-height: 44px;
         padding: 0 0.5rem;
     }
+
+    /* Overview tab grids — force single column */
+    .pillars-grid,
+    .gauge-grid-echarts,
+    .growth-charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pillar-metrics {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+
+    /* Scenario chips — smaller on mobile */
+    .pillar-scenario-chips {
+        gap: 0.25rem;
+    }
+
+    .scenario-chip {
+        font-size: 0.65rem;
+        padding: 0.2rem 0;
+    }
+
+    /* Chart containers — reduce heights */
+    .echart-container {
+        height: 220px !important;
+    }
+
+    .chart-container {
+        height: 240px;
+    }
+
+    /* Remove inline max-widths that cause overflow */
+    .growth-chart-card[style*="max-width"] {
+        max-width: 100% !important;
+    }
+
+    .chart-card-centered {
+        max-width: 100%;
+    }
+
+    /* Projection table — hide Driver on mobile, compact scenario cols */
+    .projection-table th:last-child,
+    .projection-table td:last-child {
+        display: none;
+    }
+
+    .scenario-col {
+        font-size: 0.7rem;
+    }
+
+    /* Scenario legend chips — stack on mobile */
+    .scenario-legend-row {
+        flex-direction: column;
+    }
+
+    .scenario-legend-chip {
+        font-size: 0.7rem;
+    }
+
+    /* Sources tab — word break for long URLs */
+    .sources-table td,
+    .sources-table th {
+        word-break: break-word;
+    }
+
+    /* Proximity legend — smaller text */
+    .proximity-legend {
+        font-size: 0.72rem;
+        gap: 0.5rem;
+    }
 }
 
 /* Medium screens */
@@ -3873,12 +3950,18 @@ body {
     }
 
     .projection-table {
-        font-size: 0.78rem;
+        font-size: 0.72rem;
     }
 
     .projection-table th,
     .projection-table td {
-        padding: 0.45rem 0.5rem;
+        padding: 0.35rem 0.4rem;
+    }
+
+    /* Hide CAGR column on mobile (6th column) to save space */
+    .projection-table th:nth-child(6),
+    .projection-table td:nth-child(6) {
+        display: none;
     }
 }
 
