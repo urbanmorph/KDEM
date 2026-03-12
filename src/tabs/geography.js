@@ -62,8 +62,8 @@ async function renderBeyondBengaluru(appData) {
 
                 <!-- SECTION 1: Thesis + Headline Metrics -->
                 <div class="section-header">
-                    <h3>Eight Clusters, One Thesis: Digitalize What Exists</h3>
-                    <p>Mysuru, Mangaluru, Hubballi-Dharwad, Tumakuru, Kalaburagi, and more — each with industries waiting for a digital layer</p>
+                    <h3>Six Clusters, One Thesis: Digitalize What Exists</h3>
+                    <p>Mysuru, Mangaluru, Hubballi-Dharwad-Belagavi, Tumakuru, Kalaburagi, and Shivamogga — each with industries waiting for a digital layer</p>
                 </div>
 
                 <div class="metrics-grid">

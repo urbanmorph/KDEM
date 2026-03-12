@@ -29,7 +29,7 @@
 The KDEM data has **three intersecting dimensions**:
 
 1. **VERTICALS** (5 pillars): IT Exports, IT Domestic, ESDM, Startups, Digitizing Sectors
-2. **GEOGRAPHY** (8 clusters): Bengaluru, Mysuru, Mangaluru, HDB, Kalaburagi, Tumakuru, Shivamogga, Rest of Karnataka
+2. **GEOGRAPHY** (6 clusters + Bengaluru): Bengaluru, Mysuru, Mangaluru, HDB, Kalaburagi, Tumakuru, Shivamogga
 3. **FACTORS** (4 horizontals): Land, Labour, Capital, Organisation
 
 ### The Challenge
@@ -1819,7 +1819,7 @@ dashboard.init('mysuru', 2030)
 ## Overview
 
 When an admin sets a high-level target (e.g., "GCC revenue: $50B by 2030"), the system **automatically distributes** it across:
-- **Geographic dimension** (8 clusters)
+- **Geographic dimension** (6 clusters)
 - **Factor dimension** (Labour, Land, Capital, Organisation)
 
 This apportionment uses **historical patterns** as intelligent defaults.

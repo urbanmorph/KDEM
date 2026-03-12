@@ -475,7 +475,7 @@ serve(async (req) => {
   const strategicPriorities = await getStrategicPriorities(year)
   const clusterCapacities = await getClusterCapacities(year)
 
-  const prompt = `You are an expert in Karnataka's digital economy planning. Suggest an optimal apportionment of a ${total_value} billion USD target for ${vertical_id} across 8 geographic clusters for the year ${year}.
+  const prompt = `You are an expert in Karnataka's digital economy planning. Suggest an optimal apportionment of a ${total_value} billion USD target for ${vertical_id} across 6 geographic clusters for the year ${year}.
 
 **Context:**
 

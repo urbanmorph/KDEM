@@ -6,13 +6,13 @@ This file contains instructions for Claude (or any AI assistant) working on the 
 
 **Karnataka Digital Economy Mission (KDEM) Dashboard v3.0**
 
-A data-driven dashboard for tracking Karnataka's journey to a $400 billion digital economy by 2030, creating 5 million jobs across 5 core verticals and 8 geographic clusters.
+A data-driven dashboard for tracking Karnataka's journey to a $400 billion digital economy by 2030, creating 5 million jobs across 5 core verticals and 6 geographic clusters.
 
 ### Key Metrics
 - **Target Revenue:** $400 Billion USD by 2030
 - **Target Employment:** 5 Million jobs
 - **Core Verticals:** IT Exports, IT Domestic, ESDM, Startups, Newly Digitizing Sectors
-- **Geographic Clusters:** Bengaluru + 8 strategic clusters (Tier 1/2/3)
+- **Geographic Clusters:** Bengaluru + 6 strategic clusters (Tier 1/2/3)
 - **Factors of Production:** Land, Labour, Capital, Organisation
 
 ---
@@ -84,7 +84,7 @@ Targets (single source of truth)
 
 **Dimension Tables:**
 - `verticals` (25 records: 5 core + sub-sectors + 17 digitizing)
-- `geographies` (13 records: Karnataka + Bengaluru + 8 clusters + 3 projects)
+- `geographies` (13 records: Karnataka + Bengaluru + 6 clusters + 3 projects)
 - `factors` (4 records: Land, Labour, Capital, Organisation)
 
 **Fact Table:**

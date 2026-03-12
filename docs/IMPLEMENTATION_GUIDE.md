@@ -469,7 +469,7 @@ TAB 9: ROADMAP & DATA (Consolidated)
 | Table | Purpose | Records |
 |-------|---------|---------|
 | `verticals` | 5 pillars + sub-sectors | ~25 rows |
-| `geographies` | Karnataka + 8 clusters + sub-locations | ~15 rows |
+| `geographies` | Karnataka + 6 clusters + Bengaluru + sub-locations | ~15 rows |
 | `factors` | Land, Labour, Capital, Organisation | 4 rows |
 
 #### Fact Table (Single Source of Truth)

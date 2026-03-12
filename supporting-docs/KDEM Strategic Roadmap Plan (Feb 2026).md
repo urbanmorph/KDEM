@@ -61,7 +61,7 @@ This roadmap outlines a four-phase strategy — Foundation, Navigate, Accelerate
 - Chip design cluster: 50+ design houses, positioned for India fab ecosystem
 - Climate tech vertical: $5B+ enabled by DPI-as-a-Service platform
 - EU AI Act compliance services: $2B+ exported to European clients
-- All 8 geographic clusters operational with measurable KPIs
+- All 6 geographic clusters operational with measurable KPIs
 - Revenue per employee stabilizes at new equilibrium ($75-100K)
 
 **Confidence:** ★★★☆☆ (3/5)
