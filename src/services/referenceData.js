@@ -284,7 +284,7 @@ export function getRoadmapPhases() {
                 'Chip design cluster: 50+ design houses, positioned for India fab ecosystem',
                 'Climate tech vertical: $5B+ enabled by DPI-as-a-Service platform',
                 'EU AI Act compliance services: $2B+ exported to European clients',
-                'All 8 geographic clusters operational with measurable KPIs',
+                'All 6 geographic clusters operational with measurable KPIs',
                 'Revenue per employee stabilizes at new equilibrium ($75-100K)'
             ],
             confidence: 3,
@@ -795,7 +795,21 @@ export function getKarnatakaBaseline() {
             }
         },
         source: 'NASSCOM Strategic Review 2025, MeitY, KDEM Excel',
-        confidence: 4
+        confidence: 4,
+
+        // Biotechnology (separate stream — not part of digital economy)
+        currentBiotechnology_USD_Bn: 39.21,
+        targetBiotechnology_USD_Bn: 85,
+        biotechnologyOptimistic_USD_Bn: 97,
+
+        // Combined Tech Economy (Digital + Biotechnology)
+        currentTotalTechEconomy_USD_Bn: 198,  // 159 + 39
+        targetTotalTechEconomy_USD_Bn: 414,   // 329 + 85
+        techEconomyScenarios: {
+            conservative: { total: 414, digital: 329, biotech: 85 },
+            optimistic: { total: 503, digital: 406, biotech: 97 },
+            stretch: { total: 551, digital: 454, biotech: 97 }
+        }
     }
 }
 
@@ -885,6 +899,19 @@ export function getVerticalBaselines() {
             revisionNote: 'Aligned with India nominal GDP growth; McKinsey 2019 framework not used for projections. Employment estimated via per sub-sector ratios.',
             source: 'KDEM Excel — 17 sub-sectors (McKinsey framework), no independent FY25 actuals',
             confidence: 2
+        },
+        {
+            id: 'biotechnology', name: 'Biotechnology',
+            current: 39.21, target: 85.0, optimistic: 97.0, stretch: 97.0, unit: 'USD Bn',
+            currentEmployment: 0, targetEmployment: 0,
+            employmentExcluded: true,
+            revenueExcluded: true,  // Not part of $329B digital economy
+            isBiotechPillar: true,
+            baseYear: '2022-23', baseActual: 31.01,
+            actualGrowthCAGR: '~12% (FY23-25)', targetCAGR: '11-12% (FY25-32)',
+            targetYear: '2031-32',
+            source: 'KBER 2025, ABLE Research',
+            confidence: 4
         }
     ]
 }
@@ -1663,5 +1690,249 @@ export function getBBProjections() {
         },
         source: 'KDEM Projection Model (bottom-up from traction + policy + proximity analysis)',
         confidence: 2
+    }
+}
+
+// ============================================================
+// BIOTECHNOLOGY DATA
+// Source: Karnataka BioEconomy Report 2025, ABLE Research (⭐⭐⭐⭐)
+// ============================================================
+
+export function getBiotechnologyData() {
+    return {
+        // Headline metrics
+        currentValue: 39.21,  // USD billion, 2025
+        previousValues: { 2023: 31.01, 2024: 32.36 },
+        growthRate: 26.5,  // cumulative 2023-2025 %
+        gsdpShare: 10.51,  // % of Karnataka GSDP
+        nationalAvgGsdp: 4.57,  // India BioEconomy as % of GDP
+        indiaShare: 20.63,  // Karnataka's share of India BioEconomy
+        indiaBioEconomy: 190.0,  // India total 2025 USD billion
+        karnatakaGsdp: 373.0,  // Karnataka GSDP 2025 USD billion
+
+        // Growth trajectory
+        trajectory: {
+            labels: ['2023', '2024', '2025', '2026E', '2027E', '2028E', '2029E', '2030E', '2031E', '2032E'],
+            actual: [31.01, 32.36, 39.21, null, null, null, null, null, null, null],
+            projected: [null, null, 39.21, 45, 51, 58, 66, 75, 85, 97],
+            conservativeTarget: 85,
+            optimisticTarget: 97,
+            notes: 'Conservative assumes 11-12% CAGR; Optimistic assumes 13-14% CAGR aligned with India $300B target'
+        },
+
+        // Sectoral breakdown (2025)
+        sectors: [
+            {
+                name: 'BioPharma',
+                value: 16.44,
+                share: 41.93,
+                growth: 8.02,
+                color: '#E96337',
+                description: 'Therapeutics, biologics, biosimilars, vaccines, medical devices & diagnostics',
+                subsectors: [
+                    { name: 'Therapeutics (biologics, biosimilars, vaccines)', value: 9.41, share: 57.24 },
+                    { name: 'Medical Devices & Diagnostics', value: 7.03, share: 42.76 }
+                ],
+                outlook: 'Projected to exceed $18B by 2026',
+                role: 'Innovation and exports'
+            },
+            {
+                name: 'BioIndustrial',
+                value: 11.46,
+                share: 29.23,
+                growth: 72.59,
+                color: '#E68634',
+                description: 'Fermentation, bioenergy, biogas, biomaterials, enzymes, biochemicals',
+                subsectors: [
+                    { name: 'Alcoholic Beverage (fermentation)', value: 5.30, share: 46.25 },
+                    { name: 'Animal Nutrition & Aqua Feed', value: 2.88, share: 25.13 },
+                    { name: 'BioEnergy (bioethanol, biogas)', value: 1.24, share: 10.82 },
+                    { name: 'Technical Industries (enzymes, polymers)', value: 1.21, share: 7.24 },
+                    { name: 'Food and Bio-based Processing', value: 0.83, share: 10.56 }
+                ],
+                outlook: 'Expected to cross $13B by 2026',
+                role: 'Green manufacturing'
+            },
+            {
+                name: 'BioServices',
+                value: 10.12,
+                share: 25.81,
+                growth: 8.12,
+                color: '#5BB9EC',
+                description: 'CROs, CDMOs, GCCs, Bioinformatics, contract research, genomics services',
+                subsectors: [],
+                outlook: 'Continued strength in R&D outsourcing and computational biology',
+                role: 'R&D and IT convergence'
+            },
+            {
+                name: 'BioAgri',
+                value: 1.19,
+                share: 3.03,
+                growth: 4.39,
+                color: '#10B981',
+                description: 'Bt cotton, biofertilizers, biopesticides, sustainable farming inputs',
+                subsectors: [
+                    { name: 'Bt Cotton', value: 0.91, share: 76.47 },
+                    { name: 'BioAg Inputs (fertilizers, stimulants)', value: 0.28, share: 23.53 }
+                ],
+                outlook: 'Gradual expansion through climate-smart agriculture',
+                role: 'Sustainability in agriculture'
+            }
+        ],
+
+        // Regional distribution mapped to BB clusters (2025)
+        // Raw KBER districts redistributed: "Others" (27.97%) allocated to proximate clusters
+        // based on KBER sectoral-regional leadership table (p.31)
+        regional: {
+            clusters: [
+                { name: 'Bengaluru', share: 63.6, value: 24.93, role: 'R&D, BioPharma, BioServices hub', kberDirect: 53.58, fromOthers: 10.0 },
+                { name: 'Mysuru', share: 9.4, value: 3.69, role: 'Industrial biotech & R&D integrator', kberDirect: 8.93, fromOthers: 0.5 },
+                { name: 'Hubballi-Dharwad-Belagavi', share: 9.1, value: 3.57, role: 'BioIndustrial & agri convergence', kberDirect: 3.57, fromOthers: 5.5 },
+                { name: 'Kalaburagi', share: 6.5, value: 2.55, role: 'BioAgri anchor (Bt cotton, biofertilizers)', kberDirect: 2.48, fromOthers: 4.0 },
+                { name: 'Mangaluru', share: 4.5, value: 1.76, role: 'Coastal BioIndustry & BioIT', kberDirect: 3.47, fromOthers: 1.0 },
+                { name: 'Tumakuru', share: 2.5, value: 0.98, role: 'Emerging pharma & BioIndustrial corridor', kberDirect: 0, fromOthers: 2.5 },
+                { name: 'Shivamogga', share: 1.5, value: 0.59, role: 'BioAgri & forestry-linked biotech', kberDirect: 0, fromOthers: 1.5 }
+            ],
+            bengaluruShare: 63.6,
+            beyondBengaluruShare: 36.4,
+            mappingNotes: 'Kalaburagi cluster includes Raichur (1.10%) and Yadgir (0.82%) districts. "Others" (27.97%) redistributed based on KBER sectoral-regional leadership analysis.'
+        },
+
+        // Startup ecosystem
+        startups: {
+            cumulative: 1451,
+            newIn2025: 218,
+            growthVs2024: 22.5,
+            yearlyData: [
+                { year: 2022, newRegistrations: 37, cumulative: 853 },
+                { year: 2023, newRegistrations: 202, cumulative: 1055 },
+                { year: 2024, newRegistrations: 178, cumulative: 1233 },
+                { year: 2025, newRegistrations: 218, cumulative: 1451 }
+            ],
+            segmentBreakdown: [
+                { segment: 'Pharmaceuticals & Pharma Research', share: 31.5 },
+                { segment: 'Food, Nutrition & Agritech', share: 27.5 },
+                { segment: 'Medical & Healthcare', share: 18.2 },
+                { segment: 'Laboratory & Research Infrastructure', share: 17.0 },
+                { segment: 'Biotechnology & Life Sciences', share: 3.9 },
+                { segment: 'BioEnergy & Environmental Sciences', share: 1.3 },
+                { segment: 'Genomics, Cell & Molecular Biology', share: 0.6 }
+            ],
+            nationalShare: 13.93  // Karnataka's share of India biotech startups
+        },
+
+        // Investment landscape (Jan 2024 - Oct 2025)
+        investments: {
+            totalValue: 1.14,  // USD billion
+            totalDeals: 40,
+            period: 'Jan 2024 - Oct 2025',
+            sectorBreakdown: [
+                { sector: 'MedTech & Health Devices', share: 68, value: 775, drivers: 'Healthium Medtech, Dozee, Forus Health' },
+                { sector: 'BioPharma & CDMO', share: 17, value: 195, drivers: 'OneSource, Eyestem, Immuneel, Laurus Bio' },
+                { sector: 'Ayur-Biotech & Functional Health', share: 8, value: 90, drivers: 'Kapiva, Biopeak' },
+                { sector: 'Agribiotech & BioIndustrial', share: 5, value: 55, drivers: 'Loopworm, Akshayakalpa, Devigere Biosolutions' },
+                { sector: 'AI-Biology & Digital Health', share: 2, value: 25, drivers: 'Ultrahuman, ImmunitoAI, AiSteth' }
+            ]
+        },
+
+        // Quarterly data (2025)
+        quarterly2025: [
+            { quarter: 'Q1', bioAgri: 0.29, bioIndustrial: 2.76, bioPharma: 3.95, bioServices: 2.43, total: 9.43 },
+            { quarter: 'Q2', bioAgri: 0.29, bioIndustrial: 2.74, bioPharma: 3.91, bioServices: 2.41, total: 9.35 },
+            { quarter: 'Q3', bioAgri: 0.30, bioIndustrial: 2.91, bioPharma: 4.18, bioServices: 2.57, total: 9.96 },
+            { quarter: 'Q4', bioAgri: 0.31, bioIndustrial: 3.05, bioPharma: 4.40, bioServices: 2.71, total: 10.47 }
+        ],
+
+        // Key policy initiatives
+        policies: [
+            { name: 'Karnataka Innovation Authority Act, 2020', desc: 'Regulatory sandbox for biotech enterprises' },
+            { name: 'Biomanufacturing Hub (Bio-foundry)', desc: 'At C-CAMP, Bengaluru — precommercial scale production' },
+            { name: 'Fund of Funds', desc: 'Venture capital catalyst for deep-tech and biotech startups' },
+            { name: 'Deeptech Elevate NXT', desc: 'Part of LEAP framework — funding for bio-digital convergence' },
+            { name: 'Elevate Beyond Bengaluru', desc: 'Extending startup support to Tier-2/3 bio-clusters' },
+            { name: 'BioE3 Mission', desc: 'Biotechnology for Economy, Environment, and Employment' }
+        ],
+
+        // Source attribution
+        source: 'Karnataka BioEconomy Report 2025, ABLE Research (Association of Biotechnology Led Enterprises)',
+        confidence: 4
+    }
+}
+
+// ============================================================
+// COMBINED TECH ECONOMY DATA (Digital + Biotechnology)
+// ============================================================
+
+export function getCombinedRevenueWaterfall() {
+    return [
+        { name: 'IT Exports', value: 165, color: '#E96337' },
+        { name: 'IT Domestic', value: 34, color: '#E68634' },
+        { name: 'ESDM', value: 95, color: '#5BB9EC' },
+        { name: 'Digitizing', value: 35, color: '#10B981' },
+        { name: 'Digital Economy', value: 0, isTotal: true },
+        { name: 'Biotechnology', value: 85, color: '#059669' },
+        { name: 'Total Tech Economy', value: 0, isTotal: true }
+    ]
+}
+
+export function getCombinedSankeyData() {
+    return {
+        nodes: [
+            { name: '$414B Tech Economy', id: 'total', color: '#202124' },
+            { name: 'IT Exports ($165B)', id: 'it-exports' },
+            { name: 'ESDM ($95B)', id: 'esdm' },
+            { name: 'Biotechnology ($85B)', id: 'biotechnology' },
+            { name: 'IT Domestic ($34B)', id: 'it-domestic' },
+            { name: 'Digitizing ($35B)', id: 'digitizing-sectors' },
+            { name: 'Bengaluru', id: 'bengaluru', color: '#374151' },
+            { name: 'Beyond Bengaluru', id: 'beyond-bengaluru', color: '#6b7280' }
+        ],
+        links: [
+            // Total to verticals
+            { source: '$414B Tech Economy', target: 'IT Exports ($165B)', value: 165 },
+            { source: '$414B Tech Economy', target: 'ESDM ($95B)', value: 95 },
+            { source: '$414B Tech Economy', target: 'Biotechnology ($85B)', value: 85 },
+            { source: '$414B Tech Economy', target: 'IT Domestic ($34B)', value: 34 },
+            { source: '$414B Tech Economy', target: 'Digitizing ($35B)', value: 35 },
+            // IT Exports to geographies (~4% BB)
+            { source: 'IT Exports ($165B)', target: 'Bengaluru', value: 158 },
+            { source: 'IT Exports ($165B)', target: 'Beyond Bengaluru', value: 7 },
+            // ESDM to geographies (10.8% BB)
+            { source: 'ESDM ($95B)', target: 'Bengaluru', value: 85 },
+            { source: 'ESDM ($95B)', target: 'Beyond Bengaluru', value: 10 },
+            // Biotechnology to geographies (36.4% BB — KBER 2025 cluster mapping)
+            { source: 'Biotechnology ($85B)', target: 'Bengaluru', value: 54 },
+            { source: 'Biotechnology ($85B)', target: 'Beyond Bengaluru', value: 31 },
+            // IT Domestic (17% BB)
+            { source: 'IT Domestic ($34B)', target: 'Bengaluru', value: 28 },
+            { source: 'IT Domestic ($34B)', target: 'Beyond Bengaluru', value: 6 },
+            // Digitizing (29% BB)
+            { source: 'Digitizing ($35B)', target: 'Bengaluru', value: 25 },
+            { source: 'Digitizing ($35B)', target: 'Beyond Bengaluru', value: 10 }
+        ],
+        source: 'KDEM Projection Model + KBER 2025 — Combined Tech Economy',
+        confidence: 3
+    }
+}
+
+export function getCombinedTrajectory() {
+    return {
+        labels: ['2021-22', '2022-23', '2023-24', '2024-25', '2025-26', '2026-27', '2027-28', '2028-29', '2029-30', '2030-31', '2031-32'],
+        datasets: [
+            {
+                label: 'Digital Economy (USD Bn)',
+                data: [106, 121, 138, 159, 177, 196, 217, 241, 267, 297, 329],
+                color: '#5BB9EC'
+            },
+            {
+                label: 'Biotechnology (USD Bn)',
+                data: [null, 31, 32, 39, 45, 51, 58, 66, 75, 85, 97],
+                color: '#059669'
+            }
+        ],
+        todayIndex: 3,
+        target: 414,
+        source: 'KDEM + KBER 2025',
+        confidence: 3
     }
 }

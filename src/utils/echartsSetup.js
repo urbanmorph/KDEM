@@ -38,13 +38,14 @@ export const ECHART_COLORS = {
     tertiary: '#5BB9EC',
     purple: '#8B5CF6',
     green: '#10B981',
-    verticals: ['#E96337', '#E68634', '#5BB9EC', '#8B5CF6', '#10B981'],
+    verticals: ['#E96337', '#E68634', '#5BB9EC', '#8B5CF6', '#10B981', '#059669'],
     verticalMap: {
         'it-exports': '#E96337',
         'it-domestic': '#E68634',
         'esdm': '#5BB9EC',
         'startups': '#8B5CF6',
-        'digitizing-sectors': '#10B981'
+        'digitizing-sectors': '#10B981',
+        'biotechnology': '#059669'
     },
     gaugeZones: {
         danger: '#ef4444',

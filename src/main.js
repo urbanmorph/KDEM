@@ -30,12 +30,13 @@ async function initApp() {
         showLoading()
         await loadInitialData()
 
-        document.getElementById('last-updated-date').textContent = appData.lastUpdated
+        const lastUpdatedEl = document.getElementById('last-updated-date')
+        if (lastUpdatedEl) lastUpdatedEl.textContent = appData.lastUpdated
 
         const baseline = getKarnatakaBaseline()
         const brandSubtitle = document.getElementById('brand-subtitle')
         if (brandSubtitle) {
-            brandSubtitle.textContent = `From $${baseline.currentTotalDigital_USD_Bn}B Today to $${baseline.targetRevenue_USD_Bn}B by 2032 — The Journey Ahead`
+            brandSubtitle.textContent = `From $${baseline.currentTotalTechEconomy_USD_Bn}B Today to $${baseline.targetTotalTechEconomy_USD_Bn}B by 2032 — Digital Economy + Biotechnology`
         }
 
         setupEventListeners()
@@ -145,6 +146,12 @@ async function loadTab(tabId) {
             case 'clusters': {
                 const { renderGeographyTab } = await import('./tabs/geography.js')
                 content = await renderGeographyTab('clusters', appData)
+                break
+            }
+
+            case 'biotechnology': {
+                const { renderBiotechnologyTab } = await import('./tabs/biotechnology.js')
+                content = await renderBiotechnologyTab(appData)
                 break
             }
 

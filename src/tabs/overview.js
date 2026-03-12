@@ -8,7 +8,8 @@ import { getVerticalOverview, getTotalMetrics, fetchTargets } from '../services/
 import {
     getKarnatakaBaseline, getVerticalBaselines, getIndiaDigitalEconomyTimeline,
     getKarnatakaDigitalEconomyTimeline, getGDPComparisonTimeline,
-    getRevenueWaterfall, getRevenueSankeyData, getRoadmapRevenueTrajectory
+    getRevenueWaterfall, getRevenueSankeyData, getRoadmapRevenueTrajectory,
+    getBiotechnologyData, getCombinedRevenueWaterfall, getCombinedSankeyData, getCombinedTrajectory
 } from '../services/referenceData.js'
 import { formatNumber } from '../utils/formatting.js'
 import { annotatedMetricCard, renderConfidenceStars } from '../utils/components.js'
@@ -24,7 +25,7 @@ export async function renderOverviewTab(appData) {
             fetchTargets({ year: 2030 })
         ])
 
-        const pillarOrder = ['it-exports', 'it-domestic', 'esdm', 'digitizing-sectors', 'startups']
+        const pillarOrder = ['it-exports', 'it-domestic', 'esdm', 'digitizing-sectors', 'startups', 'biotechnology']
         const coreVerticals = appData.verticals
             .filter(v => v.category === 'core')
             .sort((a, b) => pillarOrder.indexOf(a.id) - pillarOrder.indexOf(b.id))
@@ -54,7 +55,7 @@ export async function renderOverviewTab(appData) {
 
                 <!-- SECTION 2: PROGRESS GAUGES -->
                 <div class="section-header mt-4">
-                    <h3>$${baseline.currentTotalDigital_USD_Bn}B Down, $${baseline.targetRevenue_USD_Bn - baseline.currentTotalDigital_USD_Bn}B to Go</h3>
+                    <h3>Digital Economy: $${baseline.currentTotalDigital_USD_Bn}B Down, $${baseline.targetRevenue_USD_Bn - baseline.currentTotalDigital_USD_Bn}B to Go</h3>
                     <p>Karnataka's digital economy today versus the 2032 target</p>
                 </div>
 
@@ -89,8 +90,8 @@ export async function renderOverviewTab(appData) {
 
                 <!-- SECTION 4: THE 5 PILLARS -->
                 <div class="section-header mt-4">
-                    <h3>Five Pillars to $${baseline.targetRevenue_USD_Bn}B–$${baseline.revenueScenarios.stretch.total}B</h3>
-                    <p>Four revenue engines and one ecosystem accelerator — shown with conservative targets and scenario ranges</p>
+                    <h3>Five Pillars + Biotechnology → $${baseline.targetTotalTechEconomy_USD_Bn}B</h3>
+                    <p>Four digital revenue engines, one ecosystem accelerator, and one BioEconomy pillar — shown with conservative targets and scenario ranges</p>
                 </div>
 
                 <div class="pillars-grid">
@@ -99,12 +100,21 @@ export async function renderOverviewTab(appData) {
                         const current = verticalBaselines.find(v => v.id === vertical.id) || {}
                         return renderPillarCard(vertical, target, current)
                     }).join('')}
+                    ${(() => {
+                        const btBaseline = verticalBaselines.find(v => v.id === 'biotechnology')
+                        if (!btBaseline) return ''
+                        return renderPillarCard(
+                            { id: 'biotechnology', name: 'Biotechnology', description: 'BioEconomy pillar — BioPharma, BioIndustrial, BioServices, BioAgri. Tracked via KBER 2025.' },
+                            {},
+                            btBaseline
+                        )
+                    })()}
                 </div>
 
                 <!-- SECTION 5: WATERFALL -->
                 <div class="section-header mt-4">
-                    <h3>The Math: How Four Verticals Add Up</h3>
-                    <p>IT Exports carries half the weight, ESDM is the fastest grower</p>
+                    <h3>How Five Streams Add Up to $${baseline.targetTotalTechEconomy_USD_Bn}B</h3>
+                    <p>IT Exports carries half the digital weight, Biotechnology adds a separate $${baseline.targetBiotechnology_USD_Bn}B stream</p>
                 </div>
 
                 <div class="growth-charts-grid">
@@ -116,8 +126,8 @@ export async function renderOverviewTab(appData) {
 
                 <!-- SECTION 6: SANKEY -->
                 <div class="section-header mt-4">
-                    <h3>Where the Money Lands: Bengaluru 90%, Beyond Bengaluru 10%</h3>
-                    <p>$329B flowing from verticals to geographies — diversification is the next frontier</p>
+                    <h3>Where the Money Lands: Bengaluru 85%, Beyond Bengaluru 15%</h3>
+                    <p>$${baseline.targetTotalTechEconomy_USD_Bn}B flowing from verticals to geographies — Biotechnology's 36% Beyond Bengaluru share reshapes the balance</p>
                 </div>
 
                 <div class="growth-charts-grid">
@@ -130,8 +140,8 @@ export async function renderOverviewTab(appData) {
                 <!-- BB CTA -->
                 <div class="bb-cta">
                     <div class="bb-cta-content">
-                        <h3>That 10% Is Where the Story Gets Interesting</h3>
-                        <p>$33–50 billion across three scenarios. 150 companies already there. Rs 3,220 crore in ESDM investments. Eight clusters from Mysuru to Kalaburagi building Karnataka's next digital frontier — not by replicating Bengaluru, but by digitalizing the industries already there.</p>
+                        <h3>$64B+ Across Digital + Biotech Flows Beyond Bengaluru</h3>
+                        <p>Biotechnology nearly doubles the Beyond Bengaluru opportunity. 150 companies already there. Rs 3,220 crore in ESDM investments. Six clusters from Mysuru to Kalaburagi building Karnataka's next frontier — not by replicating Bengaluru, but by digitalizing and bio-industrializing the industries already there.</p>
                         <a href="#" class="bb-cta-link" data-tab="clusters">Explore Beyond Bengaluru</a>
                     </div>
                 </div>
@@ -151,6 +161,52 @@ export async function renderOverviewTab(appData) {
 
 function renderPillarCard(vertical, target, current) {
     const isEcosystem = current.isEcosystemPillar === true
+
+    if (current.isBiotechPillar) {
+        const currentRev = current.current || 0
+        const conservativeTarget = current.target || 0
+        const growthMultiple = currentRev > 0 ? (conservativeTarget / currentRev).toFixed(1) : '—'
+        return `
+            <div class="pillar-card" style="border-left: 4px solid #059669; background: linear-gradient(135deg, #ecfdf5, #f0fdf4);">
+                <div class="pillar-header">
+                    <h4>${vertical.name}</h4>
+                    <span class="pillar-badge" style="background: #059669; color: white;">BioEconomy Pillar</span>
+                </div>
+                <div class="pillar-description">
+                    ${vertical.description || ''}
+                </div>
+                <div class="pillar-metrics">
+                    <div class="pillar-metric">
+                        <span class="metric-label-small">Today</span>
+                        <span class="metric-value-small">$${formatNumber(currentRev)}B</span>
+                    </div>
+                    <div class="pillar-metric">
+                        <span class="metric-label-small">2032 Target</span>
+                        <span class="metric-value-small">$${formatNumber(conservativeTarget)}B</span>
+                    </div>
+                    <div class="pillar-metric">
+                        <span class="metric-label-small">Gap</span>
+                        <span class="metric-value-small">$${formatNumber(conservativeTarget - currentRev)}B</span>
+                    </div>
+                    <div class="pillar-metric">
+                        <span class="metric-label-small">Growth</span>
+                        <span class="metric-value-small">${growthMultiple}x</span>
+                    </div>
+                </div>
+                <div class="pillar-scenario-chips">
+                    <span class="scenario-chip scenario-chip--conservative">$${conservativeTarget}B</span>
+                    <span class="scenario-chip scenario-chip--optimistic">$${current.optimistic}B</span>
+                </div>
+                <div style="background: #d1fae5; padding: 8px 12px; border-radius: 4px; margin-top: 8px; font-size: 0.78rem; color: #065f46; line-height: 1.4;">
+                    Tracked independently — KBER 2025. Not in digital economy total ($329B).
+                </div>
+                <div class="pillar-footer">
+                    ${renderConfidenceStars(current.confidence || 4)}
+                    <span class="pillar-source">${current.source || ''}</span>
+                </div>
+            </div>
+        `
+    }
 
     if (isEcosystem) {
         // Render ecosystem-focused card for Startups (no revenue in total)
@@ -277,6 +333,15 @@ function renderGrowthCharts() {
                 </div>
                 <div class="chart-source">Source: NASSCOM Strategic Review 2025, MeitY, KDEM Excel ${renderConfidenceStars(4)}</div>
             </div>
+
+            <div class="growth-chart-card" style="grid-column: 1 / -1;">
+                <h4>Total Tech Economy: Digital + Biotech → $414B+</h4>
+                <p class="chart-subtitle">Two independent streams converging into one technology powerhouse</p>
+                <div class="chart-container">
+                    <canvas id="combined-tech-economy-chart"></canvas>
+                </div>
+                <div class="chart-source">Source: KDEM + KBER 2025 ${renderConfidenceStars(3)}</div>
+            </div>
         </div>
     `
 }
@@ -293,12 +358,12 @@ function initAllCharts(verticalOverview, totalMetrics, baseline, verticalBaselin
         unit: `${(baseline.currentDigitalEmployment / 1000000).toFixed(1)}M / ${(dbTargetEmployment / 1000000).toFixed(1)}M`
     })
 
-    // 2. WATERFALL — How verticals add up
-    const waterfallData = getRevenueWaterfall()
+    // 2. WATERFALL — How verticals add up (combined with BT)
+    const waterfallData = getCombinedRevenueWaterfall()
     createWaterfallChart('revenue-waterfall', waterfallData)
 
-    // 3. SANKEY — Flow from target to verticals to geographies
-    const sankeyData = getRevenueSankeyData()
+    // 3. SANKEY — Flow from target to verticals to geographies (combined with BT)
+    const sankeyData = getCombinedSankeyData()
     createSankeyChart('revenue-sankey', sankeyData.nodes, sankeyData.links)
 
     // 5. ANNOTATED AREA CHARTS — Growth trajectories with target lines
@@ -335,7 +400,22 @@ function initAllCharts(verticalOverview, totalMetrics, baseline, verticalBaselin
         }
     )
 
-    // 6. GDP COMPARISON — custom chart: plots India GDP scaled /10 but shows actual values
+    // 6. COMBINED TECH ECONOMY — Digital + Biotech stacked area
+    const combinedData = getCombinedTrajectory()
+    createAnnotatedAreaChart(
+        'combined-tech-economy-chart',
+        combinedData.labels,
+        combinedData.datasets.map(ds => ({
+            label: ds.label,
+            data: ds.data,
+            color: ds.color
+        })),
+        {
+            todayLine: { index: combinedData.todayIndex, label: 'FY 2024-25' }
+        }
+    )
+
+    // 7. GDP COMPARISON — custom chart: plots India GDP scaled /10 but shows actual values
     const gdpTimeline = getGDPComparisonTimeline()
     const gdpCanvas = document.getElementById('gdp-comparison-chart')
     if (gdpCanvas) {
