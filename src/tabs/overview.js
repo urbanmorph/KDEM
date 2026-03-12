@@ -202,14 +202,12 @@ function renderPillarCard(vertical, target, current) {
         'startups': '#8B5CF6'
     }
     const borderColor = pillarColors[vertical.id] || '#E96337'
-    const targetRev = target.revenue_usd_bn || 0
     const currentRev = current.current || 0
-    const pctProgress = targetRev > 0 ? ((currentRev / targetRev) * 100).toFixed(0) : 0
-    const gap = targetRev - currentRev
-    const growthMultiple = currentRev > 0 ? (targetRev / currentRev).toFixed(1) : '—'
-    const hasScenarios = current.optimistic && current.stretch
     // Use referenceData target (consistent with scenario data), fallback to DB
-    const conservativeTarget = current.target || targetRev
+    const conservativeTarget = current.target || target.revenue_usd_bn || 0
+    const pctProgress = conservativeTarget > 0 ? ((currentRev / conservativeTarget) * 100).toFixed(0) : 0
+    const growthMultiple = currentRev > 0 ? (conservativeTarget / currentRev).toFixed(1) : '—'
+    const hasScenarios = current.optimistic && current.stretch
 
     return `
         <div class="pillar-card" style="border-left: 4px solid ${borderColor};">
