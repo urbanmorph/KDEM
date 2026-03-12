@@ -64,12 +64,14 @@ body {
 }
 
 .header-content {
-    max-width: 1400px;
-    margin: 0 auto;
     padding: 0 var(--spacing-lg);
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.logo-section {
+    width: 100%;
 }
 
 .logo-section h1 {
@@ -405,6 +407,8 @@ body {
     display: flex;
     align-items: center;
     gap: var(--spacing-md);
+    width: 100%;
+    justify-content: space-between;
 }
 
 .header-logo {
@@ -421,6 +425,7 @@ body {
 
 .brand-text {
     flex: 1;
+    text-align: center;
 }
 
 @media (max-width: 768px) {
