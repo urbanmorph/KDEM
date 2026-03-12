@@ -6,6 +6,7 @@
 import { fetchVerticals, fetchGeographies, fetchFactors } from './services/dataService.js'
 import { initAnimatedCounters } from './utils/formatting.js'
 import { getKarnatakaBaseline } from './services/referenceData.js'
+import { Chart } from './utils/chartSetup.js'
 
 // State
 let currentTab = 'overview'
@@ -176,6 +177,16 @@ async function loadTab(tabId) {
         if (typeof window.__kdem_initCharts === 'function') {
             window.__kdem_initCharts()
             window.__kdem_initCharts = null
+
+            // Resize Chart.js instances after grid layout settles
+            // Side-by-side charts in CSS grid may not have final width at init time
+            requestAnimationFrame(() => {
+                const canvases = contentContainer.querySelectorAll('canvas')
+                canvases.forEach(c => {
+                    const chartInstance = Chart.getChart(c)
+                    if (chartInstance) chartInstance.resize()
+                })
+            })
         }
 
         currentTab = tabId
