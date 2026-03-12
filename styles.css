@@ -3229,23 +3229,34 @@ body {
         gap: 0.5rem;
     }
 
+    /* Metrics grid — reduce min card width on mobile */
+    .metrics-grid {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 0.75rem;
+    }
+
     /* Scenario chips — smaller on mobile */
     .pillar-scenario-chips {
         gap: 0.25rem;
     }
 
     .scenario-chip {
-        font-size: 0.65rem;
+        font-size: 0.75rem;
         padding: 0.2rem 0;
     }
 
     /* Chart containers — reduce heights */
     .echart-container {
-        height: 220px !important;
+        height: 240px !important;
+    }
+
+    /* Sankey needs more vertical space for node labels */
+    .echart-container[id="revenue-sankey"] {
+        height: 300px !important;
     }
 
     .chart-container {
-        height: 240px;
+        height: 220px;
     }
 
     /* Remove inline max-widths that cause overflow */
@@ -4078,7 +4089,7 @@ body {
 
 @media (max-width: 768px) {
     .regional-bar-row {
-        grid-template-columns: 120px 1fr 50px 40px;
+        grid-template-columns: minmax(90px, 25%) 1fr 50px 40px;
         gap: 0.5rem;
     }
 
@@ -4089,6 +4100,81 @@ body {
     .hz-bar-legend {
         flex-direction: column;
         gap: 0.5rem;
+    }
+
+    .hz-bar-track {
+        height: 28px;
+    }
+}
+
+/* Small phones (iPhone SE, etc.) */
+@media (max-width: 375px) {
+    .main-content {
+        padding: var(--spacing-sm) 0.5rem;
+    }
+
+    .content-wrapper {
+        padding: var(--spacing-sm);
+    }
+
+    .metric-card,
+    .pillar-card,
+    .cluster-card,
+    .factor-card {
+        padding: var(--spacing-md);
+    }
+
+    .pillar-metrics {
+        grid-template-columns: 1fr;
+        gap: 0.35rem;
+    }
+
+    .pillar-metric {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+
+    .regional-bar-row {
+        grid-template-columns: 70px 1fr 45px 38px;
+        gap: 0.25rem;
+    }
+
+    .regional-bar-name {
+        font-size: 0.68rem;
+    }
+
+    .chart-container {
+        height: 200px;
+    }
+
+    .echart-container {
+        height: 200px !important;
+    }
+
+    .echart-container[id="revenue-sankey"] {
+        height: 260px !important;
+    }
+
+    .section-header h3 {
+        font-size: 1.1rem;
+    }
+
+    .section-header p {
+        font-size: 0.8rem;
+    }
+
+    .logo-section h1 {
+        font-size: 1.1rem;
+    }
+
+    #brand-subtitle {
+        font-size: 0.7rem;
     }
 }
 
