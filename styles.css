@@ -765,7 +765,8 @@ body {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     width: 100%;
     min-width: 0;
-    overflow: hidden;
+    overflow: visible;
+    box-sizing: border-box;
 }
 
 .growth-chart-card:hover {
@@ -798,6 +799,10 @@ body {
     height: 360px;
     width: 100%;
     margin-bottom: 1rem;
+}
+
+.chart-container canvas {
+    width: 100% !important;
 }
 
 .chart-source {
