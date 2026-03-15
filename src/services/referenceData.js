@@ -873,15 +873,18 @@ export function getVerticalBaselines() {
             revenueExcluded: true,
             ecosystemMetrics: {
                 dpiitCount: 21163,
-                nonDpiitEstimate: '~20,000-25,000',
-                totalEstimate: '~40,000-46,000',
+                nonDpiitEstimate: '~5,300',
+                totalEstimate: '~26,500',
+                tracxnCompanies: 31700,  // Tracxn: companies founded since 2016 (per startup policy definition)
+                tracxnFundingRounds: 13600,
+                tracxnTotalFunding: 118,  // USD Bn cumulative
                 ecosystemValue: 136,
                 annualFunding: 3.6,
-                unicorns: 32,
+                unicorns: 53,
                 soonicorns: 183,
-                source: 'DPIIT Prabhaav Jan 2025, Startup Genome GSER 2025, Tracxn 2025, 3One4 Capital Bengaluru Innovation Report 2025'
+                source: 'DPIIT Prabhaav Jan 2025, Tracxn Mar 2026, 3One4 Capital Bengaluru Innovation Report 2025'
             },
-            nonDpiitNote: 'DPIIT recognition covers an estimated 50-60% of eligible startups. Many bootstrapped companies, sole proprietorships, and early-stage ventures operate without DPIIT registration. Non-DPIIT estimate based on: MCA tech company registrations in Karnataka (<10 years), Tracxn database coverage (17,000+ funded), and Karnataka Startup Cell data (Elevate program). Total ecosystem estimated at 40,000-46,000 startups.',
+            nonDpiitNote: 'Non-DPIIT startups estimated at 25% of DPIIT count (~5,300), giving ~26,500 total. Tracxn independently tracks 31,700 companies founded since 2016 in Karnataka — broader than startup definition but directionally consistent. Unicorns: 53 (BIR 2025), cumulative funding: $118B (Tracxn).',
             revisionNote: 'DPIIT/NASSCOM $1T startup contribution by 2030; Bengaluru 26% of VC funding; moderated for funding winter',
             note: 'Startup revenue excluded from total revenue target to avoid double-counting. NASSCOM IT revenue figures already include startup company revenues in IT Exports and IT Domestic. Startups tracked as an ecosystem health pillar with metrics on count, funding, and unicorns.',
             source: 'KDEM Excel projection (no independent FY25 actual available)',

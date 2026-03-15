@@ -156,7 +156,7 @@ export async function renderBiotechnologyTab(appData) {
                 <div class="pillars-grid">
                     ${btData.sectors.map(s => `
                         <div class="pillar-card">
-                            <div class="pillar-card__header" style="border-left: 4px solid ${s.color};">
+                            <div class="pillar-card__header">
                                 ${s.name}
                             </div>
                             <div class="pillar-card__value">$${s.value}B <span style="font-size: 0.8rem; color: #6b7280;">(${s.share.toFixed(1)}%)</span></div>

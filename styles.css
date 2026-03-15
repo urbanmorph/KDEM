@@ -1846,7 +1846,6 @@ body {
 
 .policy-goal {
     background: white;
-    border-left: 4px solid var(--primary-color);
     padding: var(--spacing-md);
     margin-top: var(--spacing-lg);
     border-radius: var(--radius-sm);
@@ -3054,7 +3053,6 @@ body {
 
 .transparency-commitment {
     background: white;
-    border-left: 4px solid var(--primary-color);
     padding: var(--spacing-md);
     margin-top: var(--spacing-lg);
     border-radius: var(--radius-sm);
@@ -3587,7 +3585,6 @@ body {
     padding: 1rem 1.25rem;
     background: rgba(245, 158, 11, 0.08);
     border: 1px solid rgba(245, 158, 11, 0.2);
-    border-left: 4px solid #f59e0b;
     border-radius: 6px;
     margin-bottom: 1rem;
 }

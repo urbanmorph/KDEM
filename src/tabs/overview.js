@@ -167,7 +167,7 @@ function renderPillarCard(vertical, target, current) {
         const conservativeTarget = current.target || 0
         const growthMultiple = currentRev > 0 ? (conservativeTarget / currentRev).toFixed(1) : '—'
         return `
-            <div class="pillar-card" style="border-left: 4px solid #059669; background: linear-gradient(135deg, #ecfdf5, #f0fdf4);">
+            <div class="pillar-card" style="background: linear-gradient(135deg, #ecfdf5, #f0fdf4);">
                 <div class="pillar-header">
                     <h4>${vertical.name}</h4>
                     <span class="pillar-badge" style="background: #059669; color: white;">BioEconomy Pillar</span>
@@ -212,7 +212,7 @@ function renderPillarCard(vertical, target, current) {
         // Render ecosystem-focused card for Startups (no revenue in total)
         const eco = current.ecosystemMetrics || {}
         return `
-            <div class="pillar-card pillar-card--ecosystem" style="border-left: 4px solid #8B5CF6; background: linear-gradient(135deg, #faf5ff, #f5f3ff);">
+            <div class="pillar-card pillar-card--ecosystem" style="background: linear-gradient(135deg, #faf5ff, #f5f3ff);">
                 <div class="pillar-header">
                     <h4>${vertical.name}</h4>
                     <span class="pillar-badge" style="background: #8B5CF6; color: white;">Ecosystem Pillar</span>
@@ -266,7 +266,7 @@ function renderPillarCard(vertical, target, current) {
     const hasScenarios = current.optimistic && current.stretch
 
     return `
-        <div class="pillar-card" style="border-left: 4px solid ${borderColor};">
+        <div class="pillar-card">
             <div class="pillar-header">
                 <h4>${vertical.name}</h4>
                 <span class="pillar-badge" style="color: #5BB9EC; border-color: #5BB9EC; background: rgba(91, 185, 236, 0.12);">${growthMultiple}x growth needed</span>
