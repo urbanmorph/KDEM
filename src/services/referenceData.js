@@ -73,7 +73,7 @@ export function getClusterEcosystems() {
 export function getSupportPrograms() {
     return [
         { name: 'ELEVATE (Idea2PoC)', supported: '1,227+ startups', funding: '₹280+ crore committed', womenLed: '25% women-led share', impact: 'Karnataka\'s flagship startup support program', source: 'Bengaluru Innovation Report 2025', confidence: 5 },
-        { name: 'Beyond Bengaluru Initiative', companies: '126 companies', jobs: '5,500+ jobs created', clusters: 'Mysuru, Mangaluru, Hubballi-Dharwad, and more', funding: '₹75 Cr seed fund allocation', source: 'KDEM Internal / beyondbengaluru.com', confidence: 4 },
+        { name: 'Beyond Bengaluru Initiative', companies: '167 companies', jobs: '11,587 jobs created', clusters: 'Mysuru, Mangaluru, Hubballi-Dharwad, and more', funding: '₹75 Cr seed fund allocation', source: 'KDEM Internal / beyondbengaluru.com', confidence: 4 },
         { name: 'NAIN 2.0 Innovation Centres', target: '50 new centres', location: 'Beyond Bengaluru clusters', focus: 'Distributed innovation ecosystem', source: 'Karnataka Startup Policy 2025-2030', confidence: 5 },
         { name: 'New TBIs Outside Bengaluru', target: '12 new incubators', goal: 'Strengthen cluster innovation infrastructure', support: 'Mentorship, funding, workspace', source: 'Karnataka Startup Policy 2025-2030', confidence: 5 }
     ]
@@ -191,7 +191,7 @@ export function getSkillingPrograms() {
         { name: 'ELEVATE Program', supported: '1,227+ startups', funding: '₹280+ crore', womenLed: '25%', source: 'Bengaluru Innovation Report 2025', confidence: 5 },
         { name: 'Karnataka Positive Talent Balance', achievement: 'Karnataka ranked #1 state in India', metric: 'Positive talent balance across sectors', source: 'Xpheno Report, Nov 2024', confidence: 4, link: 'https://yourstory.com/enterprise-story/2025/06/karnataka-wide-talent-pool-for-gccs-xpheno-report' },
         { name: 'Bengaluru Skill Summit 2025', role: 'KDEM as Knowledge Partner', focus: 'Skills & Innovation, industry partnerships', source: 'Karnataka Skill Development Corporation', confidence: 5, link: 'https://bengaluruskillsummit.com/' },
-        { name: 'Beyond Bengaluru Initiative', companies: '126 companies', jobs: '5,500+ jobs', source: 'KDEM Internal', confidence: 4, link: 'https://beyondbengaluru.com' }
+        { name: 'Beyond Bengaluru Initiative', companies: '167 companies', jobs: '11,587 jobs', source: 'KDEM Internal', confidence: 4, link: 'https://beyondbengaluru.com' }
     ]
 }
 
@@ -632,7 +632,7 @@ export function getAllSources() {
     return {
         kdem: [
             { id: 1, name: 'KDEM Official Website', link: 'https://karnatakadigital.in', data: 'Mission, verticals, program descriptions', confidence: 5, verified: 'Jan 2026' },
-            { id: 2, name: 'Beyond Bengaluru Initiative', link: 'https://beyondbengaluru.com', data: '126 companies, 5,500+ jobs metrics', confidence: 4, verified: 'Jan 2026' },
+            { id: 2, name: 'Beyond Bengaluru Initiative', link: 'https://beyondbengaluru.com', data: '167 companies, 11,587 jobs metrics', confidence: 4, verified: 'Mar 2026' },
             { id: 3, name: 'Bengaluru Tech Summit', link: 'https://bengalurutechsummit.com', data: 'BTS 2025: 50,000+ visitors, 60+ countries', confidence: 5, verified: 'Nov 2025' }
         ],
         government: [
@@ -1348,10 +1348,10 @@ export function getDigitizingSubSectors() {
 
 export function getBBHeadlineMetrics() {
     return {
-        newCompanies: { value: 114, period: 'Last 3 Years (FY23-26)', jobs: 3572, source: 'BB Data Points.docx (KDEM Internal)', confidence: 4 },
-        expandedCompanies: { value: 36, period: 'Last 3 Years (FY23-26)', jobs: 5165, source: 'BB Data Points.docx (KDEM Internal)', confidence: 4 },
-        totalCompanies: 150,
-        totalJobs: 8737,
+        newCompanies: { value: 127, period: 'Last 3 Years (FY23-26)', jobs: 5765, source: 'KDEM Internal (Mar 2026)', confidence: 4 },
+        expandedCompanies: { value: 40, period: 'Last 3 Years (FY23-26)', jobs: 5822, source: 'KDEM Internal (Mar 2026)', confidence: 4 },
+        totalCompanies: 167,
+        totalJobs: 11587,
         esdmInvestmentPipeline: { value: 3220, unit: 'Rs Crore', source: 'BB Data Points.docx (KDEM Internal)', confidence: 3 },
         clusterSeedFund: { value: 75, unit: 'Rs Crore', mangaluruAllocation: 25, source: 'Karnataka Startup Policy 2025-2030', confidence: 5 }
     }

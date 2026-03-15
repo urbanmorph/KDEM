@@ -141,7 +141,7 @@ export async function renderOverviewTab(appData) {
                 <div class="bb-cta">
                     <div class="bb-cta-content">
                         <h3>$64B+ Across Digital + Biotech Flows Beyond Bengaluru</h3>
-                        <p>Biotechnology nearly doubles the Beyond Bengaluru opportunity. 150 companies already there. Rs 3,220 crore in ESDM investments. Six clusters from Mysuru to Kalaburagi building Karnataka's next frontier — not by replicating Bengaluru, but by digitalizing and bio-industrializing the industries already there.</p>
+                        <p>Biotechnology nearly doubles the Beyond Bengaluru opportunity. 167 companies already there. Rs 3,220 crore in ESDM investments. Six clusters from Mysuru to Kalaburagi building Karnataka's next frontier — not by replicating Bengaluru, but by digitalizing and bio-industrializing the industries already there.</p>
                         <a href="#" class="bb-cta-link" data-tab="clusters">Explore Beyond Bengaluru</a>
                     </div>
                 </div>

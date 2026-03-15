@@ -107,7 +107,7 @@ async function renderBeyondBengaluru(appData) {
 
                 <!-- SECTION 2: Traction -->
                 <div class="section-header mt-4">
-                    <h3>150 Companies in 3 Years: It's Already Happening</h3>
+                    <h3>167 Companies in 3 Years: It's Already Happening</h3>
                     <p>New setups and expansions across Mysuru, Mangaluru, and Hubballi-Dharwad-Belagavi</p>
                 </div>
 
