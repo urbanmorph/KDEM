@@ -70,7 +70,7 @@ async function renderBeyondBengaluru(appData) {
                     ${annotatedMetricCard({
                         label: 'Companies Established (3 Years)',
                         value: headlines.totalCompanies,
-                        unit: '114 new + 36 expanded',
+                        unit: '127 new + 40 expanded',
                         icon: '',
                         type: 'actual',
                         confidence: 4,
@@ -102,6 +102,15 @@ async function renderBeyondBengaluru(appData) {
                         type: 'benchmark',
                         confidence: 5,
                         source: headlines.clusterSeedFund.source
+                    })}
+                    ${annotatedMetricCard({
+                        label: 'LEAP Program',
+                        value: '1,000',
+                        unit: 'Rs Crore — 5 lakh jobs, 16 initiatives',
+                        icon: '',
+                        type: 'benchmark',
+                        confidence: 5,
+                        source: 'eitbt.karnataka.gov.in/LEAP'
                     })}
                 </div>
 

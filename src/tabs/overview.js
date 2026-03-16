@@ -317,8 +317,8 @@ function renderGrowthCharts() {
     return `
         <div class="growth-charts-grid">
             <div class="growth-chart-card" style="grid-column: 1 / -1;">
-                <h4>India's Digital Economy: $283B and Accelerating</h4>
-                <p class="chart-subtitle">On track to $1.2 Trillion by 2029-30</p>
+                <h4>India's Digital Economy: $529B and Accelerating</h4>
+                <p class="chart-subtitle">IT ($283B) + ESDM + Digital Services — on track to $1.2 Trillion by 2029-30</p>
                 <div class="chart-container">
                     <canvas id="india-digital-economy-chart"></canvas>
                 </div>
